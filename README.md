@@ -10,8 +10,8 @@ The Android implementation of Chorus aims to provide users a mobile application 
 3. The system shall navigate to the home screen which will have a sign up and login button 
 4. When the user has clicked sign up, the system shall render a form that has a field for name (first and last), email, username, password, and school. 
 5. When the user has clicked login, the system shall render a form field with two fields: username and password. 
-
-TODO - to be completed after workflow meeting on Monday 
+6. The system shall navigate to a dashboard with tasks listed in chronological order. There will be a hamburger menu with options to select classes to open their individual dashboards and options for settings and help/feedback.
+7. Clicking on a tasks brings up a page with more info about it.
 
 # CHANGELOG.MD
 High level description of changes made during each sprint. Dev Lead is responsible for updating this file as necessary. 
@@ -31,4 +31,4 @@ High level description of changes made during each sprint. Dev Lead is responsib
 # Point of Contact:
 
 Please reach out to the developer lead for any issues. 
-Dev Lead: Rahul Sabnis rahulsabnis19@gmail.com (408)930-2644.
+- <b>Dev Lead: </b> Rahul Sabnis rahulsabnis19@gmail.com (408)930-2644.
