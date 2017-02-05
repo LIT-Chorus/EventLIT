@@ -15,13 +15,6 @@ High level description of changes made during each sprint. Project Manager is re
 
 # How to contribute
 
-1. The master branch is write-protected. This means you cannot write to it directly. 
-2. Do all your development on the "frontend-develop" or "backend-develop" branches. 
-3. When frontend and/or backend are ready, open a pull request on the "develop" branch. 
-4. Vansh will review the changes and if they are good, he will accept and resolve merge conflicts. If not, he will contact the teams.
-5. Vansh will open a pull request on branch "stage"
-6. A member of QA (Yash or Jocelyn) will review your changes and merge the pull request to "stage" 
-7. Once QA has approved your changes, they will open a pull request to merge changes with master. 
-8. The PM (Rahul) will verify the pull request and merge it with master. The PM (Rahul) will also need to update CHANGELOG.md. 
-9. If there are merge conflicts, the pull request will be closed.
-10. If not, you're good! Project manager will comment on changes. The Slack group #android-dev will be notified on any changes to master branch.
+1. Make all commits to branch master (if you get a merge conflict and don't know what to do, let other people know so they can help you fix it!)
+2. Let QA know if you make a development change that they can now write/run their tests for the feature.
+3. Once QA Finishes testing, one of them should let the Project Manager know the feature is good to go!
