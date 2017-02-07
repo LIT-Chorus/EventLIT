@@ -9,7 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.cse110.chrous.MainActivity"
+    android:background="@color/backgroundLoginPrimary"
+    tools:context="com.cse110.chrous.LoginActivity"
     android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout
@@ -22,7 +23,12 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="UCSD Email"
+            android:textColor="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:drawableLeft="@drawable/ic_mail_outline_white_24dp"
+            android:drawablePadding="15dp"
             android:soundEffectsEnabled="true"
             android:inputType="textEmailAddress" />
 
@@ -39,20 +45,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:textColor="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:drawableLeft="@drawable/ic_lock_outline_white_24dp"
+            android:drawablePadding="15dp"
             android:soundEffectsEnabled="true"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:text="Login"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/login" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:text="Sign Up"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signup"
         android:layout_gravity="center" />
@@ -62,7 +73,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/backendReturn"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_marginTop="40dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="@android:color/holo_red_light" />
 
 </LinearLayout>
