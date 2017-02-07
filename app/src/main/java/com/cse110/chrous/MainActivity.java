@@ -4,10 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,16 +52,16 @@ public class MainActivity extends AppCompatActivity {
         // Login Behavior
         login.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                if (email.getEditText() != null && password.getEditText() != null){
+                if (email.getEditText() != null && password.getEditText() != null) {
                     String emailText = email.getEditText().getText().toString();
                     String passwordText = password.getEditText().getText().toString();
                     signIn(emailText, passwordText);
                 }
-
-
-
             }
         });
+
+        // TODO #Frontend sets up a sign-up page AND-1/AND-2
+
     }
 
     /**
@@ -77,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     protected void signUp(String firstName, String lastName, String schoolEmail,
                           String password, String confirmPass){
 
+        // TODO #Chris AND-6
+
     }
 
     /**
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     protected void signIn(final String emailText, final String passwordText){
         if (fbAuth != null){
             final TextView backendRet = (TextView) findViewById(R.id.backendReturn);
+
             // Checks that text was entered in email and password field
             if (emailText == null || emailText.isEmpty()){
                 backendRet.setText("Please enter a valid email");
@@ -108,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
                                 if (!task.isSuccessful()) {
                                     backendRet.setText(task.getException().getMessage());
                                 }
-                                // TODO change this. For testing only.
                                 else {
+                                    // TODO #Frontend change this to go to new activity with intent
+                                    // Current implementation for testing only.
                                     Toast.makeText(MainActivity.this, "Sign in successful!",
                                             Toast.LENGTH_SHORT).show();
                                 }
