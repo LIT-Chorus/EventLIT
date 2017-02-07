@@ -46,8 +46,6 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:textColor="@color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:drawableLeft="@drawable/ic_lock_outline_white_24dp"
             android:drawablePadding="15dp"
             android:soundEffectsEnabled="true"

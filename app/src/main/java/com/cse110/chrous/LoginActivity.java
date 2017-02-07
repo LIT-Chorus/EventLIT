@@ -127,10 +127,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     protected void signIn(final String emailText, final String passwordText) {
         if (fbAuth != null) {
-
-
-            if (mPasswordEntry.getEditText().getError().length() == 0 &&
-                    mEmailEntry.getEditText().getError().length() == 0) {
+            if (mPasswordEntry.getEditText().getError() != null &&
+                    mEmailEntry.getEditText().getError() != null) {
                 fbAuth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(this,
                         new OnCompleteListener<AuthResult>() {
                             @Override
@@ -170,7 +168,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        mEmailEntry.clearFocus();
         mEmailEntry.getEditText().clearFocus();
+        mPasswordEntry.clearFocus();
         mPasswordEntry.getEditText().clearFocus();
     }
 }
