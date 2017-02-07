@@ -15,7 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     // Firebase Authutentication and Firebase Authentication state listener
     private FirebaseAuth fbAuth;
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                 else {
                                     // TODO #Frontend change this to go to new activity with intent
                                     // Current implementation for testing only.
-                                    Toast.makeText(MainActivity.this, "Sign in successful!",
+                                    Toast.makeText(LoginActivity.this, "Sign in successful!",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
