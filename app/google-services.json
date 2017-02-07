@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "731030211930",
+    "firebase_url": "https://chorus-ad084.firebaseio.com",
+    "project_id": "chorus-ad084",
+    "storage_bucket": "chorus-ad084.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731030211930:android:503841988ab2938a",
+        "android_client_info": {
+          "package_name": "com.cse110.chrous"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731030211930-i94te6o3nlds3rb94hr3arsv1vk7i36h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_JLGe8zyOIXqet-Xfb8xajCHRQELOkeI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731030211930-i94te6o3nlds3rb94hr3arsv1vk7i36h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
