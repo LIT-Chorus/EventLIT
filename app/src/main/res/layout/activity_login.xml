@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="UCSD Email"
+            android:textColorHint="@color/white"
             android:textColor="@color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -57,6 +58,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimaryDark"
+        android:layout_marginBottom="25dp"
+        android:elevation="10dp"
         android:id="@+id/login" />
 
     <android.support.v7.widget.AppCompatButton
@@ -64,6 +69,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/signup"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimaryDark"
+        android:elevation="10dp"
         android:layout_gravity="center" />
 
     <TextView

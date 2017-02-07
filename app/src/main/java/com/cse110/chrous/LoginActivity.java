@@ -1,5 +1,6 @@
 package com.cse110.chrous;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextView backendRet;
 
+    private ProgressDialog mSignInProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,12 @@ public class LoginActivity extends AppCompatActivity {
         mEmailEntry = (TextInputLayout) findViewById(R.id.email);
         mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
         backendRet = (TextView) findViewById(R.id.backendReturn);
+        mSignInProgress = new ProgressDialog(this);
+
+        // Set up ProgressDialog
+        mSignInProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mSignInProgress.setTitle("Login");
+        mSignInProgress.setMessage("Logging in to EventLIT");
 
         mEmailEntry.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -96,6 +105,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
                     String emailText = mEmailEntry.getEditText().getText().toString();
                     String passwordText = mPasswordEntry.getEditText().getText().toString();
+
+                    mSignInProgress.show();
+
                     signIn(emailText, passwordText);
                 }
             }
@@ -133,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                         new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                mSignInProgress.hide();
                                 // Firebase reported error on the server side displayed here
                                 if (!task.isSuccessful()) {
                                     backendRet.setText(task.getException().getMessage());
