@@ -1,10 +1,14 @@
 package com.cse110.chrous;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 public class LoginActivity extends AppCompatActivity {
 
     // Firebase Authutentication and Firebase Authentication state listener
@@ -25,12 +31,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener fbListener;
 
     private Button mLoginBut;
-    private Button mSignupBut;
+    private FloatingActionButton mSignupBut;
 
     private TextInputLayout mEmailEntry;
     private TextInputLayout mPasswordEntry;
-
-    private TextView backendRet;
 
     private ProgressDialog mSignInProgress;
 
@@ -41,10 +45,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initializes Global Vars
         mLoginBut = (Button) findViewById(R.id.login);
-        mSignupBut = (Button) findViewById(R.id.signup);
+        mSignupBut = (FloatingActionButton) findViewById(R.id.fab);
         mEmailEntry = (TextInputLayout) findViewById(R.id.email);
         mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
-        backendRet = (TextView) findViewById(R.id.backendReturn);
         mSignInProgress = new ProgressDialog(this);
 
         // Set up ProgressDialog
@@ -56,15 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    EditText emailEditText = mEmailEntry.getEditText();
-                    String emailText = emailEditText.getText().toString();
-
-                    if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
-                        emailEditText.setError("Enter a Valid UCSD Email");
-                    } else if (!emailText.contains("@ucsd.edu")) {
-                        emailEditText.setError("Please use your UCSD Email!");
-
-                    }
+                    checkEmail();
                 }
             }
         });
@@ -73,13 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    EditText passEditText = mPasswordEntry.getEditText();
-                    String passwordText = passEditText.getText().toString();
-
-                    // Password Criteria
-                    if (passwordText.isEmpty()) {
-                        passEditText.setError("Invalid Password");
-                    }
+                    checkPass();
                 }
             }
         });
@@ -92,9 +81,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    backendRet.setText("Hi " + user.getDisplayName());
+                    Log.d("Login Check", "Hi " + user.getDisplayName());
                 } else {
-                    backendRet.setText("Not signed in!");
+                    Log.d("Login Check", "Not signed in!");
                 }
             }
         };
@@ -103,31 +92,33 @@ public class LoginActivity extends AppCompatActivity {
         mLoginBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
-                    String emailText = mEmailEntry.getEditText().getText().toString();
-                    String passwordText = mPasswordEntry.getEditText().getText().toString();
+                    checkEmail();
+                    checkPass();
 
-                    mSignInProgress.show();
+                    if (mPasswordEntry.getEditText().getError() == null &&
+                            mEmailEntry.getEditText().getError() == null) {
 
-                    signIn(emailText, passwordText);
+
+                        String emailText = mEmailEntry.getEditText().getText().toString();
+                        String passwordText = mPasswordEntry.getEditText().getText().toString();
+
+                        mSignInProgress.show();
+
+                        signIn(emailText, passwordText);
+                    }
                 }
             }
         });
 
-        // TODO #Frontend sets up a sign-up page AND-1/AND-2
+        mSignupBut.setRippleColor(Color.RED);
 
-    }
-
-    /**
-     * @param firstName
-     * @param lastName
-     * @param schoolEmail
-     * @param password
-     * @param confirmPass
-     */
-    protected void signUp(String firstName, String lastName, String schoolEmail,
-                          String password, String confirmPass) {
-
-        // TODO #Chris AND-6
+        mSignupBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signUp = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(signUp);
+            }
+        });
 
     }
 
@@ -139,25 +130,44 @@ public class LoginActivity extends AppCompatActivity {
      */
     protected void signIn(final String emailText, final String passwordText) {
         if (fbAuth != null) {
-            if (mPasswordEntry.getEditText().getError() != null &&
-                    mEmailEntry.getEditText().getError() != null) {
-                fbAuth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(this,
-                        new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                mSignInProgress.hide();
-                                // Firebase reported error on the server side displayed here
-                                if (!task.isSuccessful()) {
-                                    backendRet.setText(task.getException().getMessage());
-                                } else {
-                                    // TODO #Frontend change this to go to new activity with intent
-                                    // Current implementation for testing only.
-                                    Toast.makeText(LoginActivity.this, "Sign in successful!",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+            fbAuth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(this,
+                    new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            mSignInProgress.hide();
+                            // Firebase reported error on the server side displayed here
+                            if (!task.isSuccessful()) {
+                                Log.d("Firebase Error", task.getException().getMessage());
+                            } else {
+                                // TODO #Frontend change this to go to new activity with intent
+                                // Current implementation for testing only.
+                                Toast.makeText(LoginActivity.this, "Sign in successful!",
+                                        Toast.LENGTH_SHORT).show();
                             }
-                        });
-            }
+                        }
+                    });
+        }
+    }
+
+    protected void checkEmail() {
+        EditText emailEditText = mEmailEntry.getEditText();
+        String emailText = emailEditText.getText().toString();
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+            emailEditText.setError("Enter a Valid UCSD Email");
+        } else if (!emailText.contains("@ucsd.edu")) {
+            emailEditText.setError("Please use your UCSD Email!");
+
+        }
+    }
+
+    protected void checkPass() {
+        EditText passEditText = mPasswordEntry.getEditText();
+        String passwordText = passEditText.getText().toString();
+
+        // Password Criteria
+        if (passwordText.isEmpty()) {
+            passEditText.setError("Invalid Password");
         }
     }
 
