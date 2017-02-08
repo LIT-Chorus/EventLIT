@@ -140,8 +140,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     protected void signIn(final String emailText, final String passwordText) {
         if (fbAuth != null) {
-            if (mPasswordEntry.getEditText().getError() != null &&
-                    mEmailEntry.getEditText().getError() != null) {
+            if (mPasswordEntry.getEditText().getError() == null &&
+                    mEmailEntry.getEditText().getError() == null) {
                 fbAuth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(this,
                         new OnCompleteListener<AuthResult>() {
                             @Override
