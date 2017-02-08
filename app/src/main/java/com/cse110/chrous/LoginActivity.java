@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Log.d("Login Check", "Hi " + user.getDisplayName());
+                    Log.d("Login Check", "Signed in as: " + user.getEmail());
                 } else {
                     Log.d("Login Check", "Not signed in!");
                 }
@@ -146,6 +146,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+        } else {
+            mSignInProgress.hide();
+            Toast.makeText(LoginActivity.this, "Already signed in", Toast.LENGTH_SHORT).show();
         }
     }
 
