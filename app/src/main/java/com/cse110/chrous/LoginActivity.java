@@ -41,10 +41,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Initializes Global Vars
-        mLoginBut = (Button) findViewById(R.id.login);
-        mSignupBut = (Button) findViewById(R.id.signup);
-        mEmailEntry = (TextInputLayout) findViewById(R.id.email);
-        mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
+        mLoginBut = (Button) findViewById(R.id.login_button);
+        mSignupBut = (Button) findViewById(R.id.login_signup_button);
+        mEmailEntry = (TextInputLayout) findViewById(R.id.login_email);
+        mPasswordEntry = (TextInputLayout) findViewById(R.id.login_password);
         backendRet = (TextView) findViewById(R.id.backendReturn);
         mSignInProgress = new ProgressDialog(this);
 

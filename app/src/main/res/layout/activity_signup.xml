@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="32dp"
-        android:id="@+id/login_email">
+        android:id="@+id/signup_email">
 
         <EditText
             android:layout_width="match_parent"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="32dp"
-        android:id="@+id/login_password">
+        android:id="@+id/signup_password_1">
 
         <EditText
             android:layout_width="match_parent"
@@ -53,33 +53,34 @@
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.v7.widget.AppCompatButton
-        android:text="Login"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimaryDark"
-        android:layout_marginBottom="25dp"
-        android:elevation="10dp"
-        android:id="@+id/login_button" />
+        android:layout_marginBottom="32dp"
+        android:id="@+id/signup_password_2">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Repeat Password"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/ic_lock_outline_white_24dp"
+            android:drawablePadding="15dp"
+            android:soundEffectsEnabled="true"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
 
     <android.support.v7.widget.AppCompatButton
-        android:text="Sign Up"
+        android:text="Create Account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/login_signup_button"
+        android:id="@+id/create_account_button"
         android:textColor="@color/white"
         android:background="@color/colorPrimaryDark"
         android:elevation="10dp"
         android:layout_gravity="center" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/backendReturn"
-        android:gravity="center"
-        android:layout_marginTop="40dp"/>
 
 </LinearLayout>
