@@ -93,7 +93,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    backendRet.setText("Hi " + user.getDisplayName());
+                    // Until user profiles are established on sign-up, we'll use this
+                    backendRet.setText("Signed in as: " + user.getEmail());
                 } else {
                     backendRet.setText("Not signed in!");
                 }
@@ -161,7 +162,17 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 mSignInProgress.hide();
-                Toast.makeText(LoginActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
+
+                if (mEmailEntry.getEditText().getError() != null){
+                    Toast.makeText(LoginActivity.this,
+                            mEmailEntry.getEditText().getError().toString(),
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(LoginActivity.this,
+                            mPasswordEntry.getEditText().getError().toString(),
+                            Toast.LENGTH_SHORT).show();
+                }
 
             }
         }
