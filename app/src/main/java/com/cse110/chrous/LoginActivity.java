@@ -194,9 +194,5 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mEmailEntry.clearFocus();
-        mEmailEntry.getEditText().clearFocus();
-        mPasswordEntry.clearFocus();
-        mPasswordEntry.getEditText().clearFocus();
     }
 }
