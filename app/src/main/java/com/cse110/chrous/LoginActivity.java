@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -158,6 +159,15 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
             }
+            else {
+                mSignInProgress.hide();
+                Toast.makeText(LoginActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+        else {
+            mSignInProgress.hide();
+            Toast.makeText(LoginActivity.this, "Already signed in", Toast.LENGTH_SHORT).show();
         }
     }
 
