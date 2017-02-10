@@ -27,9 +27,11 @@ public class SignUpActivity extends AppCompatActivity {
     private Button mRegisterBut;
     private FloatingActionButton mSignupBut;
 
-    private TextInputLayout mNameEntry;
+    private TextInputLayout mFirstNameEntry;
+    private TextInputLayout mLastNameEntry;
     private TextInputLayout mEmailEntry;
     private TextInputLayout mPasswordEntry;
+    private TextInputLayout mConfirmPasswordEntry;
 
     private TextView backendRet;
 
@@ -42,9 +44,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Initializes Global Vars
         mRegisterBut = (Button) findViewById(R.id.register);
-        mNameEntry = (TextInputLayout) findViewById(R.id.name);
+
+        mFirstNameEntry = (TextInputLayout) findViewById(R.id.firstname);
+        mLastNameEntry = (TextInputLayout) findViewById(R.id.lastname);
+
         mEmailEntry = (TextInputLayout) findViewById(R.id.email);
+
         mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
+        mConfirmPasswordEntry = (TextInputLayout) findViewById(R.id.confirmpassword);
+
         backendRet = (TextView) findViewById(R.id.backendReturn);
         mSignUpProgress = new ProgressDialog(this);
 
@@ -67,11 +75,20 @@ public class SignUpActivity extends AppCompatActivity {
         mSignUpProgress.setTitle("Register");
         mSignUpProgress.setMessage("Registering new user account");
 
-        mNameEntry.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mFirstNameEntry.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    checkName();
+                    checkFirstName();
+                }
+            }
+        });
+
+        mLastNameEntry.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    checkLastName();
                 }
             }
         });
@@ -94,36 +111,43 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        mConfirmPasswordEntry.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    checkPassMatch();
+                }
+            }
+        });
+
+
         // Login Behavior
         mRegisterBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
 
-                    checkName();
-                    checkPass();
-                    checkEmail();
+                    if (checkFirstName() && checkLastName() && checkEmail() && checkPass() &&
+                            checkPassMatch()) {
 
-                    if (mPasswordEntry.getEditText().getError() == null &&
-                            mEmailEntry.getEditText().getError() == null &&
-                            mNameEntry.getEditText().getError() == null) {
-
-                        StringTokenizer name = new StringTokenizer(mNameEntry.getEditText().getText().toString());
-                        String firstName = name.nextToken();
-                        String lastName = name.nextToken();
+                        String firstName = mFirstNameEntry.getEditText().toString();
+                        String lastName = mLastNameEntry.getEditText().toString();
                         String emailText = mEmailEntry.getEditText().getText().toString();
                         String passwordText = mPasswordEntry.getEditText().getText().toString();
 
                         mSignUpProgress.show();
 
-                        signUp(firstName, lastName, emailText, passwordText, passwordText);
+                        signUp(firstName, lastName, emailText, passwordText);
                     }
                 }
             }
         });
     }
 
-    protected void checkEmail() {
+    protected boolean checkEmail() {
         EditText emailEditText = mEmailEntry.getEditText();
+
+        if (emailEditText.getError() != null) return false;
+
         String emailText = emailEditText.getText().toString();
 
         if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
@@ -131,28 +155,82 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (!emailText.contains("@ucsd.edu")) {
             emailEditText.setError("Please use your UCSD Email!");
 
+        } else {
+            return true;
         }
+
+        return false;
     }
 
-    protected void checkPass() {
+    protected boolean checkPass() {
         EditText passEditText = mPasswordEntry.getEditText();
+
+        if (passEditText.getError() != null) return false;
+
         String passwordText = passEditText.getText().toString();
 
         // Password Criteria
         if (passwordText.isEmpty()) {
             passEditText.setError("Invalid Password");
+            return false;
         }
+
+        return true;
     }
 
-    protected void checkName() {
-        EditText nameEditText = mNameEntry.getEditText();
-        String nameText = nameEditText.getText().toString();
+    protected boolean checkPassMatch() {
+        EditText passEditText = mPasswordEntry.getEditText();
+        if (passEditText.getError() != null) return false;
 
-        StringTokenizer name = new StringTokenizer(nameText);
+        String passwordText = passEditText.getText().toString();
 
-        if (nameText.length() == 0 || name.countTokens() != 2) {
-            nameEditText.setError("Enter Your First and Last Name");
+        EditText confirmPassEditText = mConfirmPasswordEntry.getEditText();
+        if (confirmPassEditText.getError() != null) return false;
+
+
+
+        String confirmPasswordText = confirmPassEditText.getText().toString();
+
+        // Password Criteria
+        if (!confirmPasswordText.equals(passwordText)) {
+            confirmPassEditText.setError("Passwords Don't Match");
+            return false;
         }
+
+        return true;
+    }
+
+    protected boolean checkFirstName() {
+        EditText firstNameEditText = mFirstNameEntry.getEditText();
+
+        if (firstNameEditText.getError() != null) return false;
+
+
+        String firstNameText = firstNameEditText.getText().toString();
+
+        if (firstNameText.length() == 0) {
+            firstNameEditText.setError("Enter First Name");
+            return false;
+        }
+
+        return true;
+
+    }
+
+    protected boolean checkLastName() {
+
+        EditText lastNameEditText = mLastNameEntry.getEditText();
+
+        if (lastNameEditText.getError() != null) return false;
+
+        String lastNameText = lastNameEditText.getText().toString();
+
+        if (lastNameText.length() == 0) {
+            lastNameEditText.setError("Enter Last Name");
+            return false;
+        }
+
+        return true;
     }
 
     // App resumes
@@ -176,10 +254,9 @@ public class SignUpActivity extends AppCompatActivity {
      * @param lastName
      * @param schoolEmail
      * @param password
-     * @param confirmPass
      */
     protected void signUp(String firstName, String lastName, String schoolEmail,
-                          String password, String confirmPass) {
+                          String password) {
 
         // TODO #Chris AND-6
 
