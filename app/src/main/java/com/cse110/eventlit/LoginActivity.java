@@ -153,9 +153,11 @@ public class LoginActivity extends AppCompatActivity {
         EditText emailEditText = mEmailEntry.getEditText();
         String emailText = emailEditText.getText().toString();
 
+
+
         if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
-            emailEditText.setError("Enter a Valid UCSD Email");
-        } else if (!emailText.contains("@ucsd.edu")) {
+            emailEditText.setError("Invalid Email ID");
+        } else if (!emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
             emailEditText.setError("Please use your UCSD Email!");
 
         }
@@ -166,8 +168,8 @@ public class LoginActivity extends AppCompatActivity {
         String passwordText = passEditText.getText().toString();
 
         // Password Criteria
-        if (passwordText.isEmpty()) {
-            passEditText.setError("Invalid Password");
+        if (passwordText.length() < 6) {
+            passEditText.setError("Password must contain at least 6 characters");
         }
     }
 

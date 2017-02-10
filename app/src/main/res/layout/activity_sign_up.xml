@@ -45,7 +45,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="First Name"
-                android:inputType="textEmailAddress"
+                android:inputType="textPersonName"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white" />
@@ -68,7 +68,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="Last Name"
-                android:inputType="textEmailAddress"
+                android:inputType="textPersonName"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white" />
