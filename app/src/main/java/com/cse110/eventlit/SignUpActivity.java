@@ -1,9 +1,11 @@
 package com.cse110.eventlit;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.StringTokenizer;
 
@@ -23,6 +30,9 @@ public class SignUpActivity extends AppCompatActivity {
     // Firebase Authutentication and Firebase Authentication state listener
     private FirebaseAuth fbAuth;
     private FirebaseAuth.AuthStateListener fbListener;
+
+    // Firebase Database
+    private DatabaseReference fbDB;
 
     private Button mRegisterBut;
     private FloatingActionButton mSignupBut;
@@ -36,6 +46,9 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView backendRet;
 
     private ProgressDialog mSignUpProgress;
+
+    public SignUpActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +82,9 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         };
+
+        // Set up database reference.
+        fbDB = FirebaseDatabase.getInstance().getReference();
 
         // Set up ProgressDialog
         mSignUpProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -129,12 +145,12 @@ public class SignUpActivity extends AppCompatActivity {
                     if (checkFirstName() && checkLastName() && checkEmail() && checkPass() &&
                             checkPassMatch()) {
 
-                        String firstName = mFirstNameEntry.getEditText().toString();
-                        String lastName = mLastNameEntry.getEditText().toString();
+                        String firstName = mFirstNameEntry.getEditText().getText().toString();
+                        String lastName = mLastNameEntry.getEditText().getText().toString();
                         String emailText = mEmailEntry.getEditText().getText().toString();
                         String passwordText = mPasswordEntry.getEditText().getText().toString();
 
-                        mSignUpProgress.show();
+                        // mSignUpProgress.show();
 
                         signUp(firstName, lastName, emailText, passwordText);
                     }
@@ -250,15 +266,44 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     /**
+     * Takes preliminary user information and creates a new user account.
+     * Inputs should have already been validated before passing to this method.
      * @param firstName
      * @param lastName
      * @param schoolEmail
      * @param password
      */
-    protected void signUp(String firstName, String lastName, String schoolEmail,
+    protected void signUp(final String firstName, final String lastName, String schoolEmail,
                           String password) {
 
         // TODO #Chris AND-6
+        // Register user first, and have them signed in.
+        fbAuth.createUserWithEmailAndPassword(schoolEmail, password)
+                .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Add a new entry to the `users` table for the user's
+                            // non-auth information.
+                            String uid = fbAuth.getCurrentUser().getUid();
+                            DatabaseReference user = fbDB.child("users").child(uid);
+                            user.child("firstName").setValue(firstName);
+                            user.child("lastName").setValue(lastName);
+
+                            // TODO: Move user to email verification page (instead of LoginActivity)
+                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                            builder.setMessage(task.getException().getMessage())
+                                    .setTitle("Registration Error")
+                                    .setPositiveButton(android.R.string.ok, null);
+                            builder.create().show();
+                        }
+                    }
+                });
 
     }
 }
