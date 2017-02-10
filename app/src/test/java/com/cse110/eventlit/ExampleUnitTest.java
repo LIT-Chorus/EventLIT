@@ -1,4 +1,4 @@
-package com.cse110.chrous;
+package com.cse110.eventlit;
 
 import org.junit.Test;
 

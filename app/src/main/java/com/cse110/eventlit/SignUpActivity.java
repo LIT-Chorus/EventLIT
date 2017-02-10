@@ -1,4 +1,4 @@
-package com.cse110.chrous;
+package com.cse110.eventlit;
 
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class SignUpActivity extends AppCompatActivity {

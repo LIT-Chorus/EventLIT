@@ -1,4 +1,4 @@
-package com.cse110.chrous;
+package com.cse110.eventlit;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
