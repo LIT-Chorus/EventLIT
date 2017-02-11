@@ -24,13 +24,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.StringTokenizer;
-
 public class SignUpActivity extends AppCompatActivity {
 
     // Firebase Authutentication and Firebase Authentication state listener
-    private FirebaseAuth fbAuth;
-    private FirebaseAuth.AuthStateListener fbListener;
+    private FirebaseAuth mFbAuth;
 
     // Firebase Database
     private DatabaseReference fbDB;
@@ -47,6 +44,9 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView backendRet;
 
     private ProgressDialog mSignUpProgress;
+    private FirebaseAuth.AuthStateListener mFbListener;
+
+    private OnCompleteListener<Void> mSignUpListener;
 
     public SignUpActivity() {
     }
@@ -71,18 +71,9 @@ public class SignUpActivity extends AppCompatActivity {
         mSignUpProgress = new ProgressDialog(this);
 
         // Tracks whether a user is signed in or not
-        fbAuth = FirebaseAuth.getInstance();
-        fbListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d("Login Check", "Hi " + user.getDisplayName());
-                } else {
-                    Log.d("Login Check", "Not signed in!");
-                }
-            }
-        };
+        Log.w("FBAuth", mFbAuth + "" );
+        mFbAuth = FirebaseAuth.getInstance();
+        Log.w("FBAuth", mFbAuth.toString());
 
         // Set up database reference.
         fbDB = FirebaseDatabase.getInstance().getReference();
@@ -138,6 +129,49 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
 
+        mFbListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d("Login Check", "Signed in as: " + user.getEmail());
+                } else {
+                    Log.d("Login Check", "Not signed in!");
+                }
+            }
+        };
+
+        mSignUpListener = new OnCompleteListener<Void>(){
+            @Override
+            public void onComplete(@NonNull Task<Void> task){
+                //mSignInProgress.hide();
+                // Firebase reported error on the server side displayed here
+                if (task.isSuccessful()) {
+                    boolean isVerifed = mFbAuth.getCurrentUser().isEmailVerified();
+                    Log.w("Task successful", "yes");
+                    if (!isVerifed){
+                        // TODO Frontend
+                        // Check email dialog activity  
+                        Log.wtf("WTF!", "Email is not verified. Signing out...");
+                        mFbAuth.signOut();
+                        mSignUpProgress.hide();
+                    }
+                    else {
+                            mSignUpProgress.hide();
+                        // Move to Organization selection
+//                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
+                    }
+
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Does not work", Toast.LENGTH_LONG);
+                }
+            }
+        };
+
+
         // Login Behavior
         mRegisterBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -151,7 +185,7 @@ public class SignUpActivity extends AppCompatActivity {
                         String emailText = mEmailEntry.getEditText().getText().toString();
                         String passwordText = mPasswordEntry.getEditText().getText().toString();
 
-                        // mSignUpProgress.show();
+                        mSignUpProgress.show();
 
                         signUp(firstName, lastName, emailText, passwordText);
                     }
@@ -252,15 +286,15 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        fbAuth.addAuthStateListener(fbListener);
+        mFbAuth.addAuthStateListener(mFbListener);
     }
 
     // App exit
     @Override
     protected void onStop() {
         super.onStop();
-        if (fbListener != null) {
-            fbAuth.removeAuthStateListener(fbListener);
+        if (mFbListener != null) {
+            mFbAuth.removeAuthStateListener(mFbListener);
         }
     }
 
@@ -277,35 +311,25 @@ public class SignUpActivity extends AppCompatActivity {
 
         // TODO #Chris AND-6
         // Register user first, and have them signed in.
-        fbAuth.createUserWithEmailAndPassword(schoolEmail, password)
+        mFbAuth.createUserWithEmailAndPassword(schoolEmail, password)
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Add a new entry to the `users` table for the user's
                             // non-auth information.
-                            String uid = fbAuth.getCurrentUser().getUid();
+                            String uid = mFbAuth.getCurrentUser().getUid();
                             DatabaseReference user = fbDB.child("users").child(uid);
                             user.child("firstName").setValue(firstName);
                             user.child("lastName").setValue(lastName);
 
-                           fbAuth.getCurrentUser().sendEmailVerification()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(SignUpActivity.this, "worked", Toast.LENGTH_LONG);
-                                            }
-                                        }
-                                    });
+                           mFbAuth.getCurrentUser().sendEmailVerification()
+                                    .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
 
 
 
                             // TODO: Move user to email verification page (instead of LoginActivity)
-                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                             builder.setMessage(task.getException().getMessage())
