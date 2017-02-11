@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Firebase Authutentication and Firebase Authentication state listener
     private FirebaseAuth fbAuth;
-    private FirebaseAuth.AuthStateListener fbListener;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private AppCompatButton mLoginBut;
     private FloatingActionButton mSignupBut;
@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout mPasswordEntry;
 
     private ProgressDialog mSignInProgress;
+    private OnCompleteListener<AuthResult> mSignInListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +74,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
         // Tracks whether a user is signed in or not
-        fbAuth = FirebaseAuth.getInstance();
-        fbListener = new FirebaseAuth.AuthStateListener() {
+        try {
+            fbAuth = FirebaseAuth.getInstance();
+        }
+        catch (IllegalStateException e){
+            Toast.makeText(LoginActivity.this, "Firebase App failed to initialize",
+                    Toast.LENGTH_SHORT);
+            // Elegantly handle this later...
+        }
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -82,6 +91,23 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("Login Check", "Signed in as: " + user.getEmail());
                 } else {
                     Log.d("Login Check", "Not signed in!");
+                }
+            }
+        };
+
+        // TODO #Frontend change this to go to new activity with intent
+        mSignInListener = new OnCompleteListener<AuthResult>(){
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task){
+                mSignInProgress.hide();
+                // Firebase reported error on the server side displayed here
+                if (!task.isSuccessful()) {
+                    Log.d("Firebase Error", task.getException().getMessage());
+                } else {
+
+                    // Current implementation for testing only.
+                    Toast.makeText(LoginActivity.this, "Sign in successful!",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -127,27 +153,8 @@ public class LoginActivity extends AppCompatActivity {
      * @param passwordText
      */
     protected void signIn(final String emailText, final String passwordText) {
-        if (fbAuth != null) {
             fbAuth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(this,
-                    new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            mSignInProgress.hide();
-                            // Firebase reported error on the server side displayed here
-                            if (!task.isSuccessful()) {
-                                Log.d("Firebase Error", task.getException().getMessage());
-                            } else {
-                                // TODO #Frontend change this to go to new activity with intent
-                                // Current implementation for testing only.
-                                Toast.makeText(LoginActivity.this, "Sign in successful!",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        } else {
-            mSignInProgress.hide();
-            Toast.makeText(LoginActivity.this, "Already signed in", Toast.LENGTH_SHORT).show();
-        }
+                    mSignInListener);
     }
 
     protected void checkEmail() {
@@ -179,15 +186,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        fbAuth.addAuthStateListener(fbListener);
+        fbAuth.addAuthStateListener(mAuthStateListener);
     }
 
     // App exit
     @Override
     protected void onStop() {
         super.onStop();
-        if (fbListener != null) {
-            fbAuth.removeAuthStateListener(fbListener);
+        if (mAuthStateListener != null) {
+            fbAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
 
