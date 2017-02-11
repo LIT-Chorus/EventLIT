@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EventLIT</string>
+    <string name="title_activity_email_verification">EmailVerificationActivity</string>
 </resources>

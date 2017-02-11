@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                         String emailText = mEmailEntry.getEditText().getText().toString();
                         String passwordText = mPasswordEntry.getEditText().getText().toString();
 
-                        mSignInProgress.show();
+                        //mSignInProgress.show();
 
                         signIn(emailText, passwordText);
                     }

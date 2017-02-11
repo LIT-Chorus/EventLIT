@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -288,6 +289,18 @@ public class SignUpActivity extends AppCompatActivity {
                             user.child("firstName").setValue(firstName);
                             user.child("lastName").setValue(lastName);
 
+                           fbAuth.getCurrentUser().sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(SignUpActivity.this, "worked", Toast.LENGTH_LONG);
+                                            }
+                                        }
+                                    });
+
+
+
                             // TODO: Move user to email verification page (instead of LoginActivity)
                             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -302,6 +315,7 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 });
+
 
     }
 }
