@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -27,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth fbAuth;
     private FirebaseAuth.AuthStateListener fbListener;
 
-    private Button mLoginBut;
+    private AppCompatButton mLoginBut;
     private FloatingActionButton mSignupBut;
 
     private TextInputLayout mEmailEntry;
@@ -41,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Initializes Global Vars
-        mLoginBut = (Button) findViewById(R.id.login);
+        mLoginBut = (AppCompatButton) findViewById(R.id.login);
         mSignupBut = (FloatingActionButton) findViewById(R.id.fab);
         mEmailEntry = (TextInputLayout) findViewById(R.id.email);
         mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
@@ -157,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
             emailEditText.setError("Invalid Email ID");
-        } else if (!emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
+        } else if (emailText.length() < 9 || !emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
             emailEditText.setError("Please use your UCSD Email!");
 
         }
