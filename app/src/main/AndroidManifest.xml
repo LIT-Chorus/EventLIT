@@ -19,10 +19,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity" />
         <activity
-            android:name=".MainScrollingActivity"
+            android:name=".SignUpActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".OrganizerFeedActivity"
             android:label="@string/title_activity_main_scrolling"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".StudentFeedActivity"
+            android:label="@string/title_activity_main_scrolling"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
     </application>
