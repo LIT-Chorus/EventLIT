@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">EventLIT</string>
     <string name="title_activity_email_verification">EmailVerificationActivity</string>
-    <string name="title_activity_main_scrolling">MainScrollingActivity</string>
+    <string name="title_activity_main_scrolling">Feed</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

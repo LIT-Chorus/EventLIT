@@ -12,7 +12,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -63,15 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mPasswordEntry.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkPass();
-                }
-            }
-        });
-
 
         // Tracks whether a user is signed in or not
         try {
@@ -102,12 +92,18 @@ public class LoginActivity extends AppCompatActivity {
                 mSignInProgress.hide();
                 // Firebase reported error on the server side displayed here
                 if (!task.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_LONG);
                     Log.d("Firebase Error", task.getException().getMessage());
                 } else {
 
-                    // Current implementation for testing only.
-                    Toast.makeText(LoginActivity.this, "Sign in successful!",
-                            Toast.LENGTH_SHORT).show();
+                    // TODO: Backend team add logic to check if user is a student or an organizer
+
+                    // Starts activity based on student or organizer
+                    Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                    startActivity(openFeed);
+
+//                    Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
+//                    startActivity(openFeed);
                 }
             }
         };
@@ -117,16 +113,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
                     checkEmail();
-                    checkPass();
 
-                    if (mPasswordEntry.getEditText().getError() == null &&
-                            mEmailEntry.getEditText().getError() == null) {
+                    if (mEmailEntry.getEditText().getError() == null) {
 
 
                         String emailText = mEmailEntry.getEditText().getText().toString();
                         String passwordText = mPasswordEntry.getEditText().getText().toString();
 
-                        //mSignInProgress.show();
+                        mSignInProgress.show();
 
                         signIn(emailText, passwordText);
                     }
@@ -161,23 +155,12 @@ public class LoginActivity extends AppCompatActivity {
         EditText emailEditText = mEmailEntry.getEditText();
         String emailText = emailEditText.getText().toString();
 
-
-
+        // Checks email valid and that it ends with @ucsd.edu
         if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
             emailEditText.setError("Invalid Email ID");
         } else if (emailText.length() < 9 || !emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
             emailEditText.setError("Please use your UCSD Email!");
 
-        }
-    }
-
-    protected void checkPass() {
-        EditText passEditText = mPasswordEntry.getEditText();
-        String passwordText = passEditText.getText().toString();
-
-        // Password Criteria
-        if (passwordText.length() < 6) {
-            passEditText.setError("Password must contain at least 6 characters");
         }
     }
 

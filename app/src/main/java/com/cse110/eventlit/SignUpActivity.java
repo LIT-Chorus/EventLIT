@@ -144,7 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
         mSignUpListener = new OnCompleteListener<Void>(){
             @Override
             public void onComplete(@NonNull Task<Void> task){
-                //mSignInProgress.hide();
+                mSignUpProgress.hide();
                 // Firebase reported error on the server side displayed here
                 if (task.isSuccessful()) {
                     boolean isVerifed = mFbAuth.getCurrentUser().isEmailVerified();
@@ -154,10 +154,8 @@ public class SignUpActivity extends AppCompatActivity {
                         // Check email dialog activity  
                         Log.wtf("WTF!", "Email is not verified. Signing out...");
                         mFbAuth.signOut();
-                        mSignUpProgress.hide();
                     }
                     else {
-                            mSignUpProgress.hide();
                         // Move to Organization selection
 //                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
