@@ -23,10 +23,13 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher" />
+                android:scaleType="fitXY"
+                android:layout_marginTop="@dimen/icon_margin"
+                android:layout_marginBottom="@dimen/icon_margin"
+                android:src="@drawable/app_icon" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/email"
@@ -70,7 +73,7 @@
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/login"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:elevation="10dp"
@@ -87,21 +90,10 @@
         android:background="@color/backgroundLoginPrimary"
         android:orientation="vertical">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="32dp"
-            android:layout_marginRight="32dp"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="normal"
-            app:srcCompat="@android:drawable/ic_input_add" />
-
         <com.github.florent37.diagonallayout.DiagonalLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:diagonal_angle="30"
+            app:diagonal_angle="35"
             app:diagonal_gravity="left|top">
 
             <FrameLayout

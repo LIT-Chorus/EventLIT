@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initializes Global Vars
         mLoginBut = (AppCompatButton) findViewById(R.id.login);
-        mSignupBut = (FloatingActionButton) findViewById(R.id.fab);
         mEmailEntry = (TextInputLayout) findViewById(R.id.email);
         mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
         mSignInProgress = new ProgressDialog(this);
@@ -125,16 +124,6 @@ public class LoginActivity extends AppCompatActivity {
                         signIn(emailText, passwordText);
                     }
                 }
-            }
-        });
-
-        mSignupBut.setRippleColor(Color.RED);
-
-        mSignupBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent signUp = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(signUp);
             }
         });
 
