@@ -304,8 +304,8 @@ public class SignUpActivity extends AppCompatActivity {
      * @param schoolEmail
      * @param password
      */
-    protected void signUp(final String firstName, final String lastName, String schoolEmail,
-                          String password) {
+    protected void signUp(final String firstName, final String lastName, final String schoolEmail,
+                          final String password) {
 
         // TODO #Chris AND-6
         // Register user first, and have them signed in.
@@ -318,10 +318,9 @@ public class SignUpActivity extends AppCompatActivity {
                             // non-auth information.
                             String uid = mFbAuth.getCurrentUser().getUid();
                             DatabaseReference user = fbDB.child("users").child(uid);
-                            user.child("firstName").setValue(firstName);
-                            user.child("lastName").setValue(lastName);
+                            user.setValue(new User(firstName, lastName, schoolEmail));
 
-                           mFbAuth.getCurrentUser().sendEmailVerification()
+                            mFbAuth.getCurrentUser().sendEmailVerification()
                                     .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
 
 
