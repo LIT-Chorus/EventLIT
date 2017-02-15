@@ -22,25 +22,25 @@
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".SignUpActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".OrganizerFeedActivity"
             android:label="@string/title_activity_main_scrolling"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".StudentFeedActivity"
             android:label="@string/title_activity_main_scrolling"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait">
+            ></activity>
     </application>
 
 </manifest>

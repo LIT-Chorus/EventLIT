@@ -1,19 +1,15 @@
 package com.cse110.eventlit;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,8 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
     // Firebase Database
     private DatabaseReference fbDB;
 
-    private Button mRegisterBut;
-    private FloatingActionButton mSignupBut;
+    private Button mNextBut;
 
     private TextInputLayout mFirstNameEntry;
     private TextInputLayout mLastNameEntry;
@@ -41,9 +36,6 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout mPasswordEntry;
     private TextInputLayout mConfirmPasswordEntry;
 
-    private TextView backendRet;
-
-    private ProgressDialog mSignUpProgress;
     private FirebaseAuth.AuthStateListener mFbListener;
 
     private OnCompleteListener<Void> mSignUpListener;
@@ -57,7 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         // Initializes Global Vars
-        mRegisterBut = (Button) findViewById(R.id.register);
+        mNextBut = (Button) findViewById(R.id.next);
 
         mFirstNameEntry = (TextInputLayout) findViewById(R.id.firstname);
         mLastNameEntry = (TextInputLayout) findViewById(R.id.lastname);
@@ -67,9 +59,6 @@ public class SignUpActivity extends AppCompatActivity {
         mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
         mConfirmPasswordEntry = (TextInputLayout) findViewById(R.id.confirmpassword);
 
-        backendRet = (TextView) findViewById(R.id.backendReturn);
-        mSignUpProgress = new ProgressDialog(this);
-
         // Tracks whether a user is signed in or not
         Log.w("FBAuth", mFbAuth + "" );
         mFbAuth = FirebaseAuth.getInstance();
@@ -77,11 +66,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Set up database reference.
         fbDB = FirebaseDatabase.getInstance().getReference();
-
-        // Set up ProgressDialog
-        mSignUpProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mSignUpProgress.setTitle("Register");
-        mSignUpProgress.setMessage("Registering new user account");
 
         mFirstNameEntry.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -144,7 +128,6 @@ public class SignUpActivity extends AppCompatActivity {
         mSignUpListener = new OnCompleteListener<Void>(){
             @Override
             public void onComplete(@NonNull Task<Void> task){
-                mSignUpProgress.hide();
                 // Firebase reported error on the server side displayed here
                 if (task.isSuccessful()) {
                     boolean isVerifed = mFbAuth.getCurrentUser().isEmailVerified();
@@ -171,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         // Login Behavior
-        mRegisterBut.setOnClickListener(new View.OnClickListener() {
+        mNextBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
 
@@ -182,8 +165,6 @@ public class SignUpActivity extends AppCompatActivity {
                         String lastName = mLastNameEntry.getEditText().getText().toString();
                         String emailText = mEmailEntry.getEditText().getText().toString();
                         String passwordText = mPasswordEntry.getEditText().getText().toString();
-
-                        mSignUpProgress.show();
 
                         signUp(firstName, lastName, emailText, passwordText);
                     }

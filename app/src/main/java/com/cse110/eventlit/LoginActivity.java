@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private AppCompatButton mLoginBut;
-    private FloatingActionButton mSignupBut;
 
     private TextInputLayout mEmailEntry;
     private TextInputLayout mPasswordEntry;
@@ -36,12 +36,15 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog mSignInProgress;
     private OnCompleteListener<AuthResult> mSignInListener;
 
+    private TextView mForgot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         // Initializes Global Vars
+        mForgot = (TextView) findViewById(R.id.forgotPassText);
         mLoginBut = (AppCompatButton) findViewById(R.id.login);
         mEmailEntry = (TextInputLayout) findViewById(R.id.email);
         mPasswordEntry = (TextInputLayout) findViewById(R.id.password);
@@ -124,6 +127,14 @@ public class LoginActivity extends AppCompatActivity {
                         signIn(emailText, passwordText);
                     }
                 }
+            }
+        });
+
+        mForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent forgotPage = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(forgotPage);
             }
         });
 
