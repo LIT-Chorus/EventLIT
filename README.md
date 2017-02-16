@@ -1,17 +1,13 @@
-# events-android
+# EventLIT
 
 # Overview 
-Our Android application aims to provide students a simpler means of finding events / following organizations and to provide student organizations an easier way to reach students.
+EventLIT is an Android application that aims to provide students a simpler means of finding events / following student organizations and to provide organizations an easier way to reach students.
 
 # High Level Workflow
 
 1. The user shall launch the application
 2. The system shall display a splash screen with the application name and logo
 3. TBD
-
-# CHANGELOG.MD
-High level description of changes made during each sprint. Project Manager is responsible for updating this file as necessary. 
-
 
 # How to contribute
 
