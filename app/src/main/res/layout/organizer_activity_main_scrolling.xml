@@ -19,7 +19,11 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@drawable/side_nav_bar"
         app:headerLayout="@layout/nav_header_main_scrolling"
-        app:menu="@menu/organizer_activity_main_scrolling_drawer" />
+        app:itemTextColor="#BDBDBD"
+        app:itemIconTint="#BDBDBD"
+        app:menu="@menu/organizer_activity_main_scrolling_drawer"
+        />
 
 </android.support.v4.widget.DrawerLayout>
