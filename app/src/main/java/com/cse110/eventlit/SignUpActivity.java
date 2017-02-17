@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -137,10 +138,10 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                     else {
                         // Move to Organization selection
-//                            Intent intent = new Intent(SignUpActivity.this, SelectOrgsActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                            startActivity(intent);
+                            Intent intent = new Intent(SignUpActivity.this, OrganizationSelectionActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                     }
 
                 } else {
@@ -153,6 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Login Behavior
         mNextBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                mNextBut.setClickable(false);
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
 
                     if (checkFirstName() && checkLastName() && checkEmail() && checkPass() &&
@@ -165,6 +167,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                         signUp(firstName, lastName, emailText, passwordText);
                     }
+                } else {
+                    mNextBut.setClickable(true);
                 }
             }
         });
@@ -298,6 +302,8 @@ public class SignUpActivity extends AppCompatActivity {
                             DatabaseReference user = fbDB.child("users").child(uid);
                             user.setValue(new User(firstName, lastName, schoolEmail));
 
+                            mNextBut.setClickable(true);
+
                             mFbAuth.getCurrentUser().sendEmailVerification()
                                     .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
 
@@ -311,6 +317,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     .setTitle("Registration Error")
                                     .setPositiveButton(android.R.string.ok, null);
                             builder.create().show();
+                            mNextBut.setClickable(true);
                         }
                     }
                 });

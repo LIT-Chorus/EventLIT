@@ -30,6 +30,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 // TODO: Backend send reset link to user
 
+                mResetBut.setClickable(false);
+
                 if (checkEmail()) {
 
                     final AlertDialog dialog = new AlertDialog.Builder(ForgotPasswordActivity.this, R.style.AlertDialogCustom)
@@ -41,6 +43,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialog.dismiss();
+                            mResetBut.setClickable(true);
                         }
                     });
 
@@ -48,6 +51,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                     dialog.show();
                     mEmailEntry.getEditText().setText("");
+                } else {
+                    mResetBut.setClickable(true);
                 }
             }
         });
