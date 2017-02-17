@@ -22,6 +22,7 @@
             android:title="Your events" />
     </group>
 
+
     <group
         android:id="@+id/menu_bottom"
         android:checkableBehavior="none">
@@ -33,6 +34,10 @@
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_menu_help"
             android:title="Help &amp; feedback" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_menu_logout"
+            android:title="Log Out" />
     </group>
 
 </menu>

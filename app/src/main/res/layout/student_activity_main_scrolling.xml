@@ -44,6 +44,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@drawable/side_nav_bar"
+        app:itemTextColor="#BDBDBD"
+        app:itemIconTint="#BDBDBD"
         app:headerLayout="@layout/nav_header_main_scrolling"
         app:menu="@menu/student_activity_main_scrolling_drawer" />
 
