@@ -40,9 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private OnCompleteListener<Void> mSignUpListener;
 
-    public SignUpActivity() {
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                     else {
                         // Move to Organization selection
-//                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+//                            Intent intent = new Intent(SignUpActivity.this, SelectOrgsActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                            startActivity(intent);
@@ -285,7 +282,7 @@ public class SignUpActivity extends AppCompatActivity {
      * @param schoolEmail
      * @param password
      */
-    protected void signUp(final String firstName, final String lastName, String schoolEmail,
+    protected void signUp(final String firstName, final String lastName, final String schoolEmail,
                           String password) {
 
         // TODO #Chris AND-6
@@ -299,10 +296,9 @@ public class SignUpActivity extends AppCompatActivity {
                             // non-auth information.
                             String uid = mFbAuth.getCurrentUser().getUid();
                             DatabaseReference user = fbDB.child("users").child(uid);
-                            user.child("firstName").setValue(firstName);
-                            user.child("lastName").setValue(lastName);
+                            user.setValue(new User(firstName, lastName, schoolEmail));
 
-                           mFbAuth.getCurrentUser().sendEmailVerification()
+                            mFbAuth.getCurrentUser().sendEmailVerification()
                                     .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
 
 

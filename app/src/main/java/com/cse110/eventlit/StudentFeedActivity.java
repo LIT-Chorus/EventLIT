@@ -1,6 +1,7 @@
 package com.cse110.eventlit;
 
 import android.content.DialogInterface;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,12 +10,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +39,14 @@ public class StudentFeedActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Example call to Organizer Utils
+        final TextView test = (TextView)findViewById(R.id.test);
+        final ArrayAdapter<String> organizations = new ArrayAdapter<>(this,
+                                                        R.layout.student_activity_main_scrolling);
+        OrganizerUtils.getAllStudentOrganizations(organizations);
+        // TODO Frontend use this ArrayAdapter to populate a ListView or something
+
     }
 
     @Override
@@ -98,4 +115,5 @@ public class StudentFeedActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
