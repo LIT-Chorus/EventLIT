@@ -40,9 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private OnCompleteListener<Void> mSignUpListener;
 
-    public SignUpActivity() {
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                     else {
                         // Move to Organization selection
-//                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+//                            Intent intent = new Intent(SignUpActivity.this, SelectOrgsActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                            startActivity(intent);
