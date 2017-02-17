@@ -8,14 +8,13 @@ import java.util.List;
  */
 
 public class User {
-    public List<String> orgs_following;
 
+    public List<OrgFollowing> orgs_following;
     public String firstName;
     public String lastName;
     public String email;
 
     public User() {
-        orgs_following = new ArrayList<>();
     }
 
     public User(String firstName,
@@ -28,7 +27,7 @@ public class User {
         this.email = email;
     }
 
-    public User(List<String> organizer_access,
+    public User(List<String> organizer_access, List<OrgFollowing> orgs_following,
 
                 String firstName,
                 String lastName,
@@ -38,6 +37,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.orgs_following = orgs_following;
     }
 
 
