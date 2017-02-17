@@ -36,7 +36,8 @@
             android:name=".StudentFeedActivity"
             android:label="@string/title_activity_main_scrolling"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+        </activity>
         <activity
             android:name=".ForgotPasswordActivity"
             android:screenOrientation="portrait">
