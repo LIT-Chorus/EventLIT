@@ -9,7 +9,7 @@ import java.util.List;
 
 public class User {
 
-    public List<OrgFollowing> orgs_following;
+    public ArrayList<String> orgs_following = new ArrayList<String>();
     public String firstName;
     public String lastName;
     public String email;
@@ -27,7 +27,7 @@ public class User {
         this.email = email;
     }
 
-    public User(List<String> organizer_access, List<OrgFollowing> orgs_following,
+    public User(List<String> organizer_access, ArrayList<String> orgs_following,
 
                 String firstName,
                 String lastName,
