@@ -24,7 +24,7 @@ class OrganizerUtils {
      * Return an ArrayList of all student organizations on UCSD campus.
      * @return studentOrgs - an ArrayList of student organizations as strings
      */
-    static ArrayList<String> getAllStudentOrganizations(final ArrayAdapter<String> adapter){
+    static void getAllStudentOrganizations(final ArrayAdapter<String> adapter){
         final ArrayList<String> studentOrgs = new ArrayList<>();
         final DatabaseReference organizations = fbDBRef.child("organizations");
         ValueEventListener postListener = new ValueEventListener() {
@@ -52,6 +52,5 @@ class OrganizerUtils {
             }
         };
         organizations.addListenerForSingleValueEvent(postListener);
-        return studentOrgs;
     }
 }

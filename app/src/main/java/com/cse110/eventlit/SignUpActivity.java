@@ -138,10 +138,10 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                     else {
                         // Move to Organization selection
-                            Intent intent = new Intent(SignUpActivity.this, OrganizationSelectionActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+//                            Intent intent = new Intent(SignUpActivity.this, OrganizationSelectionActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
                     }
 
                 } else {
