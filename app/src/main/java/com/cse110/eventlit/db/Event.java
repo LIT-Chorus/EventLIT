@@ -124,7 +124,7 @@ public class Event {
      * @param hour
      * @param minute
      */
-    public void setStartDate(int year, int month, int dayOfMonth, int hour, int minute) {
+    public void sStartDate(int year, int month, int dayOfMonth, int hour, int minute) {
         Calendar c = new GregorianCalendar(year, month, dayOfMonth, hour, minute);
         startDate = c.getTimeInMillis();
     }
@@ -133,7 +133,7 @@ public class Event {
      * Gets the start date of this event.
      * @return
      */
-    public Calendar getStartDate() {
+    public Calendar gStartDate() {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(startDate);
         return c;
@@ -147,7 +147,7 @@ public class Event {
      * @param hour
      * @param minute
      */
-    public void setEndDate(int year, int month, int dayOfMonth, int hour, int minute) {
+    public void sEndDate(int year, int month, int dayOfMonth, int hour, int minute) {
         Calendar c = new GregorianCalendar(year, month, dayOfMonth, hour, minute);
         endDate = c.getTimeInMillis();
     }
@@ -156,7 +156,7 @@ public class Event {
      * Gets the end date of this event.
      * @return
      */
-    public Calendar getEndDate() {
+    public Calendar gEndDate() {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(endDate);
         return c;
