@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -39,9 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mFbListener;
 
     private OnCompleteListener<Void> mSignUpListener;
-
-    public SignUpActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +138,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                     else {
                         // Move to Organization selection
-//                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+//                            Intent intent = new Intent(SignUpActivity.this, OrganizationSelectionActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                            startActivity(intent);
@@ -156,6 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Login Behavior
         mNextBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                mNextBut.setClickable(false);
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
 
                     if (checkFirstName() && checkLastName() && checkEmail() && checkPass() &&
@@ -168,6 +167,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                         signUp(firstName, lastName, emailText, passwordText);
                     }
+                } else {
+                    mNextBut.setClickable(true);
                 }
             }
         });
@@ -285,7 +286,7 @@ public class SignUpActivity extends AppCompatActivity {
      * @param schoolEmail
      * @param password
      */
-    protected void signUp(final String firstName, final String lastName, String schoolEmail,
+    protected void signUp(final String firstName, final String lastName, final String schoolEmail,
                           String password) {
 
         // TODO #Chris AND-6
@@ -299,10 +300,11 @@ public class SignUpActivity extends AppCompatActivity {
                             // non-auth information.
                             String uid = mFbAuth.getCurrentUser().getUid();
                             DatabaseReference user = fbDB.child("users").child(uid);
-                            user.child("firstName").setValue(firstName);
-                            user.child("lastName").setValue(lastName);
+                            user.setValue(new User(firstName, lastName, schoolEmail));
 
-                           mFbAuth.getCurrentUser().sendEmailVerification()
+                            mNextBut.setClickable(true);
+
+                            mFbAuth.getCurrentUser().sendEmailVerification()
                                     .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
 
 
@@ -315,6 +317,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     .setTitle("Registration Error")
                                     .setPositiveButton(android.R.string.ok, null);
                             builder.create().show();
+                            mNextBut.setClickable(true);
                         }
                     }
                 });

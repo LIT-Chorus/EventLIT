@@ -151,7 +151,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:elevation="10dp"
-                android:text="Next"
+                android:text="Register (will be next)"
                 android:textColor="@color/white"
                 android:theme="@style/AppTheme.Button" />
 

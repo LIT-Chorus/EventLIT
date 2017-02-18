@@ -96,13 +96,26 @@ public class LoginActivity extends AppCompatActivity {
                 if (!task.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_LONG);
                     Log.d("Firebase Error", task.getException().getMessage());
+                    mLoginBut.setClickable(true);
                 } else {
 
                     // TODO: Backend team add logic to check if user is a student or an organizer
 
-                    // Starts activity based on student or organizer
-                    Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
-                    startActivity(openFeed);
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if (currentUser.isEmailVerified()) {
+
+                        Log.d("EmailVerification", "email is verified");
+                        // Starts activity based on student or organizer
+                        mLoginBut.setClickable(true);
+                        Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                        startActivity(openFeed);
+                    }
+
+                    else {
+                        mLoginBut.setClickable(true);
+                        Log.d("EmailVerification", "email is not verified");
+                    }
 
 //                    Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
 //                    startActivity(openFeed);
@@ -113,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
         // Login Behavior
         mLoginBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                mLoginBut.setClickable(false);
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
                     checkEmail();
 
@@ -125,7 +139,11 @@ public class LoginActivity extends AppCompatActivity {
                         mSignInProgress.show();
 
                         signIn(emailText, passwordText);
+                    } else {
+                        mLoginBut.setClickable(true);
                     }
+                } else {
+                    mLoginBut.setClickable(true);
                 }
             }
         });

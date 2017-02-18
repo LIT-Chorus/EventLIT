@@ -36,16 +36,30 @@
             android:name=".StudentFeedActivity"
             android:label="@string/title_activity_main_scrolling"
             android:screenOrientation="portrait"
+<<<<<<< HEAD
             android:theme="@style/AppTheme" />
 
+=======
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".OrganizerDetailedEventActivity"
+            android:label="Event"
+            android:screenOrientation="portrait"
+            android:exported="true"
+            android:theme="@style/AppTheme"></activity>
+>>>>>>> 285ca8e63d0c1ddeaa7f26283c49ffbd79360d70
         <activity
             android:name=".ForgotPasswordActivity"
             android:screenOrientation="portrait">
             >
         </activity>
+<<<<<<< HEAD
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
+=======
+        <activity android:name=".OrganizationSelectionActivity"></activity>
+>>>>>>> 285ca8e63d0c1ddeaa7f26283c49ffbd79360d70
     </application>
 
 </manifest>

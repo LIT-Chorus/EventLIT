@@ -1,6 +1,7 @@
 package com.cse110.eventlit;
 
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +11,17 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private AppCompatButton mResetBut;
     private TextInputLayout mEmailEntry;
+    private FirebaseAuth fbAuth;
+    private OnCompleteListener onPasswordResetSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +32,32 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         mResetBut = (AppCompatButton) findViewById(R.id.reset);
         mEmailEntry = (TextInputLayout) findViewById(R.id.email);
 
-        mResetBut.setOnClickListener(new View.OnClickListener() {
+        // Initial fb auth object
+        fbAuth = FirebaseAuth.getInstance();
+
+        // Setup an on complete listener
+        onPasswordResetSent = new OnCompleteListener<Void>() {
             @Override
-            public void onClick(View view) {
+            public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()){
+                    final AlertDialog dialog = new AlertDialog.Builder(ForgotPasswordActivity.this, R.style.AlertDialogCustom)
+                            .setTitle("Reset Failed")
+                            .setMessage("User with email " +
+                                    mEmailEntry.getEditText().getText().toString() + " does not exist")
+                            .setCancelable(false).create();
+                    dialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialog.dismiss();
+                            mResetBut.setClickable(true);
+                        }
+                    });
 
-                // TODO: Backend send reset link to user
+                    LitUtils.hideSoftKeyboard(ForgotPasswordActivity.this, mEmailEntry);
 
-                if (checkEmail()) {
-
+                    dialog.show();
+                    mEmailEntry.getEditText().setText("");
+                } else {
                     final AlertDialog dialog = new AlertDialog.Builder(ForgotPasswordActivity.this, R.style.AlertDialogCustom)
                             .setTitle("Reset Confirmation")
                             .setMessage("A reset link has been sent to " +
@@ -40,6 +66,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            mResetBut.setClickable(true);
                             dialog.dismiss();
                         }
                     });
@@ -48,6 +75,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                     dialog.show();
                     mEmailEntry.getEditText().setText("");
+                }
+            }
+        };
+
+
+        mResetBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mResetBut.setClickable(false);
+                if (checkEmail()) {
+                    String email = mEmailEntry.getEditText().getText().toString();
+                    fbAuth.sendPasswordResetEmail(email).addOnCompleteListener(onPasswordResetSent);
+                } else {
+                    mResetBut.setClickable(true);
                 }
             }
         });

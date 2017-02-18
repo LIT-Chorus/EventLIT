@@ -1,36 +1,28 @@
 package com.cse110.eventlit;
 
-import com.cse110.eventlit.db.Event;
-import android.content.DialogInterface;
-import android.database.DataSetObserver;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
+import at.favre.lib.dali.Dali;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-
-public class StudentFeedActivity extends AppCompatActivity
+public class OrganizerDetailedEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.student_activity_main_scrolling);
+        setContentView(R.layout.organizer_activity_detailed_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,25 +35,32 @@ public class StudentFeedActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Example call to Organizer Utils
-        final TextView test = (TextView)findViewById(R.id.test);
-        final ArrayAdapter<String> organizations = new ArrayAdapter<>(this,
-                                                        R.layout.student_activity_main_scrolling);
-        OrganizerUtils.getAllStudentOrganizations(organizations);
-        // TODO Frontend use this ArrayAdapter to populate a ListView or something
+        // TODO: Set database going/interested/not going entry
+        Button goingBut = (Button) findViewById(R.id.goingButton);
+        Button interestedBut = (Button) findViewById(R.id.interestedButton);
+        Button notGoingBut = (Button) findViewById(R.id.notGoingButton);
 
-        // Mock Data stored in Firebase
-        Event first_event = new Event("Spring Quarter Job Fair", "Job me plz", "1", "San Diego", "Networking", 2000);
-        Event second_event = new Event("Google Tech Talk", "Big Data", "2", "San Francisco", "Networking", 50);
-        Event third_event = new Event("Ice Cream Run", "Come get ice cream", "3", "LA", "Food", 60);
-        Event fourth_event = new Event("IEEE Micromouse", "Annual Competition", "4", "Davis", "Academics", 400);
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference();
-        DatabaseReference eventsRef = ref.child("events").child("1");
-        eventsRef.push().setValue(first_event);
-        eventsRef.push().setValue(second_event);
-        eventsRef.push().setValue(third_event);
-        eventsRef.push().setValue(fourth_event);
+
+        goingBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        interestedBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        notGoingBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -70,16 +69,8 @@ public class StudentFeedActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            new AlertDialog.Builder(this, R.style.AlertDialogCustom)
-                    .setTitle("Really Exit?")
-                    .setMessage("Are you sure you want to exit?")
-                    .setNegativeButton(R.string.no, null)
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            finish();
-                        }
-                    }).create().show();
+            // TODO: Go back to organizer feed
+            finish();
         }
     }
 
@@ -120,6 +111,8 @@ public class StudentFeedActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_preferences) {
 
+        } else if (id == R.id.nav_your_events) {
+
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_help) {
@@ -130,5 +123,4 @@ public class StudentFeedActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
