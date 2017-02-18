@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import com.cse110.eventlit.db.Event;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -47,6 +50,18 @@ public class StudentFeedActivity extends AppCompatActivity
         OrganizerUtils.getAllStudentOrganizations(organizations);
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
 
+        // Mock Data stored in Firebase
+        Event first_event = new Event("Spring Quarter Job Fair", "Job me plz", "1", "San Diego", "Networking", 2000);
+        Event second_event = new Event("Google Tech Talk", "Big Data", "2", "San Francisco", "Networking", 50);
+        Event third_event = new Event("Ice Cream Run", "Come get ice cream", "3", "LA", "Food", 60);
+        Event fourth_event = new Event("IEEE Micromouse", "Annual Competition", "4", "Davis", "Academics", 400);
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference();
+        DatabaseReference eventsRef = ref.child("events").child("1");
+        eventsRef.push().setValue(first_event);
+        eventsRef.push().setValue(second_event);
+        eventsRef.push().setValue(third_event);
+        eventsRef.push().setValue(fourth_event);
     }
 
     @Override
