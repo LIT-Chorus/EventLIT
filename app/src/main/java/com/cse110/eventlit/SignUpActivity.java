@@ -167,9 +167,9 @@ public class SignUpActivity extends AppCompatActivity {
 
                         signUp(firstName, lastName, emailText, passwordText);
                     }
-                } else {
-                    mNextBut.setClickable(true);
                 }
+
+                mNextBut.setClickable(true);
             }
         });
     }
@@ -303,6 +303,11 @@ public class SignUpActivity extends AppCompatActivity {
                             user.setValue(new User(firstName, lastName, schoolEmail));
 
                             mNextBut.setClickable(true);
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                            builder.setTitle("Registration Successful!")
+                                    .setPositiveButton(android.R.string.ok, null);
+                            builder.create().show();
 
                             mFbAuth.getCurrentUser().sendEmailVerification()
                                     .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
