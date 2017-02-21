@@ -1,4 +1,4 @@
-package com.cse110.eventlit;
+package com.cse110.eventlit.db;
 
 import java.util.ArrayList;
 import java.util.List;

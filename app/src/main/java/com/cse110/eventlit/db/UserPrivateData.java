@@ -1,4 +1,4 @@
-package com.cse110.eventlit;
+package com.cse110.eventlit.db;
 
 import com.cse110.eventlit.db.Event;
 
