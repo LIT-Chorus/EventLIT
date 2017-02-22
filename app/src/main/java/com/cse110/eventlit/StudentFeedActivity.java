@@ -46,7 +46,7 @@ public class StudentFeedActivity extends AppCompatActivity
 //        FirebaseUtils.getAllStudentOrganizations(organizations);
 
 
-        // Test Code
+        // Test Code for getting events
         final ArrayAdapter<Event> events = new ArrayAdapter<>(this,
                 R.layout.student_activity_main_scrolling);
         FirebaseUtils.getEventsByOrgId(events, "1");

@@ -62,7 +62,7 @@ public class FirebaseUtils {
      * change.
      */
     public static void getEventsByOrgId(final ArrayAdapter<Event> adapter, final String orgId){
-        final DatabaseReference events = fbDBRef.child("events").child("1");
+        final DatabaseReference events = fbDBRef.child("events").child(orgId);
         ValueEventListener eventListener = new ValueEventListener() {
             // Get a snapshot of events db
             @Override
