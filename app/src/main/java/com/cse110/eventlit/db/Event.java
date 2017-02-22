@@ -1,9 +1,13 @@
 package com.cse110.eventlit.db;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Event {
     /**
@@ -19,55 +23,47 @@ public class Event {
     /**
      * Title of the event.
      */
-    public String title;
+    private String title;
 
     /**
      * Description of the event.
      */
-    public String description;
+    private String description;
 
     /**
      * String ID of the organization hosting the event.
      */
-    public String orgid;
+    private String orgid;
 
     /**
      * Start and end dates of the event, as milliseconds since the Unix epoch (Jan 1, 1970).
      * Use getStartDate() or getEndDate() for better representations of this data.
      */
-    public long startDate;
-    public long endDate;
+    private long startDate;
+    private long endDate;
 
     /**
-     * Named location of the event.
+     * Named location of the event. e.g. "La Jolla, CA"
      */
-    public String location;
+    private String location;
 
     /**
      * Category of the event.
      */
-    public String category;
+    private String category;
 
     /**
      * Maximum number of persons that the event can hold.
      */
-    public int maxCapacity;
+    private int maxCapacity;
 
     /**
      * List of UIDs of attendees to the event.
      */
-    public List<String> attendees;
+    private List<String> attendees;
 
     /**
      * Full constructor containing all event information.
-     * @param title
-     * @param description
-     * @param orgid
-     * @param startDate
-     * @param endDate
-     * @param location
-     * @param category
-     * @param maxCapacity
      */
     public Event(String title, String description, String orgid, Calendar startDate,
                  Calendar endDate, String location, String category, int maxCapacity) {
@@ -85,12 +81,6 @@ public class Event {
     /**
      * Constructor less the start and end dates. The dates are automatically initialized to the
      * current date and time.
-     * @param title
-     * @param description
-     * @param orgid
-     * @param location
-     * @param category
-     * @param maxCapacity
      */
     public Event(String title, String description, String orgid, String location, String category,
                  int maxCapacity) {
@@ -100,10 +90,6 @@ public class Event {
 
     /**
      * Constructor less dates, location and max capacity.
-     * @param title
-     * @param description
-     * @param orgid
-     * @param category
      */
     public Event(String title, String description, String orgid, String category) {
         this(title, description, orgid, "Nowhere", category, 100);
@@ -118,22 +104,16 @@ public class Event {
 
     /**
      * Sets the start date of this event. Months are 0-indexed: e.g. Month 0 is January.
-     * @param year
-     * @param month
-     * @param dayOfMonth
-     * @param hour
-     * @param minute
      */
-    public void sStartDate(int year, int month, int dayOfMonth, int hour, int minute) {
+    public void setStartDate(int year, int month, int dayOfMonth, int hour, int minute) {
         Calendar c = new GregorianCalendar(year, month, dayOfMonth, hour, minute);
         startDate = c.getTimeInMillis();
     }
 
     /**
-     * Gets the start date of this event.
-     * @return
+     * Gets the start date of this event as a Calendar object.
      */
-    public Calendar gStartDate() {
+    public Calendar getStartDate() {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(startDate);
         return c;
@@ -141,24 +121,108 @@ public class Event {
 
     /**
      * Sets the end date of this event. Months are 0-indexed: e.g. Month 0 is January.
-     * @param year
-     * @param month
-     * @param dayOfMonth
-     * @param hour
-     * @param minute
      */
-    public void sEndDate(int year, int month, int dayOfMonth, int hour, int minute) {
+    public void setEndDate(int year, int month, int dayOfMonth, int hour, int minute) {
         Calendar c = new GregorianCalendar(year, month, dayOfMonth, hour, minute);
         endDate = c.getTimeInMillis();
     }
 
     /**
-     * Gets the end date of this event.
-     * @return
+     * Gets the end date of this event as a Calendar object.
      */
-    public Calendar gEndDate() {
+    public Calendar getEndDate() {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(endDate);
         return c;
+    }
+
+    /**
+     * Adds attendee by UID to the Event's attendee list.
+     */
+    public void addAttendee(String uid) {
+        attendees.add(uid);
+    }
+
+    /**
+     * Removes an attendee by UID from the Event's attendee list.
+     */
+    public void removeAttendee(String uid) {
+        attendees.remove(uid);
+    }
+
+    /**
+     * Returns a key-value mapping of the Event object.
+     * Pass this map to a Firebase setValue() method if you need to store the Event into the DB.
+     */
+    public Map<String, Object> getMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", title);
+        map.put("description", description);
+        map.put("orgid", orgid);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("location", location);
+        map.put("category", category);
+        map.put("maxCapacity", maxCapacity);
+        map.put("attendees", attendees);
+        return map;
+    }
+
+    /**
+     * Returns a JSON stringified version of the Event object.
+     */
+    @Override
+    public String toString() {
+        JSONObject json = new JSONObject(getMap());
+        return json.toString();
+    }
+
+    // Plain self-explanatory getters and setters below.
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getOrgid() {
+        return orgid;
+    }
+
+    public void setOrgid(String orgid) {
+        this.orgid = orgid;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
     }
 }

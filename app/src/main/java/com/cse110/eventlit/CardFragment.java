@@ -76,8 +76,8 @@ public class CardFragment extends Fragment {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-            holder.dateTextView.setText(list.get(position).gStartDate().toString());
-            holder.locationTextView.setText(list.get(position).location);
+            holder.dateTextView.setText(list.get(position).getStartDate().toString());
+            holder.locationTextView.setText(list.get(position).getLocation());
 
         }
 
