@@ -1,4 +1,4 @@
-package com.cse110.eventlit;
+package com.cse110.utils;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;

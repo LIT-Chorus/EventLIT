@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -59,7 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
         mConfirmPasswordEntry = (TextInputLayout) findViewById(R.id.confirmpassword);
 
         // Tracks whether a user is signed in or not
-        Log.w("FBAuth", mFbAuth + "" );
+        Log.w("FBAuth", mFbAuth + "");
         mFbAuth = FirebaseAuth.getInstance();
         Log.w("FBAuth", mFbAuth.toString());
 
@@ -124,20 +125,19 @@ public class SignUpActivity extends AppCompatActivity {
             }
         };
 
-        mSignUpListener = new OnCompleteListener<Void>(){
+        mSignUpListener = new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task){
+            public void onComplete(@NonNull Task<Void> task) {
                 // Firebase reported error on the server side displayed here
                 if (task.isSuccessful()) {
                     boolean isVerifed = mFbAuth.getCurrentUser().isEmailVerified();
                     Log.w("Task successful", "yes");
-                    if (!isVerifed){
+                    if (!isVerifed) {
                         // TODO Frontend
                         // Check email dialog activity  
                         Log.wtf("WTF!", "Email is not verified. Signing out...");
                         mFbAuth.signOut();
-                    }
-                    else {
+                    } else {
                         // Move to Organization selection
 //                            Intent intent = new Intent(SignUpActivity.this, OrganizationSelectionActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -218,7 +218,6 @@ public class SignUpActivity extends AppCompatActivity {
         if (confirmPassEditText.getError() != null) return false;
 
 
-
         String confirmPasswordText = confirmPassEditText.getText().toString();
 
         // Password Criteria
@@ -282,6 +281,7 @@ public class SignUpActivity extends AppCompatActivity {
     /**
      * Takes preliminary user information and creates a new user account.
      * Inputs should have already been validated before passing to this method.
+     *
      * @param firstName
      * @param lastName
      * @param schoolEmail
@@ -305,14 +305,29 @@ public class SignUpActivity extends AppCompatActivity {
 
                             mNextBut.setClickable(true);
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                            builder.setTitle("Registration Successful!")
-                                    .setPositiveButton(android.R.string.ok, null);
-                            builder.create().show();
-
                             mFbAuth.getCurrentUser().sendEmailVerification()
                                     .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
 
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                            builder.setTitle("Registration Successful!")
+                                    .setMessage("A verification email has been sent to " +
+                                            schoolEmail + ". Please verify your email then click " +
+                                            "ok to begin using our application!")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            if (!mFbAuth.getCurrentUser().isEmailVerified()) {
+                                                Toast.makeText(SignUpActivity.this, "Please " +
+                                                        "verify your email!", Toast.LENGTH_SHORT);
+                                            } else {
+                                                Intent selectOrgs = new Intent(SignUpActivity.this,
+                                                        OrganizationSelectionActivity.class);
+                                                startActivity(selectOrgs);
+
+                                            }
+                                        }
+                                    });
+                            builder.create().show();
 
 
                             // TODO: Move user to email verification page (instead of LoginActivity)

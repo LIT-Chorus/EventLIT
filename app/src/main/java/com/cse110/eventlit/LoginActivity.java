@@ -109,6 +109,8 @@ public class LoginActivity extends AppCompatActivity {
                         // Starts activity based on student or organizer
                         mLoginBut.setClickable(true);
                         Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                        mEmailEntry.getEditText().setText("");
+                        mPasswordEntry.getEditText().setText("");
                         startActivity(openFeed);
                     }
 
