@@ -1,15 +1,19 @@
 package com.cse110.utils;
 
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.Organization;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -28,22 +32,25 @@ public class FirebaseUtils {
      * Notify the ArrayAdapter of the change.
      *
      */
-    public static void getAllStudentOrganizations(final ArrayAdapter<String> adapter){
+    public static void getAllStudentOrganizations(final OrganizationsAdapter adapter,
+                                                  final ArrayList<Organization> orgsList){
         final DatabaseReference organizations = fbDBRef.child("organizations");
         ValueEventListener postListener = new ValueEventListener() {
             // Get a snapshot of the database organizations document
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Remove all existing orgs
-                adapter.clear();
-
                 // Reindex and add new organziations
                 for (DataSnapshot shot: dataSnapshot.getChildren()){
-                    String organization = shot.getValue().toString();
-                    adapter.add(organization);
+                    String orgKey = shot.getKey();
+                    String orgName = shot.getValue().toString();
+                    Organization org = new Organization(orgKey, orgName);
+
+                    // Add the new org to the list and notify the adapter.
+                    orgsList.add(org);
+                    adapter.notifyItemChanged(adapter.getItemCount() - 1);
                 }
-                for (int i = 0; i < adapter.getCount(); i++){
-                    Log.w("Org " + i + ":", adapter.getItem(i));
+                for (int i = 0; i < adapter.getItemCount(); i++){
+                    Log.w("Org " + i + ":", adapter.getItemId(i) + "");
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -61,7 +68,9 @@ public class FirebaseUtils {
      * Fetch a list of events and save it off in an ArrayAdapter. Notify the ArrayAdapter of the
      * change.
      */
-    public static void getEventsByOrgId(final ArrayAdapter<Event> adapter, final String orgId){
+    public static void getEventsByOrgId(final ArrayAdapter<Event> adapter,
+                                        final ArrayList<Event> adapterArray,
+                                        final String orgId){
         final DatabaseReference events = fbDBRef.child("events").child(orgId);
         ValueEventListener eventListener = new ValueEventListener() {
             // Get a snapshot of events db
@@ -99,7 +108,7 @@ public class FirebaseUtils {
                             // Create an event object and add it to the adapter
                             Event event = new Event(title, description, orgId, startDate,
                                     endDate,location, category, maxCapacity);
-                            adapter.add(event);
+                            adapterArray.add(event);
                         }
                     }
                 }
@@ -115,5 +124,33 @@ public class FirebaseUtils {
             }
         };
         events.addValueEventListener(eventListener);
+    }
+
+    /**
+     * Fetch a list of all events regardless of organization.
+     *
+     * @param adapter - the adapter to notify once the ArrayList has been populated
+     * @param eventList - an ArrayList of events to be populated
+     */
+    public static void getAllEvents(final ArrayAdapter<Event> adapter,
+                                    final ArrayList<Event> eventList) {
+        final DatabaseReference events = fbDBRef.child("events");
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Enumerate through all the organizations
+                for (DataSnapshot org : dataSnapshot.getChildren()){
+                    getEventsByOrgId(adapter, eventList, org.getKey());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("FirebaseUtils", "Could not retrieve events");
+            }
+        };
+        events.addValueEventListener(eventListener);
+
     }
 }
