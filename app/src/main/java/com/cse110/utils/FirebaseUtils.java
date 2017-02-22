@@ -1,9 +1,12 @@
 package com.cse110.utils;
 
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.Organization;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,22 +31,25 @@ public class FirebaseUtils {
      * Notify the ArrayAdapter of the change.
      *
      */
-    public static void getAllStudentOrganizations(final ArrayAdapter<String> adapter){
+    public static void getAllStudentOrganizations(final OrganizationsAdapter adapter,
+                                                  final ArrayList<Organization> orgsList){
         final DatabaseReference organizations = fbDBRef.child("organizations");
         ValueEventListener postListener = new ValueEventListener() {
             // Get a snapshot of the database organizations document
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Remove all existing orgs
-                adapter.clear();
-
                 // Reindex and add new organziations
                 for (DataSnapshot shot: dataSnapshot.getChildren()){
-                    String organization = shot.getValue().toString();
-                    adapter.add(organization);
+                    String orgKey = shot.getKey();
+                    String orgName = shot.getValue().toString();
+                    Organization org = new Organization(orgKey, orgName);
+
+                    // Add the new org to the list and notify the adapter.
+                    orgsList.add(org);
+                    adapter.notifyItemChanged(adapter.getItemCount() - 1);
                 }
-                for (int i = 0; i < adapter.getCount(); i++){
-                    Log.w("Org " + i + ":", adapter.getItem(i));
+                for (int i = 0; i < adapter.getItemCount(); i++){
+                    Log.w("Org " + i + ":", adapter.getItemId(i) + "");
                 }
                 adapter.notifyDataSetChanged();
             }
