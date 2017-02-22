@@ -10,4 +10,11 @@
     <dimen name="nav_header_height">190dp</dimen>
     <dimen name="notification_text">20dp</dimen>
 
+    <dimen name="activity_right_margin">10dp</dimen>
+    <dimen name="activity_left_margin">10dp</dimen>
+    <dimen name="icon_width">60dip</dimen>
+    <dimen name="icon_height">60dip</dimen>
+    <dimen name="icon_padding">8dp</dimen>
+    <dimen name="card_height">250dip</dimen>
+    <dimen name="text_size">18sp</dimen>
 </resources>
