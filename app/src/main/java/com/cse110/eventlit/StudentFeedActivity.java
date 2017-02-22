@@ -20,6 +20,8 @@ import com.cse110.utils.FirebaseUtils;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @Override
@@ -38,20 +40,10 @@ public class StudentFeedActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Example call to Organizer Utils
+        // Example call to Organizer Utils. TODO change example
         final TextView test = (TextView)findViewById(R.id.test);
         final ArrayAdapter<String> organizations = new ArrayAdapter<>(this,
                                                         R.layout.student_activity_main_scrolling);
-        // TODO call this when ready
-//        FirebaseUtils.getAllStudentOrganizations(organizations);
-
-
-        // Test Code for getting events
-        final ArrayAdapter<Event> events = new ArrayAdapter<>(this,
-                R.layout.student_activity_main_scrolling);
-        FirebaseUtils.getEventsByOrgId(events, "1");
-
-
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
     }
 
