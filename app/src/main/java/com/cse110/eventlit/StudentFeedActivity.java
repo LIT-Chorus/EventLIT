@@ -1,6 +1,5 @@
 package com.cse110.eventlit;
 
-import com.cse110.eventlit.db.Event;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,13 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-
-import com.cse110.utils.FirebaseUtils;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

@@ -1,70 +1,25 @@
 package com.cse110.utils;
 
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import com.cse110.eventlit.CardFragment;
-import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Event;
-import com.cse110.eventlit.db.Organization;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * A utility class to get data related to student organizations
- * Created by: Sandeep
+ * Created by sandeep on 2/23/17.
  */
 
-public class FirebaseUtils {
-    // Get a reference to the Firebase Database
-    private static DatabaseReference fbDBRef = FirebaseDatabase.getInstance().getReference();
+public class EventUtils {
 
-    /**
-     * Fetch a list of student organizations at UCSD, save it off in an ArrayAdapter,
-     * Notify the ArrayAdapter of the change.
-     *
-     */
-    public static void getAllStudentOrganizations(final OrganizationsAdapter adapter,
-                                                  final ArrayList<Organization> orgsList){
-        final DatabaseReference organizations = fbDBRef.child("organizations");
-        ValueEventListener postListener = new ValueEventListener() {
-            // Get a snapshot of the database organizations document
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Reindex and add new organziations
-                for (DataSnapshot shot: dataSnapshot.getChildren()){
-                    String orgKey = shot.getKey();
-                    String orgName = shot.getValue().toString();
-                    Organization org = new Organization(orgKey, orgName);
-
-                    // Add the new org to the list and notify the adapter.
-                    orgsList.add(org);
-                    adapter.notifyItemChanged(adapter.getItemCount() - 1);
-                }
-                for (int i = 0; i < orgsList.size(); i++){
-                    Log.w("Organization " + i + ":",  orgsList.get(i).toString());
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            // Elegantly handle the error
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("OrganizerUtils", "Could not retrieve student organizations");
-            }
-        };
-        organizations.addListenerForSingleValueEvent(postListener);
-    }
-
+    private static DatabaseReference eventsDB = DatabaseUtils.getEventsDB();
     /**
      * Fetch a list of events and save it off in an ArrayAdapter. Notify the ArrayAdapter of the
      * change.
@@ -72,7 +27,7 @@ public class FirebaseUtils {
     public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
                                         final String orgId){
-        final DatabaseReference events = fbDBRef.child("events").child(orgId);
+        final DatabaseReference events = eventsDB.child(orgId);
         ValueEventListener eventListener = new ValueEventListener() {
             // Get a snapshot of events db
             @Override
@@ -84,14 +39,14 @@ public class FirebaseUtils {
 
                             // Get all fields in an event object
                             String title = eventSnapshot.child("title").getValue()
-                                           .toString();
+                                    .toString();
                             String category = eventSnapshot.child("category").getValue().toString();
                             String description = eventSnapshot.child("description").getValue()
-                                                 .toString();
+                                    .toString();
 
                             Calendar startDate = new GregorianCalendar();
                             String startMilli = eventSnapshot.child("startDate").getValue()
-                                                .toString();
+                                    .toString();
                             startDate.setTimeInMillis(Long.parseLong(startMilli));
 
                             Calendar endDate = new GregorianCalendar();
@@ -116,7 +71,7 @@ public class FirebaseUtils {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("FirebaseUtils", "Could not retrieve events");
+                Log.d("DatabaseUtils", "Could not retrieve events");
             }
         };
         events.addValueEventListener(eventListener);
@@ -130,7 +85,6 @@ public class FirebaseUtils {
      */
     public static void getAllEvents(final CardFragment.MyAdapter adapter,
                                     final ArrayList<Event> eventList) {
-        final DatabaseReference events = fbDBRef.child("events");
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -144,10 +98,9 @@ public class FirebaseUtils {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("FirebaseUtils", "Could not retrieve events");
+                Log.d("DatabaseUtils", "Could not retrieve events");
             }
         };
-        events.addValueEventListener(eventListener);
-
+        eventsDB.addValueEventListener(eventListener);
     }
 }

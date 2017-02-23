@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.Organization;
-import com.cse110.utils.FirebaseUtils;
+import com.cse110.utils.OrganizationUtils;
 
 import java.util.ArrayList;
 
@@ -57,7 +57,7 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     private void populateOrganizations() {
         // Makes a call to the Firebase utility to get all organizations and stores in the reference
         // Adapter will be notified of changes. 
-        FirebaseUtils.getAllStudentOrganizations(this, mOrganizations);
+        OrganizationUtils.getAllStudentOrganizations(this, mOrganizations);
     }
 
     @Override

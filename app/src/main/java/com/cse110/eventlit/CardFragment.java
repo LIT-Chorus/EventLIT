@@ -8,14 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
-import com.cse110.utils.FirebaseUtils;
-
-import org.w3c.dom.Text;
+import com.cse110.utils.EventUtils;
 
 import java.util.ArrayList;
 
@@ -44,7 +40,7 @@ public class CardFragment extends Fragment {
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         if (listEvents.size() > 0 & MyRecyclerView != null) {
             //TODO: GET RECYCLER VIEW ADAPTER INSTEAD OF ARRAYADAPTER FROM BACKEND
-            //MyRecyclerView.setAdapter(FirebaseUtils.getAllStudentOrganizations(new MyAdapter(listEvents)));
+            //MyRecyclerView.setAdapter(EventUtils.getAllEvents(<Instance of MyAdapter goes here>, listEvents));
         }
         MyRecyclerView.setLayoutManager(MyLayoutManager);
 
