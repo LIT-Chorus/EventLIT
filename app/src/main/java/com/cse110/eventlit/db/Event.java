@@ -150,6 +150,15 @@ public class Event {
         attendees.remove(uid);
     }
 
+
+    /**
+     * Returns a list of the Event's attendees.
+     */
+    public ArrayList<String> getAttendees() {
+        ArrayList<String> copy = new ArrayList<>(attendees);
+        return copy;
+    }
+
     /**
      * Returns a key-value mapping of the Event object.
      * Pass this map to a Firebase setValue() method if you need to store the Event into the DB.
@@ -164,7 +173,7 @@ public class Event {
         map.put("location", location);
         map.put("category", category);
         map.put("maxCapacity", maxCapacity);
-        map.put("attendees", attendees);
+        map.put("attendees", new ArrayList<>(attendees));
         return map;
     }
 
