@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
@@ -49,8 +50,8 @@ public class FirebaseUtils {
                     orgsList.add(org);
                     adapter.notifyItemChanged(adapter.getItemCount() - 1);
                 }
-                for (int i = 0; i < adapter.getItemCount(); i++){
-                    Log.w("Org " + i + ":", adapter.getItemId(i) + "");
+                for (int i = 0; i < orgsList.size(); i++){
+                    Log.w("Organization " + i + ":",  orgsList.get(i).toString());
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -68,7 +69,7 @@ public class FirebaseUtils {
      * Fetch a list of events and save it off in an ArrayAdapter. Notify the ArrayAdapter of the
      * change.
      */
-    public static void getEventsByOrgId(final ArrayAdapter<Event> adapter,
+    public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
                                         final String orgId){
         final DatabaseReference events = fbDBRef.child("events").child(orgId);
@@ -102,18 +103,13 @@ public class FirebaseUtils {
                                     .parseInt(eventSnapshot.child("maxCapacity")
                                             .getValue().toString());
 
-
-
-
                             // Create an event object and add it to the adapter
                             Event event = new Event(title, description, orgId, startDate,
                                     endDate,location, category, maxCapacity);
                             adapterArray.add(event);
+                            adapter.notifyItemChanged(adapter.getItemCount() - 1);
                         }
                     }
-                }
-                for (int i = 0; i < adapter.getCount(); i++){
-                    Log.w("Event title " + i + ":", adapter.getItem(i).toString());
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -132,7 +128,7 @@ public class FirebaseUtils {
      * @param adapter - the adapter to notify once the ArrayList has been populated
      * @param eventList - an ArrayList of events to be populated
      */
-    public static void getAllEvents(final ArrayAdapter<Event> adapter,
+    public static void getAllEvents(final CardFragment.MyAdapter adapter,
                                     final ArrayList<Event> eventList) {
         final DatabaseReference events = fbDBRef.child("events");
         ValueEventListener eventListener = new ValueEventListener() {
@@ -140,6 +136,7 @@ public class FirebaseUtils {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Enumerate through all the organizations
                 for (DataSnapshot org : dataSnapshot.getChildren()){
+                    // Makes call to other method to get events for the org
                     getEventsByOrgId(adapter, eventList, org.getKey());
                     adapter.notifyDataSetChanged();
                 }
