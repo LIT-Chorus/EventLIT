@@ -1,5 +1,8 @@
 package com.cse110.eventlit.db;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by sandeep on 2/21/17.
  * An immutable object tracking an organization.
@@ -36,5 +39,21 @@ public class Organization {
      */
     public String getName(){
         return name;
+    }
+
+    /**
+     * Returns the organization as a JSON string.
+     * @return
+     */
+    @Override
+    public String toString() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", id);
+            json.put("name", name);
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return json.toString();
     }
 }
