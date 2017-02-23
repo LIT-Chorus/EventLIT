@@ -26,7 +26,7 @@ public class EventUtils {
      */
     public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
-                                        final String orgId){
+                                        final String orgId, final boolean notifyComplete){
         final DatabaseReference events = eventsDB.child(orgId);
         ValueEventListener eventListener = new ValueEventListener() {
             // Get a snapshot of events db
@@ -66,7 +66,10 @@ public class EventUtils {
                         }
                     }
                 }
-                adapter.notifyDataSetChanged();
+                if (notifyComplete){
+                    adapter.notifyDataSetChanged();
+                }
+
             }
 
             @Override
@@ -91,9 +94,10 @@ public class EventUtils {
                 // Enumerate through all the organizations
                 for (DataSnapshot org : dataSnapshot.getChildren()){
                     // Makes call to other method to get events for the org
-                    getEventsByOrgId(adapter, eventList, org.getKey());
+                    getEventsByOrgId(adapter, eventList, org.getKey(), true);
                     adapter.notifyDataSetChanged();
                 }
+
             }
 
             @Override

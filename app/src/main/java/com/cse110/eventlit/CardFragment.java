@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,13 @@ import java.util.ArrayList;
  * Created by rahulsabnis on 2/22/17.
  */
 
-public class CardFragment extends Fragment {
+public class CardFragment extends android.support.v4.app.Fragment {
     ArrayList<Event> listEvents = new ArrayList<>();
     RecyclerView MyRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("7 Wonders of the Modern World");
     }
 
     @Override
@@ -38,10 +38,15 @@ public class CardFragment extends Fragment {
         MyRecyclerView.setHasFixedSize(true);
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        if (listEvents.size() > 0 & MyRecyclerView != null) {
-            //TODO: GET RECYCLER VIEW ADAPTER INSTEAD OF ARRAYADAPTER FROM BACKEND
-            //MyRecyclerView.setAdapter(EventUtils.getAllEvents(<Instance of MyAdapter goes here>, listEvents));
-        }
+        MyAdapter adapter = new MyAdapter(listEvents);
+        EventUtils.getAllEvents(adapter, listEvents);
+//        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//            @Override
+//            public void onChanged() {
+//                super.onChanged();
+//            }
+//        });
+        MyRecyclerView.setAdapter(adapter);
         MyRecyclerView.setLayoutManager(MyLayoutManager);
 
         return view;

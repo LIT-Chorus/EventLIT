@@ -1,8 +1,10 @@
 package com.cse110.eventlit;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,10 +34,15 @@ public class StudentFeedActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Example call to Organizer Utils. TODO change example
-        final TextView test = (TextView)findViewById(R.id.test);
-        final ArrayAdapter<String> organizations = new ArrayAdapter<>(this,
-                                                        R.layout.student_activity_main_scrolling);
+        FragmentManager fm = getSupportFragmentManager();
+        android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+
+        if (fragment == null) {
+            fragment = new CardFragment();
+            fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+        }
+
+
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
     }
 

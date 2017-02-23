@@ -128,22 +128,41 @@ public class SignUpActivity extends AppCompatActivity {
         mSignUpListener = new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+
                 // Firebase reported error on the server side displayed here
                 if (task.isSuccessful()) {
-                    boolean isVerifed = mFbAuth.getCurrentUser().isEmailVerified();
+
+                    final boolean isVerifed = mFbAuth.getCurrentUser().isEmailVerified();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this, R.style.AlertDialogCustom);
+                    builder.setTitle("Registration Successful!")
+                            .setMessage("A verification email has been sent to " +
+                                    mEmailEntry.getEditText().getText().toString() +
+                                    ". Please verify your email then click " +
+                                    "ok to begin using our application!")
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (!isVerifed) {
+                                        Toast.makeText(SignUpActivity.this, "Please " +
+                                                "verify your email!", Toast.LENGTH_SHORT);
+                                    } else {
+                                        Intent selectOrgs = new Intent(SignUpActivity.this,
+                                                OrganizationSelectionActivity.class);
+                                        startActivity(selectOrgs);
+
+                                    }
+                                }
+                            });
+                    builder.create().show();
+
                     Log.w("Task successful", "yes");
-                    if (!isVerifed) {
-                        // TODO Frontend
-                        // Check email dialog activity  
-                        Log.wtf("WTF!", "Email is not verified. Signing out...");
-                        mFbAuth.signOut();
-                    } else {
                         // Move to Organization selection
 //                            Intent intent = new Intent(SignUpActivity.this, OrganizationSelectionActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                            startActivity(intent);
-                    }
 
                 } else {
                     Toast.makeText(SignUpActivity.this, "Does not work", Toast.LENGTH_LONG);
@@ -307,27 +326,6 @@ public class SignUpActivity extends AppCompatActivity {
 
                             mFbAuth.getCurrentUser().sendEmailVerification()
                                     .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                            builder.setTitle("Registration Successful!")
-                                    .setMessage("A verification email has been sent to " +
-                                            schoolEmail + ". Please verify your email then click " +
-                                            "ok to begin using our application!")
-                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            if (!mFbAuth.getCurrentUser().isEmailVerified()) {
-                                                Toast.makeText(SignUpActivity.this, "Please " +
-                                                        "verify your email!", Toast.LENGTH_SHORT);
-                                            } else {
-                                                Intent selectOrgs = new Intent(SignUpActivity.this,
-                                                        OrganizationSelectionActivity.class);
-                                                startActivity(selectOrgs);
-
-                                            }
-                                        }
-                                    });
-                            builder.create().show();
 
 
                             // TODO: Move user to email verification page (instead of LoginActivity)
