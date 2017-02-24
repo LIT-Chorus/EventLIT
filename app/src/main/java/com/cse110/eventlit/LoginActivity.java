@@ -16,11 +16,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cse110.eventlit.db.Organization;
+import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -108,19 +114,39 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("EmailVerification", "email is verified");
                         // Starts activity based on student or organizer
                         mLoginBut.setClickable(true);
-                        Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+//                        Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
                         mEmailEntry.getEditText().setText("");
                         mPasswordEntry.getEditText().setText("");
-                        startActivity(openFeed);
+//                        startActivity(openFeed);
                     }
 
                     else {
                         mLoginBut.setClickable(true);
                         Log.d("EmailVerification", "email is not verified");
                     }
+                    Log.w("Login", "Checking if organizer or student");
+                    String userUid = currentUser.getUid();
+                    List<Organization> orgManagingList = new ArrayList<Organization>();
+                    CountDownLatch signal = new CountDownLatch(1);
+                    UserUtils.getOrgsManaging(userUid, orgManagingList, signal);
+                    try {
+                        signal.await();
+                        if (orgManagingList.size() == 0){
+                            Log.w("Student Feed Activity", "Here!");
+                            Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                            startActivity(openFeed);
+                        }
+                        else {
+                            Log.w("Organizer Feed Activity", "Here!");
+                            Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
+                            startActivity(openFeed);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-//                    Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
-//                    startActivity(openFeed);
+
+
                 }
             }
         };

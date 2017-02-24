@@ -180,7 +180,7 @@ public class UserUtils {
 
     // TODO create methods to modify the User database
 
-    public static final void addOrgFromId(String orgid, final List<Organization> orgs) {
+    public static final void addOrgFromId(String orgid, final List<Organization> orgs, final CountDownLatch signal) {
 
         DatabaseReference orgdb = DatabaseUtils.getOrganizationsDB();
 
@@ -189,7 +189,9 @@ public class UserUtils {
         orgdb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.w("User Utils", "Added Org");
                 orgs.add(dataSnapshot.getValue(Organization.class));
+                signal.countDown();
             }
 
             @Override
@@ -200,20 +202,29 @@ public class UserUtils {
 
     }
 
-    public static final void getOrgsManaging(String uid, final List<Organization> orgsManaging) {
-
+    public static final void getOrgsManaging(String uid, final List<Organization> orgsManaging, final CountDownLatch flag) {
         DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
 
         upd_db = upd_db.child(uid);
-
+        Log.w("User Utils", "Get Orgs Managing - start" + uid + " : " + upd_db.getParent());
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserPrivateData data = dataSnapshot.getValue(UserPrivateData.class);
-
+                Log.w("User Utils", "Get Orgs Managing");
                 for (String orgid: data.org_ids_managing) {
-                    addOrgFromId(orgid, orgsManaging);
+                    final CountDownLatch signal = new CountDownLatch(1);
+                    addOrgFromId(orgid, orgsManaging, signal);
+
+                    try {
+                        signal.await();
+                    } catch (Exception e) {
+
+                    }
+
                 }
+
+                flag.countDown();
             }
 
             @Override
@@ -223,7 +234,7 @@ public class UserUtils {
         });
     }
 
-    public static final void getOrgsFollowing(String uid, final List<Organization> orgsFollowing) {
+    public static final void getOrgsFollowing(String uid, final List<Organization> orgsFollowing, final CountDownLatch flag) {
         DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
 
         upd_db = upd_db.child(uid);
@@ -231,11 +242,19 @@ public class UserUtils {
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.w("User Utils", "Get Orgs Following");
                 UserPrivateData data = dataSnapshot.getValue(UserPrivateData.class);
-
                 for (String orgid: data.org_ids_following) {
-                    addOrgFromId(orgid, orgsFollowing);
+                    CountDownLatch signal = new CountDownLatch(1);
+                    addOrgFromId(orgid, orgsFollowing, signal);
+                    try {
+                        signal.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+                flag.countDown();
             }
 
             @Override
