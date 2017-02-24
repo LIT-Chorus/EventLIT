@@ -3,15 +3,18 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <CheckedTextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/org_name"/>
-
+        android:id="@+id/org_name"
+        android:text="Org1"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:checked="false" />
+    <!--
     <android.support.v7.widget.SwitchCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:id="@+id/selection"/>
-
+     -->
 </LinearLayout>
