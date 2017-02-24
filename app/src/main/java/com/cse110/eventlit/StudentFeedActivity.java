@@ -53,17 +53,6 @@ public class StudentFeedActivity extends AppCompatActivity
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
 
-        // Testing password reset
-//        OnCompleteListener completeListener = new OnCompleteListener() {
-//            @Override
-//            public void onComplete(@NonNull Task task) {
-//                if (task.isSuccessful()){
-//                    Log.w("Student Feed Activity","Password Reset Successful!");
-//                }
-//            }
-//        };
-//        UserUtils.resetPassword(FirebaseAuth.getInstance().getCurrentUser(),"Password", "NewPassword", completeListener);
-
 
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
     }
