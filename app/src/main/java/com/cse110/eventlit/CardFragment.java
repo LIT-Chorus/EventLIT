@@ -1,8 +1,10 @@
 package com.cse110.eventlit;
 
 import android.app.Fragment;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +16,9 @@ import android.widget.TextView;
 import com.cse110.eventlit.db.Event;
 import com.cse110.utils.EventUtils;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by rahulsabnis on 2/22/17.
@@ -77,8 +81,33 @@ public class CardFragment extends android.support.v4.app.Fragment {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-            holder.dateTextView.setText(list.get(position).getStartDate().toString());
+            Event e = list.get(position);
+
+            java.util.Calendar startEventCal = e.getStartDate();
+            java.util.Calendar endEventCal = e.getEndDate();
+
+            // Gets start and end times
+            int startHour = startEventCal.get(java.util.Calendar.HOUR);
+            int startMinute = startEventCal.get(java.util.Calendar.MINUTE);
+
+            int endHour = endEventCal.get(java.util.Calendar.HOUR);
+            int endMinute = endEventCal.get(java.util.Calendar.MINUTE);
+
+            // Gets month and date
+            int day = startEventCal.get(java.util.Calendar.DAY_OF_MONTH);
+            int month = startEventCal.get(java.util.Calendar.MONTH);
+            String monthStr = new DateFormatSymbols().getMonths()[month];
+
+            String category = e.getCategory();
+
+            String eventName = e.getTitle();
+
+
+            holder.timeTextView.setText(String.format(Locale.getDefault(), "%d:%02d - %d:%02d",
+                    startHour, startMinute, endHour, endMinute));
             holder.locationTextView.setText(list.get(position).getLocation());
+            holder.categoriesTextView.setText(category);
+            holder.eventNameTextView.setText(eventName);
 
         }
 
@@ -90,13 +119,17 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView locationTextView;
-        public TextView dateTextView;
+        public AppCompatTextView locationTextView;
+        public AppCompatTextView timeTextView;
+        public AppCompatTextView categoriesTextView;
+        public AppCompatTextView eventNameTextView;
 
         public MyViewHolder(View v) {
             super(v);
-            dateTextView = (TextView) v.findViewById(R.id.date);
-            locationTextView = (TextView) v.findViewById(R.id.location);
+            timeTextView = (AppCompatTextView) v.findViewById(R.id.time);
+            locationTextView = (AppCompatTextView) v.findViewById(R.id.location);
+            categoriesTextView = (AppCompatTextView) v.findViewById(R.id.categories);
+            eventNameTextView = (AppCompatTextView) v.findViewById(R.id.eventName);
 
         }
     }

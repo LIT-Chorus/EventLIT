@@ -14,57 +14,124 @@
         android:orientation="vertical"
         android:weightSum="4">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="3.2"
-            android:orientation="vertical">
+            android:layout_weight="3.2">
 
-            <TextView
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textColor="#000000"
-            android:textSize="@dimen/text_size"
-            android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/location"
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textColor="#000000"
-                android:textSize="@dimen/text_size"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:id="@+id/dateLayout">
+
+            </FrameLayout>
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@+id/dateLayout"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/eventName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/eventNameSize"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/text_size"
+                    android:drawableStart="@drawable/ic_access_time_black_18dp"
+                    android:drawablePadding="@dimen/drawablePadding"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/text_size"
+                    android:drawableStart="@drawable/ic_location_on_black_18dp"
+                    android:drawablePadding="@dimen/drawablePadding"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/categories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/text_size"
+                    android:drawableStart="@drawable/ic_label_black_18dp"
+                    android:drawablePadding="@dimen/drawablePadding" />
+
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="0.8"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
             <TextView
                 android:id="@+id/going"
                 android:layout_width="wrap_content"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:textStyle="bold"
+                android:textColor="@color/goingColor"
                 android:text="@string/going" />
+            
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="45dp"
+                android:background="#000000"
+                android:id="@+id/line">
+
+            </View>
 
             <TextView
                 android:id="@+id/interested"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/interested" />
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:textStyle="bold"
+                android:textColor="@color/interestedColor"
+                android:text="@string/interested"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="45dp"
+                android:background="#000000"
+                android:id="@+id/line2">
+
+            </View>
 
             <TextView
                 android:id="@+id/notGoing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="@string/cannotGo" />
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:textStyle="bold"
+                android:textColor="@color/notGoingColor"
+                android:text="@string/cannotGo"/>
         </LinearLayout>
 
     </LinearLayout>
