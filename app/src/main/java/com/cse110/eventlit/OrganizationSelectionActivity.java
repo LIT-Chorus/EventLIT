@@ -1,7 +1,7 @@
 package com.cse110.eventlit;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,7 +18,14 @@ public class OrganizationSelectionActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.list_orgs);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        initialize_adapter();
 
 
     }
+
+    private void initialize_adapter() {
+        OrganizationsAdapter adapter = new OrganizationsAdapter(getApplicationContext());
+        mRecyclerView.setAdapter(adapter);
+    }
+
 }

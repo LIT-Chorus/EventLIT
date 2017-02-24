@@ -17,8 +17,12 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 //import com.cse110.chrous.R;
 
@@ -36,6 +40,9 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+
+    private ImageButton mChangePass;
+    private ImageButton mReqOrgStatus;
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -123,6 +130,33 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
         setContentView(R.layout.settings);
+
+
+        // My Code
+        // Initialize buttons
+        mChangePass = (ImageButton) findViewById(R.id.reqOrgStatus);
+        mReqOrgStatus = (ImageButton) findViewById(R.id.reqOrgStatus);
+
+        // Handling Change Password Button Listener
+        mChangePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, ChangePasswordActivity.class));
+            }
+        });
+
+        // Handling ReqOrgStatus Button Listener
+        mReqOrgStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO startActivity(new Intent(SettingsActivity.this, MyOtherActivity.class));
+            }
+        });
+
+
+
+
+
     }
 
     /**
@@ -254,4 +288,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+
+
+
+
+
 }
