@@ -2,7 +2,6 @@ package com.cse110.eventlit;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +38,12 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mOrgName;
-        public SwitchCompat mSwitch;
+
 
         public MyViewHolder(View view) {
             super(view);
             mOrgName = (TextView) view.findViewById(R.id.title);
-            mSwitch = (SwitchCompat) view.findViewById(R.id.selection);
+
         }
     }
 
@@ -58,7 +57,6 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     @Override
     public void onBindViewHolder(OrganizationsAdapter.MyViewHolder holder, int position) {
         holder.mOrgName.setText(mOrganizations.get(position).getName());
-        holder.mSwitch.setChecked(false);
     }
 
     /**
