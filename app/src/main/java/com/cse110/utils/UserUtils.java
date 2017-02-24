@@ -204,6 +204,8 @@ public class UserUtils {
 
         DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
 
+        upd_db = upd_db.child(uid);
+
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -223,6 +225,8 @@ public class UserUtils {
 
     public static final void getOrgsFollowing(String uid, final List<Organization> orgsFollowing) {
         DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
+
+        upd_db = upd_db.child(uid);
 
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -262,6 +266,8 @@ public class UserUtils {
     public static final void getEventsFollowing(String uid, final List<Event> eventsFollowing) {
 
         DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
+
+        upd_db = upd_db.child(uid);
 
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
