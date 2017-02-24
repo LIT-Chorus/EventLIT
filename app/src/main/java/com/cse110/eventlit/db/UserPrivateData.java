@@ -15,14 +15,17 @@ class UserPrivateData {
     public List<String> organizer_access;
     public Map<String, Event.RSVPStatus> events_following = new HashMap<>();
     public ArrayList<String> orgs_managing = new ArrayList<String>();
+    public boolean notifications;
 
     public UserPrivateData() {}
 
-    public UserPrivateData(List<String> organizer_access, Map<String, Event.RSVPStatus> events_following, ArrayList<String> orgs_managing) {
+    public UserPrivateData(List<String> organizer_access, Map<String, Event.RSVPStatus> events_following, ArrayList<String> orgs_managing,
+                           boolean notifications) {
         this.organizer_access = organizer_access;
         this.events_following = events_following;
         this.orgs_managing = orgs_managing;
         this.events_following = events_following;
+        this.notifications = notifications;
 
     }
 }

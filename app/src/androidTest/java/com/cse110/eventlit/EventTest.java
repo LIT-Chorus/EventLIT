@@ -1,10 +1,16 @@
 package com.cse110.eventlit;
 
+import android.support.annotation.NonNull;
 import android.support.test.filters.MediumTest;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
+import com.cse110.utils.UserUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,6 +24,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -83,6 +90,54 @@ public class EventTest {
             Object testVal = testMap.get(key);
             Object expectVal = expectedMap.get(key);
             assertEquals("Could not find " + key + " in map", testVal, expectVal);
+        }
+    }
+
+    // Unit testing for Password Reset
+    @Test
+    public void testPasswordReset() {
+        final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+        Log.w("Password Test", "Testing begins");
+        final CountDownLatch signal = new CountDownLatch(2);
+        final OnCompleteListener passwordResetListener = new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                // Check if the tests pass
+                signal.countDown();
+                assertEquals(task.isSuccessful(), true);
+                if (task.isSuccessful()){
+                    Log.w("Password Test", "Password was successfully Reset!");
+                }
+                else {
+                    Log.w("Password Test", "Password failed to be reset!");
+                }
+            }
+        };
+
+        // Executed after signIn is complete
+        final OnCompleteListener signInCompleteListener = new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                signal.countDown();
+                if (task.isSuccessful()){
+                    Log.w("Password Test", "Login Successful!");
+                    UserUtils.resetPassword(fbAuth.getCurrentUser(),"NewPassword", "NewPassword",
+                            passwordResetListener);
+                }
+                else {
+                    Log.w("Password Test", "Login Failed!");
+                }
+            }
+        };
+
+        fbAuth
+                .signInWithEmailAndPassword("saraghun@ucsd.edu", "NewPassword")
+                .addOnCompleteListener(signInCompleteListener);
+        try {
+            signal.await();
+        }
+        catch (InterruptedException e){
+            Log.w("Password Test", "Test interrupted");
         }
     }
 }
