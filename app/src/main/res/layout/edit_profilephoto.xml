@@ -26,6 +26,8 @@
             android:textSize="24sp"
             android:textColor="@android:color/black" />
     </LinearLayout>
+
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
