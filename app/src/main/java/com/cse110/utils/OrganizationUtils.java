@@ -37,7 +37,7 @@ public class OrganizationUtils {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Reindex and add new organziations
                 for (DataSnapshot shot: dataSnapshot.getChildren()){
-                    String orgKey = shot.getKey();
+                    int orgKey = Integer.valueOf(shot.getKey());
                     String orgName = shot.getValue().toString();
                     Organization org = new Organization(orgKey, orgName);
 

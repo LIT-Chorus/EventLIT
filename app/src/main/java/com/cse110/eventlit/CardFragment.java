@@ -83,8 +83,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
             Event e = list.get(position);
 
-            java.util.Calendar startEventCal = e.getStartDate();
-            java.util.Calendar endEventCal = e.getEndDate();
+            java.util.Calendar startEventCal = e.startTimeAsCalendar();
+            java.util.Calendar endEventCal = e.endTimeAsCalendar();
 
             // Gets start and end times
             int startHour = startEventCal.get(java.util.Calendar.HOUR);

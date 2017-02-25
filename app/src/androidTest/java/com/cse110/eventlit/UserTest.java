@@ -7,6 +7,7 @@ import android.util.Log;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
 import com.cse110.eventlit.db.UserEventRSVP;
+import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +33,9 @@ import static org.junit.Assert.assertEquals;
 public class UserTest {
     private static final String USER_EMAIL = "cpence@ucsd.edu";
     private static final String USER_PASSWORD = "hellothere";
+
+    public static final String TEST_EVENTID = "Test Event ID#";
+
     User user;
     FirebaseAuth fbAuth;
     DatabaseReference fbDB;
@@ -43,12 +47,56 @@ public class UserTest {
         user = new User();
     }
 
-    /**
-     * Test the User constructor that initializes via a Map
-     * @throws Exception
-     */
+    // Unit testing for Password Reset
     @Test
-    public void testMapConstructor() throws Exception {
+    public void testPasswordReset() {
+        final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+        Log.w("Password Test", "Testing begins");
+        final CountDownLatch signal = new CountDownLatch(2);
+        final OnCompleteListener passwordResetListener = new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                // Check if the tests pass
+                signal.countDown();
+                assertEquals(task.isSuccessful(), true);
+                if (task.isSuccessful()){
+                    Log.w("Password Test", "Password was successfully Reset!");
+                }
+                else {
+                    Log.w("Password Test", "Password failed to be reset!");
+                }
+            }
+        };
+
+        // Executed after signIn is complete
+        final OnCompleteListener signInCompleteListener = new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                signal.countDown();
+                if (task.isSuccessful()){
+                    Log.w("Password Test", "Login Successful!");
+                    UserUtils.resetPassword(fbAuth.getCurrentUser(),"NewPassword", "NewPassword",
+                            passwordResetListener);
+                }
+                else {
+                    Log.w("Password Test", "Login Failed!");
+                }
+            }
+        };
+
+        fbAuth
+                .signInWithEmailAndPassword("saraghun@ucsd.edu", "NewPassword")
+                .addOnCompleteListener(signInCompleteListener);
+        try {
+            signal.await();
+        }
+        catch (InterruptedException e){
+            Log.w("Password Test", "Test interrupted");
+        }
+    }
+
+    @Test
+    public void testPublicData() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         fbAuth.signInWithEmailAndPassword(USER_EMAIL, USER_PASSWORD).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -60,36 +108,35 @@ public class UserTest {
                     fbDB.child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                            data.put("email", email);
-                            user.set(data);
+                            user = dataSnapshot.getValue(User.class);
                             latch.countDown();
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            Log.w("testMapConstructor", "onCancelled", databaseError.toException());
+                            Log.w("testPublicData", "onCancelled", databaseError.toException());
                         }
                     });
                 } else {
-                    Log.e("testMapConstructor", "Authorization task not successful!");
+                    Log.e("testPublicData", "Authorization task not successful!");
                 }
             }
         });
         latch.await();
-        Log.w("testMapConstructor", "Data is... " + user);
+        Log.w("testPublicData", "Data is... " + user);
         assertEquals("Christopher", user.getFirstName());
         assertEquals("Pence", user.getLastName());
         assertEquals(USER_EMAIL, user.getEmail());
     }
 
     @Test
-    public void testEventsFollowing() throws Exception {
-        final User expectedu = new User();
-        String testorgid = "Test Org XYZ";
-        String testeventid = "Test Event ABC";
-        Event.RSVPStatus teststatus = Event.RSVPStatus.GOING;
-        expectedu.addEventFollowing(testorgid, testeventid, teststatus);
+    public void testPrivateData() throws Exception {
+        final User expectedUser = new User();
+        expectedUser.addOrgFollowing(0);
+        expectedUser.addOrgFollowing(1);
+        expectedUser.addOrgManaging(0);
+        expectedUser.addEventFollowing(0, TEST_EVENTID + 0, Event.RSVPStatus.GOING);
+        expectedUser.addEventFollowing(1, TEST_EVENTID + 1, Event.RSVPStatus.INTERESTED);
 
         final CountDownLatch latch1 = new CountDownLatch(1);
         fbAuth.signInWithEmailAndPassword(USER_EMAIL, USER_PASSWORD).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -100,30 +147,29 @@ public class UserTest {
                     String uid = fbUser.getUid();
                     final String email = fbUser.getEmail();
                     // Set test user data into database.
-                    fbDB.child("users").child(uid).child("eventsFollowing").setValue(expectedu.getEventsFollowing());
+                    fbDB.child("userPrivateData").child(uid).setValue(expectedUser.extractPrivateData());
 
                     // See if we can retrieve the same data afterwards.
-                    fbDB.child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    fbDB.child("userPrivateData").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                            data.put("email", email);
-                            user.set(data);
+                            User.PrivateData data = dataSnapshot.getValue(User.PrivateData.class);
+                            user.applyPrivateData(data);
                             latch1.countDown();
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            Log.w("testMapConstructor", "onCancelled", databaseError.toException());
+                            Log.w("testPrivateData", "onCancelled", databaseError.toException());
                         }
                     });
                 } else {
-                    Log.e("testMapConstructor", "Authorization task not successful!");
+                    Log.e("testPrivateData", "Authorization task not successful!");
                 }
             }
         });
         latch1.await();
-        Log.w("testMapConstructor", "Data is... " + user);
-        assertEquals(expectedu.getEventsFollowing(), user.getEventsFollowing());
+        Log.w("testMapConstructor", "Private data is... " + user.extractPrivateData());
+        assertEquals(expectedUser.extractPrivateData().getEventsFollowing(), user.extractPrivateData().getEventsFollowing());
     }
 }

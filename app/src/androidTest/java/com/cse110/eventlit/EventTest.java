@@ -46,8 +46,8 @@ public class EventTest {
         expectedMap.put("title", "Test Event");
         expectedMap.put("description", "Here it is.");
         expectedMap.put("orgid", "abcdefg");
-        expectedMap.put("startDate", event.getStartDate().getTimeInMillis());
-        expectedMap.put("endDate", event.getEndDate().getTimeInMillis());
+        expectedMap.put("startTime", event.getStartTime());
+        expectedMap.put("endTime", event.getEndTime());
         expectedMap.put("location", "Nowhere");
         expectedMap.put("category", "Other");
         expectedMap.put("maxCapacity", 100);
@@ -90,54 +90,6 @@ public class EventTest {
             Object testVal = testMap.get(key);
             Object expectVal = expectedMap.get(key);
             assertEquals("Could not find " + key + " in map", testVal, expectVal);
-        }
-    }
-
-    // Unit testing for Password Reset
-    @Test
-    public void testPasswordReset() {
-        final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
-        Log.w("Password Test", "Testing begins");
-        final CountDownLatch signal = new CountDownLatch(2);
-        final OnCompleteListener passwordResetListener = new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                // Check if the tests pass
-                signal.countDown();
-                assertEquals(task.isSuccessful(), true);
-                if (task.isSuccessful()){
-                    Log.w("Password Test", "Password was successfully Reset!");
-                }
-                else {
-                    Log.w("Password Test", "Password failed to be reset!");
-                }
-            }
-        };
-
-        // Executed after signIn is complete
-        final OnCompleteListener signInCompleteListener = new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                signal.countDown();
-                if (task.isSuccessful()){
-                    Log.w("Password Test", "Login Successful!");
-                    UserUtils.resetPassword(fbAuth.getCurrentUser(),"NewPassword", "NewPassword",
-                            passwordResetListener);
-                }
-                else {
-                    Log.w("Password Test", "Login Failed!");
-                }
-            }
-        };
-
-        fbAuth
-                .signInWithEmailAndPassword("saraghun@ucsd.edu", "NewPassword")
-                .addOnCompleteListener(signInCompleteListener);
-        try {
-            signal.await();
-        }
-        catch (InterruptedException e){
-            Log.w("Password Test", "Test interrupted");
         }
     }
 }
