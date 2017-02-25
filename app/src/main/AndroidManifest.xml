@@ -29,35 +29,41 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".OrganizerFeedActivity"
+            android:exported="true"
             android:label="@string/title_activity_main_scrolling"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".StudentFeedActivity"
             android:label="@string/title_activity_main_scrolling"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".OrganizerDetailedEventActivity"
             android:exported="true"
             android:label="Event"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".StudentDetailedEventActivity"
             android:exported="true"
             android:label="Event"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ForgotPasswordActivity"
-            android:screenOrientation="portrait">
-            >
-        </activity>
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
-        <activity android:name=".OrganizationSelectionActivity"></activity>
+            android:exported="true"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="true"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".OrganizationSelectionActivity" />
     </application>
 
 </manifest>

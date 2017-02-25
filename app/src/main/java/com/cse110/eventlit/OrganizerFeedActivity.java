@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -93,6 +94,8 @@ public class OrganizerFeedActivity extends AppCompatActivity
         } else if (id == R.id.nav_your_events) {
 
         } else if (id == R.id.nav_settings) {
+
+            startActivity(new Intent(OrganizerFeedActivity.this, SettingsActivity.class));
 
         } else if (id == R.id.nav_help) {
 
