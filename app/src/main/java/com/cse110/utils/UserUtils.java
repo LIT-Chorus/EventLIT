@@ -174,11 +174,11 @@ public class UserUtils {
 
     // TODO create methods to modify the User database
 
-    public static final void addOrgFromId(String orgid, final List<Organization> orgs) {
+    public static final void addOrgFromId(int orgid, final List<Organization> orgs) {
 
         DatabaseReference orgdb = DatabaseUtils.getOrganizationsDB();
 
-        orgdb = orgdb.child(orgid);
+        orgdb = orgdb.child(String.valueOf(orgid));
 
         orgdb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -204,9 +204,9 @@ public class UserUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User(data);
+                User user = new User();
 
-                for (String orgid: user.getOrgsManaging()) {
+                for (int orgid: user.extractPrivateData().getOrgsManaging()) {
                     addOrgFromId(orgid, orgsManaging);
                 }
             }
@@ -227,9 +227,9 @@ public class UserUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User(data);
+                User user = new User();
 
-                for (String orgid: user.getOrgsFollowing()) {
+                for (int orgid: user.extractPrivateData().getOrgsFollowing()) {
                     addOrgFromId(orgid, orgsFollowing);
                 }
             }
@@ -244,7 +244,7 @@ public class UserUtils {
     public static final void addEventFromIds(UserEventRSVP rsvp, final List<Event> eventsFollowing) {
         DatabaseReference e_db = DatabaseUtils.getEventsDB();
 
-        e_db = e_db.child(rsvp.getOrgid()).child(rsvp.getEventid());
+        e_db = e_db.child(String.valueOf(rsvp.getOrgid())).child(rsvp.getEventid());
 
         e_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -269,9 +269,9 @@ public class UserUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User(data);
+                User user = new User();
 
-                for (UserEventRSVP rsvp: user.getEventsFollowing()) {
+                for (UserEventRSVP rsvp: user.extractPrivateData().getEventsFollowing()) {
                     addEventFromIds(rsvp, eventsFollowing);
                 }
             }
