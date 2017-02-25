@@ -1,206 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            app:srcCompat="@drawable/event_pic"
-            android:id="@+id/event"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:scaleType="centerCrop" />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            app:srcCompat="@android:drawable/sym_def_app_icon"
-            android:id="@+id/orgpic"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/event" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingTop="24dp"
-            android:text="Event Title"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            app:layout_constraintLeft_toRightOf="@+id/orgpic"
-            app:layout_constraintTop_toTopOf="@+id/orgpic" />
-
-        <TextView
-            android:id="@+id/orgname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:text="Held By:"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintLeft_toRightOf="@+id/orgpic"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_menu_event"
-            android:id="@+id/calendaricon"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/event"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-        <TextView
-            android:text="February 14, 2017"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:id="@+id/timetext"
-            android:gravity="center"
-            android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/calendaricon"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/event" />
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_location"
-            android:id="@+id/locationicon"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/calendaricon"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-        <TextView
-            android:text="Price Center, La Jolla"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:id="@+id/locationtext"
-            android:gravity="center"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/timetext"
-            android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/locationicon" />
-
-        <TextView
-            android:text="This is a fun event for all students!"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/descriptiontext"
-            android:layout_marginTop="32dp"
-            app:layout_constraintTop_toBottomOf="@+id/locationtext"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_label"
-            android:id="@+id/tagicon"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/linearlayout"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:text="Social, Free Food"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:id="@+id/tagtext"
-            android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/tagicon"
-            app:layout_constraintBottom_toTopOf="@+id/linearlayout"
-            android:layout_marginBottom="8dp" />
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_person"
-            android:id="@+id/peopleicon"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tagicon"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:text="People Going: 10"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:id="@+id/peopletext"
-            android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/peopleicon"
-            app:layout_constraintBottom_toTopOf="@+id/tagtext"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearlayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <Button
-                android:id="@+id/goingButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="16dp"
-                android:text="GOING" />
-
-            <Button
-                android:id="@+id/interestedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="16dp"
-                android:text="INTERESTED" />
-
-            <Button
-                android:id="@+id/notGoingButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="NOT GOING" />
-
-        </LinearLayout>
-    </android.support.constraint.ConstraintLayout>
-
-
-    <include
-        layout="@layout/student_app_bar_main_scrolling"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+    <ImageView
+        android:id="@+id/event"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        android:background="@drawable/side_nav_bar"
-        app:itemTextColor="#BDBDBD"
-        app:itemIconTint="#BDBDBD"
-        app:headerLayout="@layout/nav_header_main_scrolling"
-        app:menu="@menu/student_activity_main_scrolling_drawer" />
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/event_pic" />
 
-</android.support.v4.widget.DrawerLayout>
+    <ImageView
+        android:id="@+id/orgpic"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/event"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="24dp"
+        android:text="Event Title"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toRightOf="@+id/orgpic"
+        app:layout_constraintTop_toTopOf="@+id/orgpic" />
+
+    <TextView
+        android:id="@+id/orgname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:paddingLeft="16dp"
+        android:text="Held By:"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@+id/orgpic"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <ImageView
+        android:id="@+id/calendaricon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event"
+        app:srcCompat="@drawable/ic_menu_event" />
+
+    <TextView
+        android:id="@+id/timetext"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="February 14, 2017"
+        app:layout_constraintLeft_toRightOf="@+id/calendaricon"
+        app:layout_constraintTop_toBottomOf="@+id/event" />
+
+    <ImageView
+        android:id="@+id/locationicon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendaricon"
+        app:srcCompat="@drawable/ic_location" />
+
+    <TextView
+        android:id="@+id/locationtext"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Price Center, La Jolla"
+        app:layout_constraintLeft_toRightOf="@+id/locationicon"
+        app:layout_constraintTop_toBottomOf="@+id/timetext" />
+
+    <TextView
+        android:id="@+id/descriptiontext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="This is a fun event for all students!"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationtext" />
+
+
+    <ImageView
+        android:id="@+id/tagicon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_label"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/tagtext"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Social, Free Food"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout"
+        app:layout_constraintLeft_toRightOf="@+id/tagicon" />
+
+    <ImageView
+        android:id="@+id/peopleicon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/tagicon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@drawable/ic_person" />
+
+    <TextView
+        android:id="@+id/peopletext"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="People Going: 10"
+        app:layout_constraintBottom_toTopOf="@+id/tagtext"
+        app:layout_constraintLeft_toRightOf="@+id/peopleicon" />
+
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/goingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:text="GOING" />
+
+        <Button
+            android:id="@+id/interestedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:text="INTERESTED" />
+
+        <Button
+            android:id="@+id/notGoingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="NOT GOING" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
+
+
+
+
+
+
+

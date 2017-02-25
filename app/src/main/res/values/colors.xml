@@ -7,4 +7,7 @@
     <color name="white">#FFFFFF</color>
     <color name="loginButton">#FF355B</color>
     <color name="signUpButton">#F36113</color>
+    <color name="goingColor">#32cd32</color>
+    <color name="interestedColor">#FFA500</color>
+    <color name="notGoingColor">#FF0000</color>
 </resources>
