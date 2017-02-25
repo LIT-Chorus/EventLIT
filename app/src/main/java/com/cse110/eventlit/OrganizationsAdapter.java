@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.CheckedTextView;
 
 import com.cse110.eventlit.db.Organization;
 import com.cse110.utils.OrganizationUtils;
@@ -36,14 +36,27 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView mOrgName;
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public CheckedTextView mOrgName;
 
 
         public MyViewHolder(View view) {
             super(view);
-            mOrgName = (TextView) view.findViewById(R.id.title);
+            mOrgName = (CheckedTextView) view.findViewById(R.id.org_name);
 
+        }
+
+        public void onClick(View view)
+        {
+            if(mOrgName.isChecked())
+            {
+                mOrgName.setChecked(false);
+            }
+
+            else
+            {
+                mOrgName.setChecked(true);
+            }
         }
     }
 
