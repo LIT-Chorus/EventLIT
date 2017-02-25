@@ -114,6 +114,7 @@ public class StudentFeedActivity extends AppCompatActivity
         } else if (id == R.id.nav_preferences) {
 
         } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(StudentFeedActivity.this, SettingsActivity.class));
 
         } else if (id == R.id.nav_help) {
 
