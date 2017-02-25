@@ -185,6 +185,11 @@ public class UserUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.w("User Utils", "Added Org");
+
+                Object org = dataSnapshot.getValue(Organization.class);
+
+                Log.d("yoyo", org.toString());
+
                 orgs.add(dataSnapshot.getValue(Organization.class));
                 signal.countDown();
             }

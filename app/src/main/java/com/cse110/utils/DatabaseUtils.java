@@ -12,23 +12,23 @@ public class DatabaseUtils {
     // Get a reference to the Firebase Database
     private static DatabaseReference fbDBRef = FirebaseDatabase.getInstance().getReference();
 
-    static DatabaseReference getDBReference() {
+    public static DatabaseReference getDBReference() {
         return fbDBRef;
     }
 
-    static DatabaseReference getOrganizationsDB(){
+    public static DatabaseReference getOrganizationsDB(){
         return fbDBRef.child("organizations");
     }
 
-    static DatabaseReference getEventsDB(){
+    public static DatabaseReference getEventsDB(){
         return fbDBRef.child("events");
     }
 
-    static DatabaseReference getUsersDB(){
+    public static DatabaseReference getUsersDB(){
         return fbDBRef.child("users");
     }
 
-    static DatabaseReference getUserPrivateDataDB(){
+    public static DatabaseReference getUserPrivateDataDB(){
         return fbDBRef.child("userPrivateData");
     }
 
