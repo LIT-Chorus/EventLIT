@@ -94,8 +94,8 @@ public class User {
                 for (Map<String, Object> m : following) {
                     eventsFollowing.add(
                             new Rsvp(
-                                    m.get("orgid").toString(),
-                                    m.get("eventid").toString(),
+                                    "" + m.get("orgid"),
+                                    "" + m.get("eventid"),
                                     Event.RSVPStatus.valueOf((String) m.get("rsvpStatus"))));
                 }
             } else if (key.equals("orgsManaging")) {
