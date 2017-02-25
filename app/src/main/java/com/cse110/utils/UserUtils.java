@@ -175,7 +175,7 @@ public class UserUtils {
 
     // TODO create methods to modify the User database
 
-    public static final void addOrgFromId(String orgid, final List<Organization> orgs, final CountDownLatch signal) {
+    public static final void addOrgFromId(final String orgid, final List<Organization> orgs, final CountDownLatch signal) {
 
         DatabaseReference orgdb = DatabaseUtils.getOrganizationsDB();
 
@@ -186,11 +186,11 @@ public class UserUtils {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.w("User Utils", "Added Org");
 
-                Object org = dataSnapshot.getValue(Organization.class);
+                String org_name = dataSnapshot.getValue().toString();
 
-                Log.d("yoyo", org.toString());
+                Log.d("yoyo", org_name);
 
-                orgs.add(dataSnapshot.getValue(Organization.class));
+                orgs.add(new Organization(orgid, org_name));
                 signal.countDown();
             }
 

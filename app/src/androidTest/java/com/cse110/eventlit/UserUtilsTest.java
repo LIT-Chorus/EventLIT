@@ -107,6 +107,11 @@ public class UserUtilsTest {
     }
 
     @Test
+    public void addEventFromIds() throws Exception {
+
+    }
+
+    @Test
     public void getOrgsManaging() throws Exception {
 
     }
