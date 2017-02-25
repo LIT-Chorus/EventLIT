@@ -2,7 +2,9 @@ package com.cse110.eventlit;
 
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.Ringtone;
@@ -17,8 +19,10 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -39,10 +43,12 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public class SettingsActivity extends AppCompatPreferenceActivity
+{
 
     private ImageButton mChangePass;
     private ImageButton mReqOrgStatus;
+    private de.hdodenhof.circleimageview.CircleImageView mProfilePhoto;
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -131,8 +137,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         setupActionBar();
         setContentView(R.layout.settings);
 
-
         // My Code
+
+        // Get user's profile photo
+        mProfilePhoto = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.profilePhoto);
+
+        // If user has already uploaded a photo, display that
+        // TODO
+        /* if ( ){
+            mProfilePhoto
+        } */
+
+
         // Initialize buttons
         mChangePass = (ImageButton) findViewById(R.id.reqOrgStatus);
         mReqOrgStatus = (ImageButton) findViewById(R.id.reqOrgStatus);
@@ -154,9 +170,36 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         });
 
 
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater factory = LayoutInflater.from(this);
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
 
+        // Add edit_profilephoto xml
+        final View view = factory.inflate(R.layout.edit_profilephoto, null);
+        dialog.setView(view);
+    }
 
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        String[] photoOptions = {"Choose from photo gallery", "Remove photo"};
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(photoOptions, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // The 'which' argument contains the index position
+                // of the selected item
+                if (which == 0){
+                    //Choose photo from Gallery
+                    // TODO Change Photo
+                }
+                else if (which == 1){
+                    // Remove Photo
+
+                }
+            }
+        });
+        return builder.create();
     }
 
     /**

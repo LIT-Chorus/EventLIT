@@ -34,12 +34,12 @@
             android:orientation="vertical"
             android:background="@color/common_google_signin_btn_text_dark_disabled">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/icon_margin"
-                app:srcCompat="@drawable/app_icon"
+                android:src="@drawable/app_icon"
                 android:id="@+id/profilePhoto" />
 
             <TextView
