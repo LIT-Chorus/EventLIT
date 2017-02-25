@@ -14,25 +14,20 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
-
-import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
-import com.cse110.eventlit.db.UserEventRsvp;
-import com.cse110.eventlit.db.UserPrivateData;
+import com.cse110.eventlit.db.User;
+import com.cse110.eventlit.db.UserEventRSVP;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -210,9 +205,11 @@ public class UserUtils {
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UserPrivateData data = dataSnapshot.getValue(UserPrivateData.class);
+                Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
+                User user = new User(data);
+
                 Log.w("User Utils", "Get Orgs Managing");
-                for (String orgid: data.org_ids_managing) {
+                for (String orgid: user.getOrgsManaging()) {
                     final CountDownLatch signal = new CountDownLatch(1);
                     addOrgFromId(orgid, orgsManaging, signal);
 
@@ -221,9 +218,7 @@ public class UserUtils {
                     } catch (Exception e) {
 
                     }
-
                 }
-
                 flag.countDown();
             }
 
@@ -242,9 +237,11 @@ public class UserUtils {
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
+                User user = new User(data);
+
                 Log.w("User Utils", "Get Orgs Following");
-                UserPrivateData data = dataSnapshot.getValue(UserPrivateData.class);
-                for (String orgid: data.org_ids_following) {
+                for (String orgid: user.getOrgsFollowing()) {
                     CountDownLatch signal = new CountDownLatch(1);
                     addOrgFromId(orgid, orgsFollowing, signal);
                     try {
@@ -264,10 +261,10 @@ public class UserUtils {
         });
     }
 
-    public static final void addEventFromIds(UserEventRsvp rsvp, final List<Event> eventsFollowing) {
+    public static final void addEventFromIds(UserEventRSVP rsvp, final List<Event> eventsFollowing) {
         DatabaseReference e_db = DatabaseUtils.getEventsDB();
 
-        e_db = e_db.child(rsvp.orgid).child(rsvp.eventid);
+        e_db = e_db.child(rsvp.getOrgid()).child(rsvp.getEventid());
 
         e_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -291,9 +288,10 @@ public class UserUtils {
         upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UserPrivateData data = dataSnapshot.getValue(UserPrivateData.class);
+                Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
+                User user = new User(data);
 
-                for (UserEventRsvp rsvp: data.event_ids_following) {
+                for (UserEventRSVP rsvp: user.getEventsFollowing()) {
                     addEventFromIds(rsvp, eventsFollowing);
                 }
             }
