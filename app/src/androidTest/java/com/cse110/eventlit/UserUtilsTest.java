@@ -3,8 +3,10 @@ package com.cse110.eventlit;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
+import com.cse110.eventlit.db.Rsvp;
 import com.cse110.utils.DatabaseUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -96,11 +98,8 @@ public class UserUtilsTest {
 
         signal.await();
 
-        Log.wtf("UserUtilsTest", "let's see what we added");
-
         for (Organization org: orgs) {
-            if (org == null)  Log.d("UserUtilsTest", "it is null");
-            else Log.d("addOrgFromId", org.toString());
+            Log.d("addOrgFromId", org.toString());
         }
 
         assertEquals(orgs.size(), 1);
@@ -108,6 +107,19 @@ public class UserUtilsTest {
 
     @Test
     public void addEventFromIds() throws Exception {
+        List<Rsvp> eventRsvps = user.getEventsFollowing();
+
+        List<Event> eventsFollowing = new ArrayList<>();
+
+        CountDownLatch signal = new CountDownLatch(1);
+
+        UserUtils.addEventFromIds(eventRsvps.get(0), eventsFollowing,  signal);
+        signal.await();
+
+        assertEquals(1,eventsFollowing.size());
+
+        Log.d("yoyo", eventsFollowing.get(0).toString());
+
 
     }
 

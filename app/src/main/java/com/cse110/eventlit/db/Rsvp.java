@@ -1,14 +1,13 @@
 package com.cse110.eventlit.db;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserEventRSVP {
+public class Rsvp {
     private String orgid;
     private String eventid;
     private Event.RSVPStatus rsvpStatus;
 
-    public UserEventRSVP(String orgid, String eventid, Event.RSVPStatus rsvpStatus) {
+    public Rsvp(String orgid, String eventid, Event.RSVPStatus rsvpStatus) {
         this.orgid = orgid;
         this.eventid = eventid;
         this.rsvpStatus = rsvpStatus;
@@ -29,8 +28,8 @@ public class UserEventRSVP {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof UserEventRSVP) {
-            UserEventRSVP rsvpOther = (UserEventRSVP) other;
+        if (other instanceof Rsvp) {
+            Rsvp rsvpOther = (Rsvp) other;
             return this.orgid.equals(rsvpOther.orgid)
                     && this.eventid.equals(rsvpOther.eventid)
                     && this.rsvpStatus == rsvpOther.rsvpStatus;

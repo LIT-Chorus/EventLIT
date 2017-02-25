@@ -1,8 +1,5 @@
 package com.cse110.eventlit.db;
 
-import android.util.ArrayMap;
-import android.util.Log;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class User {
     /**
      * Map of org ids and event ids to the user's RSVP status to each event.
      */
-    private ArrayList<UserEventRSVP> eventsFollowing;
+    private ArrayList<Rsvp> eventsFollowing;
 
     /**
      * List of orgids of the student orgs that the user manages.
@@ -58,7 +55,7 @@ public class User {
      */
     public User(String firstName, String lastName, String email,
                 List<String> orgsFollowing,
-                ArrayList<UserEventRSVP> eventsFollowing,
+                ArrayList<Rsvp> eventsFollowing,
                 List<String> orgsManaging) {
         this(firstName, lastName, email);
         this.orgsFollowing = orgsFollowing;
@@ -96,9 +93,9 @@ public class User {
                 ArrayList<Map<String, Object>> following = (ArrayList<Map<String, Object>>) val;
                 for (Map<String, Object> m : following) {
                     eventsFollowing.add(
-                            new UserEventRSVP(
-                                    (String) m.get("orgid"),
-                                    (String) m.get("eventid"),
+                            new Rsvp(
+                                    m.get("orgid").toString(),
+                                    m.get("eventid").toString(),
                                     Event.RSVPStatus.valueOf((String) m.get("rsvpStatus"))));
                 }
             } else if (key.equals("orgsManaging")) {
@@ -130,7 +127,7 @@ public class User {
      * @param status status as defined in Event.RSVPStatus
      */
     public void addEventFollowing(String orgid, String eventid, Event.RSVPStatus status) {
-        eventsFollowing.add(new UserEventRSVP(orgid, eventid, status));
+        eventsFollowing.add(new Rsvp(orgid, eventid, status));
     }
 
     /**
@@ -194,7 +191,7 @@ public class User {
         return new ArrayList<>(orgsFollowing);
     }
 
-    public ArrayList<UserEventRSVP> getEventsFollowing() {
+    public ArrayList<Rsvp> getEventsFollowing() {
         return new ArrayList<>(eventsFollowing);
     }
 
