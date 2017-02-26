@@ -69,18 +69,18 @@ public class FirebaseTest2 {
     public void testUserData() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         DatabaseReference userRef = testRef2.child("user_data");
-        Log.d("FirebaseTest", "Setting new child...");
-        Log.d("FirebaseTest", "Child is " + test_user.toString());
-        Log.d("FirebaseTest", "With private data " + test_user.extractPrivateData().toString());
+        Log.d("FirebaseTest2", "Setting new child user_data");
+        Log.d("FirebaseTest2", "Child is " + test_user.toString());
+        Log.d("FirebaseTest2", "With private data " + test_user.extractPrivateData().toString());
 
         // Set the value, passing in a reference to the user.
         userRef.setValue(test_user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("FirebaseTest", "Set successful!");
+                    Log.d("FirebaseTest2", "Set successful!");
                 } else {
-                    Log.e("FirebaseTest", "Set unsuccessful");
+                    Log.e("FirebaseTest2", "Set unsuccessful");
                 }
                 latch.countDown();
             }
@@ -92,17 +92,17 @@ public class FirebaseTest2 {
     public void testUserPrivateData() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         DatabaseReference privateRef = testRef2.child("user_private_data");
-        Log.d("FirebaseTest", "Setting new child...");
-        Log.d("FirebaseTest", "With private data " + test_user.extractPrivateData().toString());
+        Log.d("FirebaseTest2", "Setting new child called user_private_data");
+        Log.d("FirebaseTest2", "With private data " + test_user.extractPrivateData().toString());
 
         // Set the value, passing in a reference to the user's privateData.
         privateRef.setValue(test_user.extractPrivateData()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("FirebaseTest", "Set successful!");
+                    Log.d("FirebaseTest2", "Set successful!");
                 } else {
-                    Log.e("FirebaseTest", "Set unsuccessful");
+                    Log.e("FirebaseTest2", "Set unsuccessful");
                 }
                 latch.countDown();
             }
@@ -112,9 +112,9 @@ public class FirebaseTest2 {
 
     // Primary tests to just analyze how Firebase handles classes:
     class Shallow {
-        private int integer = 0xcafebabe;
-        private double double_precision = 42.0;
-        private String string = "hello world";
+        private int integer = 0xffffffff;
+        private double double_precision = 12.24;
+        private String string = "testing string";
 
         public Shallow() {}
 
@@ -158,7 +158,7 @@ public class FirebaseTest2 {
         private List<Shallow> shallowList;
 
         public Deep() {
-            list = Arrays.asList("a", "b", "c", "d");
+            list = Arrays.asList("1", "2", "3", "4", "5");
             shallowList = new ArrayList<>();
             map = new HashMap<>();
             for (String s : list) {
@@ -199,14 +199,18 @@ public class FirebaseTest2 {
     public void testShallow() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         DatabaseReference shallowRef = testRef2.child("shallow");
-        Log.d("FirebaseTest", "Setting new child...");
+        Log.d("FirebaseTest2", "Setting new child shallow");
+        Log.d("FirebaseTest2", "shallow's string " + shallow.getString());
+        Log.d("FirebaseTest2", "shallow's int " + shallow.getInteger());
+        Log.d("FirebaseTest2", "shallow's double-precision " + shallow.getDouble_precision());
+
         shallowRef.setValue(shallow).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("FirebaseTest", "Set successful!");
+                    Log.d("FirebaseTest2", "Set successful!");
                 } else {
-                    Log.e("FirebaseTest", "Set unsuccessful");
+                    Log.e("FirebaseTest2", "Set unsuccessful");
                 }
                 latch.countDown();
             }
@@ -218,14 +222,19 @@ public class FirebaseTest2 {
     public void testDeep() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
         DatabaseReference deepRef = testRef2.child("deep");
-        Log.d("FirebaseTest", "Setting new child...");
+        Log.d("FirebaseTest2", "Setting new child deep");
+        Log.d("FirebaseTest2", "deep's shallowlist " + deep.getShallowList());
+        Log.d("FirebaseTest2", "deep's list  " + deep.getList());
+        Log.d("FirebaseTest2", "deep's map " + deep.getMap());
+
+
         deepRef.setValue(deep).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("FirebaseTest", "Set successful!");
+                    Log.d("FirebaseTest2", "Set successful!");
                 } else {
-                    Log.e("FirebaseTest", "Set unsuccessful");
+                    Log.e("FirebaseTest2", "Set unsuccessful");
                 }
                 latch.countDown();
             }
