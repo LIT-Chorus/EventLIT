@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
-import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -35,29 +34,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class FirebaseTest {
+public class FirebaseTest2 {
     FirebaseDatabase fbDB = FirebaseDatabase.getInstance();
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
 
     DatabaseReference testRef;
-    User user;
+    User test_user;
 
-    public static final String TEST_EVENTID = "Test Event ID#";
+    public static final String TEST_EVENTID = "Event ID ";
 
     @Before
     public void setUp() throws Exception {
-        testRef = fbDB.getReference().child("firebase_testing");
+        testRef = fbDB.getReference().child("firebase_test2");
 
         // User we will be using in tests.
-        user = new User("Firebase", "Test", "ftest@ucsd.edu");
+        test_user = new User("Firebase", "Test2", "ftest2@ucsd.edu");
 
         // Add some private data to the user.
-        user.addOrgFollowing(0);
-        user.addOrgFollowing(1);
-        user.addOrgManaging(0);
-        user.addEventFollowing(0, TEST_EVENTID + 0, Event.RSVPStatus.GOING);
-        user.addEventFollowing(1, TEST_EVENTID + 1, Event.RSVPStatus.INTERESTED);
-
+        test_user.addOrgFollowing(4);
+        test_user.addOrgFollowing(5);
+        test_user.addOrgFollowing(6);
+        test_user.addOrgManaging(1);
+        test_user.addOrgManaging(2);
+        test_user.addEventFollowing(1, TEST_EVENTID + 1, Event.RSVPStatus.GOING);
+        test_user.addEventFollowing(2, TEST_EVENTID + 2, Event.RSVPStatus.INTERESTED);
+        test_user.addEventFollowing(3, TEST_EVENTID + 3, Event.RSVPStatus.MAYBE);
+        test_user.addEventFollowing(4, TEST_EVENTID + 4, Event.RSVPStatus.NOT_GOING);
         // For primary tests just analyzing how Firebase handles classes:
         shallow = new Shallow();
         deep = new Deep();
@@ -68,11 +70,11 @@ public class FirebaseTest {
         final CountDownLatch latch = new CountDownLatch(1);
         DatabaseReference userRef = testRef.child("user_data");
         Log.d("FirebaseTest", "Setting new child...");
-        Log.d("FirebaseTest", "Child is " + user.toString());
-        Log.d("FirebaseTest", "With private data " + user.extractPrivateData().toString());
+        Log.d("FirebaseTest", "Child is " + test_user.toString());
+        Log.d("FirebaseTest", "With private data " + test_user.extractPrivateData().toString());
 
         // Set the value, passing in a reference to the user.
-        userRef.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+        userRef.setValue(test_user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -91,10 +93,10 @@ public class FirebaseTest {
         final CountDownLatch latch = new CountDownLatch(1);
         DatabaseReference privateRef = testRef.child("user_private_data");
         Log.d("FirebaseTest", "Setting new child...");
-        Log.d("FirebaseTest", "With private data " + user.extractPrivateData().toString());
+        Log.d("FirebaseTest", "With private data " + test_user.extractPrivateData().toString());
 
         // Set the value, passing in a reference to the user's privateData.
-        privateRef.setValue(user.extractPrivateData()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        privateRef.setValue(test_user.extractPrivateData()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
