@@ -3,9 +3,9 @@ package com.cse110.eventlit.db;
 import org.json.JSONObject;
 
 public class Rsvp {
-    private int orgid;
-    private String eventid;
-    private Event.RSVPStatus rsvpStatus;
+    public int orgid;
+    public String eventid;
+    public Event.RSVPStatus rsvpStatus;
 
     public Rsvp() {}
 

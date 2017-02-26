@@ -1,9 +1,13 @@
 package com.cse110.utils;
+
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.Organization;
+import com.cse110.eventlit.db.Rsvp;
 import com.cse110.eventlit.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -15,19 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
-
-import com.cse110.eventlit.db.Event;
-import com.cse110.eventlit.db.Organization;
-import com.cse110.eventlit.db.Rsvp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.List;
-
-import static com.cse110.utils.OrganizationUtils.addOrgFromId;
 
 /**
  * Created by sandeep on 2/23/17.

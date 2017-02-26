@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
+import com.cse110.utils.DatabaseUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,6 +43,52 @@ public class UserTest {
         fbAuth = FirebaseAuth.getInstance();
         fbDB = FirebaseDatabase.getInstance().getReference();
         user = new User();
+    }
+
+    @Test public void testReadUser() {
+        fbAuth = FirebaseAuth.getInstance();
+        fbDB = DatabaseUtils.getUsersDB();
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        fbAuth.signInWithEmailAndPassword(USER_EMAIL, USER_PASSWORD).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser fbUser = fbAuth.getCurrentUser();
+                    String uid = fbUser.getUid();
+
+                    Log.d("UserUtilsTest", "onComplete");
+
+                    fbDB.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d("UserUtilsTest", "onDataChange");
+                            user = dataSnapshot.getValue(User.class);
+
+                            latch.countDown();
+                            Log.d("UserUtilsTest", user.toString());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else {
+                    Log.e("UserUtilsTest", "Authorization task not successful!");
+                }
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.wtf("UserUtilsTest", "setup is complete");
+
     }
 
     // Unit testing for Password Reset
