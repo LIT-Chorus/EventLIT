@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.Rsvp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,6 +13,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -106,5 +109,40 @@ public class EventUtils {
             }
         };
         eventsDB.addValueEventListener(eventListener);
+    }
+
+    /**
+     * Add an Event object to an input param eventsFollowing based off of an RSVP object.
+     *
+     * NOTE: only package scope. Only to be used by other util methods
+     * DO NOT MAKE PUBLIC
+     *
+     * @param rsvp
+     * @param eventsFollowing
+     * @param signal
+     */
+    static final void addEventFromId(final Rsvp rsvp, final List<Event> eventsFollowing, final CountDownLatch signal) {
+
+        eventsDB = eventsDB.child(Long.toString(rsvp.getOrgid())).child(rsvp.getEventid());
+
+        eventsDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Event event = dataSnapshot.getValue(Event.class);
+
+                Log.d("eventutils", "" + rsvp);
+                Log.d("eventutils", "" + event);
+                if (event != null)
+                    eventsFollowing.add(dataSnapshot.getValue(Event.class));
+
+                signal.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

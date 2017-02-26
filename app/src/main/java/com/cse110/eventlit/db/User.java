@@ -17,6 +17,8 @@ public class User {
     private String lastName;
     private String email;
 
+    public List<Rsvp> eventsFollowing;
+
     private PrivateData privateData;
 
     public static class PrivateData {
@@ -28,7 +30,7 @@ public class User {
         /**
          * Map of org ids and event ids to the user's RSVP status to each event.
          */
-        private ArrayList<UserEventRSVP> eventsFollowing;
+        private List<Rsvp> eventsFollowing;
 
         /**
          * List of orgids of the student orgs that the user manages.
@@ -45,7 +47,7 @@ public class User {
             this(data.getOrgsFollowing(), data.getEventsFollowing(), data.getOrgsManaging());
         }
 
-        public PrivateData(List<Integer> orgsFollowing, ArrayList<UserEventRSVP> eventsFollowing,
+        public PrivateData(List<Integer> orgsFollowing, List<Rsvp> eventsFollowing,
                            List<Integer> orgsManaging) {
             this.orgsFollowing = orgsFollowing;
             this.eventsFollowing = eventsFollowing;
@@ -56,7 +58,7 @@ public class User {
             return new ArrayList<>(orgsFollowing);
         }
 
-        public ArrayList<UserEventRSVP> getEventsFollowing() {
+        public List<Rsvp> getEventsFollowing() {
             return new ArrayList<>(eventsFollowing);
         }
 
@@ -68,7 +70,7 @@ public class User {
             this.orgsFollowing = new ArrayList<>(orgsFollowing);
         }
 
-        public void setEventsFollowing(ArrayList<UserEventRSVP> eventsFollowing) {
+        public void setEventsFollowing(ArrayList<Rsvp> eventsFollowing) {
             this.eventsFollowing = new ArrayList<>(eventsFollowing);
         }
 
@@ -81,7 +83,7 @@ public class User {
             JSONArray eventsFollowingJSON = new JSONArray();
             try {
                 json.put("orgsFollowing", orgsFollowing);
-                for (UserEventRSVP event : eventsFollowing) {
+                for (Rsvp event : eventsFollowing) {
                     eventsFollowingJSON.put(event.toJSON());
                 }
                 json.put("eventsFollowing", eventsFollowingJSON);
@@ -126,7 +128,7 @@ public class User {
      */
     public User(String firstName, String lastName, String email,
                 List<Integer> orgsFollowing,
-                ArrayList<UserEventRSVP> eventsFollowing,
+                ArrayList<Rsvp> eventsFollowing,
                 List<Integer> orgsManaging) {
         this(firstName, lastName, email);
         privateData = new PrivateData(orgsFollowing, eventsFollowing, orgsManaging);
@@ -155,7 +157,7 @@ public class User {
      * @param status status as defined in Event.RSVPStatus
      */
     public void addEventFollowing(int orgid, String eventid, Event.RSVPStatus status) {
-        privateData.eventsFollowing.add(new UserEventRSVP(orgid, eventid, status));
+        privateData.eventsFollowing.add(new Rsvp(orgid, eventid, status));
     }
 
     public JSONObject toJSON() {

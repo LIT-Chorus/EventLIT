@@ -1,10 +1,10 @@
 package com.cse110.utils;
 import android.app.Activity;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.cse110.eventlit.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,19 +14,20 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
-import com.cse110.eventlit.db.User;
-import com.cse110.eventlit.db.UserEventRSVP;
+import com.cse110.eventlit.db.Rsvp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
-import java.util.Map;
+
+import static com.cse110.utils.OrganizationUtils.addOrgFromId;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -37,23 +38,23 @@ public class UserUtils {
 
     /**
      * Reset the user's password
-     * @param user - a Firebase Authenticated user
+     *
+     * @param user            - a Firebase Authenticated user
      * @param currentPassword - the current password of the user
-     * @param newPassword - a new password
-     * @param onComplete - a listener to be notified when done
+     * @param newPassword     - a new password
+     * @param onComplete      - a listener to be notified when done
      */
     public static void resetPassword(@NonNull final FirebaseUser user, @NonNull String currentPassword,
                                      @NonNull final String newPassword,
-                                     @NonNull final OnCompleteListener<Void> onComplete){
+                                     @NonNull final OnCompleteListener<Void> onComplete) {
         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
         OnCompleteListener<Void> verifyOnComplete = new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     // Try to update the password
                     updatePassword(user, newPassword, onComplete);
-                }
-                else {
+                } else {
                     // Old password was wrong
                     Log.w("Password Reset", "Old password was wrong");
                     onComplete.onComplete(new InvalidPasswordTask());
@@ -69,20 +70,19 @@ public class UserUtils {
      * Resets the password of a given user, and notifies the on complete listener when
      * done.
      *
-     * @param user - a user object
+     * @param user        - a user object
      * @param newPassword - a new password that the user has entered
-     * @param onComplete - listener to notify when done
+     * @param onComplete  - listener to notify when done
      */
     private static void updatePassword(@NonNull FirebaseUser user, @NonNull String newPassword,
-                                     @NonNull final OnCompleteListener<Void> onComplete){
+                                       @NonNull final OnCompleteListener<Void> onComplete) {
         OnCompleteListener<Void> verifyOnComplete = new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Log.w("Password Reset", "Successful!");
                     onComplete.onComplete(task);
-                }
-                else {
+                } else {
                     // New Password Rejected by Firebase
                     Log.w("Password Reset", "Firebase does not like your password.");
                     onComplete.onComplete(new InvalidPasswordTask());
@@ -97,11 +97,12 @@ public class UserUtils {
 
     /**
      * Set the users notification setting
-     * @param user - a Firebase Authenticated user
-     * @param value - a boolean flag for whether
+     *
+     * @param user       - a Firebase Authenticated user
+     * @param value      - a boolean flag for whether
      * @param onComplete - a listener to notify when the the setting has been completed
      */
-    public static void setNotifications(@NonNull FirebaseUser user, boolean value, @NonNull OnCompleteListener<Void> onComplete){
+    public static void setNotifications(@NonNull FirebaseUser user, boolean value, @NonNull OnCompleteListener<Void> onComplete) {
         DatabaseReference currentUserPrivateData = userPrivateDataRef.child(user.getUid());
         currentUserPrivateData.setValue("notifications", value).addOnCompleteListener(onComplete);
     }
@@ -174,112 +175,72 @@ public class UserUtils {
 
     // TODO create methods to modify the User database
 
-    public static final void addOrgFromId(int orgid, final List<Organization> orgs) {
+    public static final List<Organization> getOrgsFollowingSynch(User user) {
 
-        DatabaseReference orgdb = DatabaseUtils.getOrganizationsDB();
+        List<Organization> orgsFollowing = new ArrayList<>();
 
-        orgdb = orgdb.child(String.valueOf(orgid));
+        List<Integer> orgid_following = user.extractPrivateData().getOrgsFollowing();
+        CountDownLatch finished = new CountDownLatch(orgid_following.size());
 
-        orgdb.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                orgs.add(dataSnapshot.getValue(Organization.class));
-            }
+        for (int orgid : orgid_following) {
+            OrganizationUtils.addOrgFromId(orgid, orgsFollowing, finished);
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        try {
+            finished.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            }
-        });
+        return orgsFollowing;
 
     }
 
-    public static final void getOrgsManaging(String uid, final List<Organization> orgsManaging) {
+    // TODO create methods to modify the User database
 
-        DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
+    public static final List<Organization> getOrgsManagingSynch(User user) {
 
-        upd_db = upd_db.child(uid);
+        List<Organization> orgsManaging = new ArrayList<>();
 
-        upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User();
+        List<Integer> orgid_managing = user.extractPrivateData().getOrgsManaging();
+        CountDownLatch finished = new CountDownLatch(orgid_managing.size());
 
-                for (int orgid: user.extractPrivateData().getOrgsManaging()) {
-                    addOrgFromId(orgid, orgsManaging);
-                }
-            }
+        for (int orgid : orgid_managing) {
+            OrganizationUtils.addOrgFromId(orgid, orgsManaging, finished);
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        try {
+            finished.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            }
-        });
+        return orgsManaging;
+
     }
 
-    public static final void getOrgsFollowing(String uid, final List<Organization> orgsFollowing) {
-        DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
+    public static final List<Event> getEventsFollowingSynch(User user) {
 
-        upd_db = upd_db.child(uid);
+        List<Event> eventsFollowing = new ArrayList<>();
 
-        upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User();
+        List<Rsvp> rsvps = user.eventsFollowing;
+        CountDownLatch finished = new CountDownLatch(rsvps.size());
 
-                for (int orgid: user.extractPrivateData().getOrgsFollowing()) {
-                    addOrgFromId(orgid, orgsFollowing);
-                }
-            }
+        for (Rsvp rsvp : rsvps) {
+            Log.d("userutils", rsvp.toString());
+            EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            Log.d("userutils", eventsFollowing.toString());
+        }
 
-            }
-        });
+        try {
+            finished.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return eventsFollowing;
     }
 
-    public static final void addEventFromIds(UserEventRSVP rsvp, final List<Event> eventsFollowing) {
-        DatabaseReference e_db = DatabaseUtils.getEventsDB();
-
-        e_db = e_db.child(String.valueOf(rsvp.getOrgid())).child(rsvp.getEventid());
-
-        e_db.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                eventsFollowing.add(dataSnapshot.getValue(Event.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public static final void getEventsFollowing(String uid, final List<Event> eventsFollowing) {
-
-        DatabaseReference upd_db = DatabaseUtils.getUserPrivateDataDB();
-
-        upd_db = upd_db.child(uid);
-
-        upd_db.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User();
-
-                for (UserEventRSVP rsvp: user.extractPrivateData().getEventsFollowing()) {
-                    addEventFromIds(rsvp, eventsFollowing);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 }
+

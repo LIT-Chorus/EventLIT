@@ -11,6 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -61,5 +63,35 @@ public class OrganizationUtils {
         organizations.addListenerForSingleValueEvent(postListener);
     }
 
+    /**
+     * Add an organization to a list from it's id
+     *
+     * NOTE: only package scope. Only to be used by other util methods
+     * DO NOT MAKE PUBLIC
+     *
+     * @param orgid
+     * @param orgs
+     * @param signal
+     */
+    static final void addOrgFromId(final int orgid, final List<Organization> orgs, final CountDownLatch signal) {
+
+        orgsDB = orgsDB.child(Long.toString(orgid));
+
+        orgsDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String org_name = dataSnapshot.getValue().toString();
+
+                orgs.add(new Organization(orgid, org_name));
+                signal.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

@@ -1,19 +1,15 @@
 package com.cse110.eventlit.db;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class UserEventRSVP {
+public class Rsvp {
     private int orgid;
     private String eventid;
     private Event.RSVPStatus rsvpStatus;
 
-    public UserEventRSVP() {}
+    public Rsvp() {}
 
-    public UserEventRSVP(int orgid, String eventid, Event.RSVPStatus rsvpStatus) {
+    public Rsvp(int orgid, String eventid, Event.RSVPStatus rsvpStatus) {
         this.orgid = orgid;
         this.eventid = eventid;
         this.rsvpStatus = rsvpStatus;
@@ -38,8 +34,8 @@ public class UserEventRSVP {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof UserEventRSVP) {
-            UserEventRSVP rsvpOther = (UserEventRSVP) other;
+        if (other instanceof Rsvp) {
+            Rsvp rsvpOther = (Rsvp) other;
             return this.orgid == rsvpOther.orgid
                     && this.eventid.equals(rsvpOther.eventid)
                     && this.rsvpStatus == rsvpOther.rsvpStatus;
