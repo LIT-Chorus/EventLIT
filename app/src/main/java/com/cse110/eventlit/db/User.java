@@ -93,6 +93,17 @@ public class User {
         }
 
         @Override
+        public boolean equals(Object other) {
+            if (other instanceof PrivateData) {
+                PrivateData otherData = (PrivateData) other;
+                return orgsFollowing.equals(otherData.orgsFollowing) &&
+                        eventsFollowing.equals(otherData.eventsFollowing) &&
+                        orgsManaging.equals(otherData.orgsManaging);
+            }
+            return false;
+        }
+
+        @Override
         public String toString() {
             return toJSON().toString();
         }
@@ -168,6 +179,18 @@ public class User {
             e.printStackTrace();
         }
         return json;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof User) {
+            User otherUser = (User) other;
+            return firstName.equals(otherUser.firstName) &&
+                    lastName.equals(otherUser.lastName) &&
+                    email.equals(otherUser.email) &&
+                    privateData.equals(otherUser.privateData);
+        }
+        return false;
     }
 
     /**

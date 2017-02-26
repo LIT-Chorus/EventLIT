@@ -6,27 +6,22 @@ import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
-import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -40,7 +35,8 @@ public class FirebaseTest {
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
 
     DatabaseReference testRef;
-    User user;
+    User setUser;
+    User retrievedUser;
 
     public static final String TEST_EVENTID = "Test Event ID#";
 
@@ -49,14 +45,17 @@ public class FirebaseTest {
         testRef = fbDB.getReference().child("firebase_test");
 
         // User we will be using in tests.
-        user = new User("Firebase", "Test", "ftest@ucsd.edu");
+        setUser = new User("Firebase", "Test", "ftest@ucsd.edu");
 
-        // Add some private data to the user.
-        user.addOrgFollowing(0);
-        user.addOrgFollowing(1);
-        user.addOrgManaging(0);
-        user.addEventFollowing(0, TEST_EVENTID + 0, Event.RSVPStatus.GOING);
-        user.addEventFollowing(1, TEST_EVENTID + 1, Event.RSVPStatus.INTERESTED);
+        // Add some private data to the setUser.
+        setUser.addOrgFollowing(0);
+        setUser.addOrgFollowing(1);
+        setUser.addOrgManaging(0);
+        setUser.addEventFollowing(0, TEST_EVENTID + 0, Event.RSVPStatus.GOING);
+        setUser.addEventFollowing(1, TEST_EVENTID + 1, Event.RSVPStatus.INTERESTED);
+
+        // Construct new empty user for retriving stuff.
+        retrievedUser = new User();
 
         // For primary tests just analyzing how Firebase handles classes:
         shallow = new Shallow();
@@ -65,14 +64,17 @@ public class FirebaseTest {
 
     @Test
     public void testUserData() throws Exception {
+        // Actually clear out PrivateData since we'll only be grabbing public info
+        setUser.applyPrivateData(new User.PrivateData());
+
         final CountDownLatch latch = new CountDownLatch(1);
         DatabaseReference userRef = testRef.child("user_data");
         Log.d("FirebaseTest", "Setting new child...");
-        Log.d("FirebaseTest", "Child is " + user.toString());
-        Log.d("FirebaseTest", "With private data " + user.extractPrivateData().toString());
+        Log.d("FirebaseTest", "Child is " + setUser.toString());
+        Log.d("FirebaseTest", "With private data " + setUser.extractPrivateData().toString());
 
-        // Set the value, passing in a reference to the user.
-        userRef.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+        // Set the value, passing in a reference to the setUser.
+        userRef.setValue(setUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -84,17 +86,37 @@ public class FirebaseTest {
             }
         });
         latch.await();
+
+        Log.d("FirebaseTest", "Getting public data...");
+        final CountDownLatch getLatch = new CountDownLatch(1);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                retrievedUser = dataSnapshot.getValue(User.class);
+                getLatch.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        getLatch.await();
+
+        Log.d("FirebaseTest", "Data coming back is " + retrievedUser.toString());
+        Log.d("FirebaseTest", "With private data " + retrievedUser.extractPrivateData().toString());
+        assertEquals(setUser, retrievedUser);
     }
 
     @Test
     public void testUserPrivateData() throws Exception {
-        final CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch setLatch = new CountDownLatch(1);
         DatabaseReference privateRef = testRef.child("user_private_data");
         Log.d("FirebaseTest", "Setting new child...");
-        Log.d("FirebaseTest", "With private data " + user.extractPrivateData().toString());
+        Log.d("FirebaseTest", "With private data " + setUser.extractPrivateData().toString());
 
-        // Set the value, passing in a reference to the user's privateData.
-        privateRef.setValue(user.extractPrivateData()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        // Set the value, passing in a reference to the setUser's privateData.
+        privateRef.setValue(setUser.extractPrivateData()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -102,10 +124,29 @@ public class FirebaseTest {
                 } else {
                     Log.e("FirebaseTest", "Set unsuccessful");
                 }
-                latch.countDown();
+                setLatch.countDown();
             }
         });
-        latch.await();
+        setLatch.await();
+
+        Log.d("FirebaseTest", "Getting private data...");
+        final CountDownLatch getLatch = new CountDownLatch(1);
+        privateRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                retrievedUser.applyPrivateData(dataSnapshot.getValue(User.PrivateData.class));
+                getLatch.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        getLatch.await();
+
+        Log.d("FirebaseTest", "Data coming back is " + retrievedUser.extractPrivateData().toString());
+        assertEquals(setUser.extractPrivateData(), retrievedUser.extractPrivateData());
     }
 
     // Primary tests to just analyze how Firebase handles classes:
