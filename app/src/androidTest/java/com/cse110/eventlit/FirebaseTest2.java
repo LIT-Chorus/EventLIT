@@ -38,14 +38,14 @@ public class FirebaseTest2 {
     FirebaseDatabase fbDB = FirebaseDatabase.getInstance();
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
 
-    DatabaseReference testRef;
+    DatabaseReference testRef2;
     User test_user;
 
     public static final String TEST_EVENTID = "Event ID ";
 
     @Before
     public void setUp() throws Exception {
-        testRef = fbDB.getReference().child("firebase_test2");
+        testRef2 = fbDB.getReference().child("firebase_test").child("firebase_test2");
 
         // User we will be using in tests.
         test_user = new User("Firebase", "Test2", "ftest2@ucsd.edu");
@@ -68,7 +68,7 @@ public class FirebaseTest2 {
     @Test
     public void testUserData() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
-        DatabaseReference userRef = testRef.child("user_data");
+        DatabaseReference userRef = testRef2.child("user_data");
         Log.d("FirebaseTest", "Setting new child...");
         Log.d("FirebaseTest", "Child is " + test_user.toString());
         Log.d("FirebaseTest", "With private data " + test_user.extractPrivateData().toString());
@@ -91,7 +91,7 @@ public class FirebaseTest2 {
     @Test
     public void testUserPrivateData() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
-        DatabaseReference privateRef = testRef.child("user_private_data");
+        DatabaseReference privateRef = testRef2.child("user_private_data");
         Log.d("FirebaseTest", "Setting new child...");
         Log.d("FirebaseTest", "With private data " + test_user.extractPrivateData().toString());
 
@@ -198,7 +198,7 @@ public class FirebaseTest2 {
     @Test
     public void testShallow() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
-        DatabaseReference shallowRef = testRef.child("shallow");
+        DatabaseReference shallowRef = testRef2.child("shallow");
         Log.d("FirebaseTest", "Setting new child...");
         shallowRef.setValue(shallow).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -217,7 +217,7 @@ public class FirebaseTest2 {
     @Test
     public void testDeep() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
-        DatabaseReference deepRef = testRef.child("deep");
+        DatabaseReference deepRef = testRef2.child("deep");
         Log.d("FirebaseTest", "Setting new child...");
         deepRef.setValue(deep).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

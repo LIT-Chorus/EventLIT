@@ -46,7 +46,7 @@ public class FirebaseTest {
 
     @Before
     public void setUp() throws Exception {
-        testRef = fbDB.getReference().child("firebase_testing");
+        testRef = fbDB.getReference().child("firebase_test");
 
         // User we will be using in tests.
         user = new User("Firebase", "Test", "ftest@ucsd.edu");
