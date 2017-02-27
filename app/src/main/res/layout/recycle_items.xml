@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    style="@style/CardView.Light"
     card_view:cardCornerRadius="4dp">
 
 
@@ -20,13 +21,23 @@
             android:layout_weight="3.2">
 
             <FrameLayout
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginTop="48dp"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_width="72dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:id="@+id/dateLayout">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/dateView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/circle"
+                    android:textSize="13sp"
+                    />
 
             </FrameLayout>
             

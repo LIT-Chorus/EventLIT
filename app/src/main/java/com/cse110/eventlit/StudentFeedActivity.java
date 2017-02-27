@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,10 +31,10 @@ public class StudentFeedActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         FragmentManager fm = getSupportFragmentManager();
@@ -41,6 +44,7 @@ public class StudentFeedActivity extends AppCompatActivity
             fragment = new CardFragment();
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
+
 
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
 
@@ -59,9 +63,8 @@ public class StudentFeedActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                     .setTitle("Really Exit?")
@@ -116,13 +119,11 @@ public class StudentFeedActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(StudentFeedActivity.this, SettingsActivity.class));
-
         } else if (id == R.id.nav_help) {
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
