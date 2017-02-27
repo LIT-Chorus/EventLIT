@@ -42,7 +42,6 @@ public class UserTest {
     public void setUp() throws Exception {
         fbAuth = FirebaseAuth.getInstance();
         fbDB = FirebaseDatabase.getInstance().getReference();
-        user = new User();
     }
 
     @Test public void testReadUser() {
@@ -173,6 +172,7 @@ public class UserTest {
         assertEquals(USER_EMAIL, user.getEmail());
     }
 
+    /*
     @Test
     public void testPrivateData() throws Exception {
         final User expectedUser = new User();
@@ -216,4 +216,5 @@ public class UserTest {
         Log.w("testMapConstructor", "Private data is... " + user.extractPrivateData());
         assertEquals(expectedUser.extractPrivateData().getEventsFollowing(), user.extractPrivateData().getEventsFollowing());
     }
+    */
 }

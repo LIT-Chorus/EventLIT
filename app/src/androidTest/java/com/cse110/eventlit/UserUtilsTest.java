@@ -54,18 +54,21 @@ public class UserUtilsTest {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser fbUser = fbAuth.getCurrentUser();
-                    String uid = fbUser.getUid();
+                    final String uid = fbUser.getUid();
 
-                    Log.d("UserUtilsTest", "onComplete");
+                    Log.d("onComplete", "onComplete setup");
 
                     fbDB.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.d("UserUtilsTest", "onDataChange");
+                            Log.d("onDataChange", "onDataChange setup");
+
                             user = dataSnapshot.getValue(User.class);
 
+                            Log.d("reading in user", user.toString());
+
                             latch.countDown();
-                            Log.d("UserUtilsTest", user.toString());
+                            //Log.d("UserUtilsTest", user.toString());
                         }
 
                         @Override
@@ -99,8 +102,6 @@ public class UserUtilsTest {
 
     @Test
     public void getEventsFollowing() throws Exception {
-
-        Log.d("Hello", user.toString());
 
         List<Event> eventsFollowing = UserUtils.getEventsFollowingSynch(user);
 

@@ -18,105 +18,18 @@ public class User {
     private String email;
 
     public List<Rsvp> eventsFollowing;
-
-    private PrivateData privateData;
-
-    public static class PrivateData {
-        /**
-         * List of orgids of the student orgs that the user is following.
-         */
-        private List<Integer> orgsFollowing;
-
-        /**
-         * Map of org ids and event ids to the user's RSVP status to each event.
-         */
-        private List<Rsvp> eventsFollowing;
-
-        /**
-         * List of orgids of the student orgs that the user manages.
-         */
-        private List<Integer> orgsManaging;
-
-        public PrivateData() {
-            orgsFollowing = new ArrayList<>();
-            eventsFollowing = new ArrayList<>();
-            orgsManaging = new ArrayList<>();
-        }
-
-        public PrivateData(PrivateData data) {
-            this(data.getOrgsFollowing(), data.getEventsFollowing(), data.getOrgsManaging());
-        }
-
-        public PrivateData(List<Integer> orgsFollowing, List<Rsvp> eventsFollowing,
-                           List<Integer> orgsManaging) {
-            this.orgsFollowing = orgsFollowing;
-            this.eventsFollowing = eventsFollowing;
-            this.orgsManaging = orgsManaging;
-        }
-
-        public List<Integer> getOrgsFollowing() {
-            return new ArrayList<>(orgsFollowing);
-        }
-
-        public List<Rsvp> getEventsFollowing() {
-            return new ArrayList<>(eventsFollowing);
-        }
-
-        public List<Integer> getOrgsManaging() {
-            return new ArrayList<>(orgsManaging);
-        }
-
-        public void setOrgsFollowing(List<Integer> orgsFollowing) {
-            this.orgsFollowing = new ArrayList<>(orgsFollowing);
-        }
-
-        public void setEventsFollowing(ArrayList<Rsvp> eventsFollowing) {
-            this.eventsFollowing = new ArrayList<>(eventsFollowing);
-        }
-
-        public void setOrgsManaging(List<Integer> orgsManaging) {
-            this.orgsManaging = new ArrayList<>(orgsManaging);
-        }
-
-        public JSONObject toJSON() {
-            JSONObject json = new JSONObject();
-            JSONArray eventsFollowingJSON = new JSONArray();
-            try {
-                json.put("orgsFollowing", orgsFollowing);
-                for (Rsvp event : eventsFollowing) {
-                    eventsFollowingJSON.put(event.toJSON());
-                }
-                json.put("eventsFollowing", eventsFollowingJSON);
-                json.put("orgsManaging", orgsManaging);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return json;
-        }
-
-        @Override
-        public String toString() {
-            return toJSON().toString();
-        }
-    }
-
-    public PrivateData extractPrivateData() {
-        return privateData;
-    }
-
-    public void applyPrivateData(PrivateData data) {
-        privateData = new PrivateData(data);
-    }
+    public List<Integer> orgsFollowing;
+    public List<Integer> orgsManaging;
 
     public User() {
-        privateData = new PrivateData();
+        eventsFollowing = new ArrayList<>();
+        orgsFollowing = new ArrayList<>();
+        orgsManaging = new ArrayList<>();
     }
 
-    /**
-     * The metadata constructor that should be used for new users.
-     */
     public User(String firstName, String lastName, String email) {
         this();
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -128,10 +41,16 @@ public class User {
      */
     public User(String firstName, String lastName, String email,
                 List<Integer> orgsFollowing,
-                ArrayList<Rsvp> eventsFollowing,
-                List<Integer> orgsManaging) {
-        this(firstName, lastName, email);
-        privateData = new PrivateData(orgsFollowing, eventsFollowing, orgsManaging);
+                List<Rsvp> eventsFollowing,
+                List<Integer> orgsManaging)
+    {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+
+        this.orgsFollowing = orgsFollowing;
+        this.eventsFollowing = eventsFollowing;
+        this.orgsManaging = orgsManaging;
     }
 
     /**
@@ -139,7 +58,7 @@ public class User {
      * @param orgid Organization ID
      */
     public void addOrgFollowing(int orgid) {
-        privateData.orgsFollowing.add(orgid);
+        orgsFollowing.add(orgid);
     }
 
     /**
@@ -147,7 +66,7 @@ public class User {
      * @param orgid Organization ID
      */
     public void addOrgManaging(int orgid) {
-        privateData.orgsManaging.add(orgid);
+        orgsManaging.add(orgid);
     }
 
     /**
@@ -157,7 +76,7 @@ public class User {
      * @param status status as defined in Event.RSVPStatus
      */
     public void addEventFollowing(int orgid, String eventid, Event.RSVPStatus status) {
-        privateData.eventsFollowing.add(new Rsvp(orgid, eventid, status));
+        eventsFollowing.add(new Rsvp(orgid, eventid, status));
     }
 
     public JSONObject toJSON() {

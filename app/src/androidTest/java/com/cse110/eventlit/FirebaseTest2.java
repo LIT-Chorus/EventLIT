@@ -33,6 +33,7 @@ import java.util.concurrent.CountDownLatch;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/*
 @RunWith(AndroidJUnit4.class)
 public class FirebaseTest2 {
     FirebaseDatabase fbDB = FirebaseDatabase.getInstance();
@@ -242,3 +243,6 @@ public class FirebaseTest2 {
         latch.await();
     }
 }
+
+*/
+

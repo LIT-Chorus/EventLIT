@@ -1,16 +1,8 @@
 package com.cse110.eventlit;
 
-import android.support.annotation.NonNull;
-import android.support.test.filters.MediumTest;
-import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
-import com.cse110.utils.UserUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,7 +16,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -46,8 +37,8 @@ public class EventTest {
         expectedMap.put("title", "Test Event");
         expectedMap.put("description", "Here it is.");
         expectedMap.put("orgid", "abcdefg");
-        expectedMap.put("startTime", event.getStartTime());
-        expectedMap.put("endTime", event.getEndTime());
+        expectedMap.put("startTime", event.getStartDate());
+        expectedMap.put("endTime", event.getEndDate());
         expectedMap.put("location", "Nowhere");
         expectedMap.put("category", "Other");
         expectedMap.put("maxCapacity", 100);

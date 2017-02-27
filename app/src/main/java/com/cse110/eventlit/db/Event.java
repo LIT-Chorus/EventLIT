@@ -38,8 +38,8 @@ public class Event {
     /**
      * Start and end dates of the event, as milliseconds since the Unix epoch (Jan 1, 1970).
      */
-    private long startTime;
-    private long endTime;
+    private long startDate;
+    private long endDate;
 
     /**
      * Named location of the event. e.g. "La Jolla, CA"
@@ -69,8 +69,8 @@ public class Event {
         this.title = title;
         this.description = description;
         this.orgid = orgid;
-        this.startTime = startDate.getTimeInMillis();
-        this.endTime = endDate.getTimeInMillis();
+        this.startDate = startDate.getTimeInMillis();
+        this.endDate = endDate.getTimeInMillis();
         this.location = location;
         this.category = category;
         this.maxCapacity = maxCapacity;
@@ -101,12 +101,12 @@ public class Event {
         this("Untitled", "No description.", null, "None");
     }
 
-    public long getEndTime() {
-        return endTime;
+    public long getEndDate() {
+        return endDate;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public long getStartDate() {
+        return startDate;
     }
 
     /**
@@ -114,7 +114,7 @@ public class Event {
      */
     public void putStartTime(int year, int month, int dayOfMonth, int hour, int minute) {
         Calendar c = new GregorianCalendar(year, month, dayOfMonth, hour, minute);
-        startTime = c.getTimeInMillis();
+        startDate = c.getTimeInMillis();
     }
 
     /**
@@ -122,7 +122,7 @@ public class Event {
      */
     public Calendar startTimeAsCalendar() {
         Calendar c = new GregorianCalendar();
-        c.setTimeInMillis(startTime);
+        c.setTimeInMillis(startDate);
         return c;
     }
 
@@ -131,7 +131,7 @@ public class Event {
      */
     public void putEndTime(int year, int month, int dayOfMonth, int hour, int minute) {
         Calendar c = new GregorianCalendar(year, month, dayOfMonth, hour, minute);
-        endTime = c.getTimeInMillis();
+        endDate = c.getTimeInMillis();
     }
 
     /**
@@ -139,7 +139,7 @@ public class Event {
      */
     public Calendar endTimeAsCalendar() {
         Calendar c = new GregorianCalendar();
-        c.setTimeInMillis(endTime);
+        c.setTimeInMillis(endDate);
         return c;
     }
 
@@ -175,8 +175,8 @@ public class Event {
         map.put("title", title);
         map.put("description", description);
         map.put("orgid", orgid);
-        map.put("startTime", startTime);
-        map.put("endTime", endTime);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
         map.put("location", location);
         map.put("category", category);
         map.put("maxCapacity", maxCapacity);

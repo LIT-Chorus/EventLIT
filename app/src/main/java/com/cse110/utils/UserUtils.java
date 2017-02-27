@@ -173,7 +173,7 @@ public class UserUtils {
 
         List<Organization> orgsFollowing = new ArrayList<>();
 
-        List<Integer> orgid_following = user.extractPrivateData().getOrgsFollowing();
+        List<Integer> orgid_following = user.orgsFollowing;
         CountDownLatch finished = new CountDownLatch(orgid_following.size());
 
         for (int orgid : orgid_following) {
@@ -196,7 +196,7 @@ public class UserUtils {
 
         List<Organization> orgsManaging = new ArrayList<>();
 
-        List<Integer> orgid_managing = user.extractPrivateData().getOrgsManaging();
+        List<Integer> orgid_managing = user.orgsManaging;
         CountDownLatch finished = new CountDownLatch(orgid_managing.size());
 
         for (int orgid : orgid_managing) {
@@ -220,12 +220,25 @@ public class UserUtils {
         List<Rsvp> rsvps = user.eventsFollowing;
         CountDownLatch finished = new CountDownLatch(rsvps.size());
 
-        for (Rsvp rsvp : rsvps) {
-            Log.d("userutils", rsvp.toString());
-            EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
+        Rsvp rsvp = rsvps.get(0);
 
-            Log.d("userutils", eventsFollowing.toString());
-        }
+        Log.d("getEvents: rsvp object:", rsvp.toString());
+        EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
+        Log.d("getEvents list size:", "" + eventsFollowing.size());
+
+        rsvp = rsvps.get(1);
+
+        Log.d("getEvents: rsvp object:", rsvp.toString());
+        EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
+        Log.d("getEvents list size:", "" + eventsFollowing.size());
+
+        rsvp = rsvps.get(2);
+
+        Log.d("getEvents: rsvp object:", rsvp.toString());
+        EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
+        Log.d("getEvents list size:", "" + eventsFollowing.size());
+
+        finished.countDown();
 
         try {
             finished.await();
