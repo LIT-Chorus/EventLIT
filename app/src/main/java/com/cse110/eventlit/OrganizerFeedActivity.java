@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class OrganizerFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +43,17 @@ public class OrganizerFeedActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // TODO call updateHeader with user's name/email/pic
+    }
+
+    // Updates the name/email/profile pic that is displayed in the hamburger menu
+    public void updateHeader(String name, String email) {
+        TextView nameTextView = (TextView) findViewById(R.id.nameTextView);
+        TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
+        nameTextView.setText(name);
+        emailTextView.setText(email);
+        // TODO update prof pic
     }
 
     @Override
