@@ -89,7 +89,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
             // Go to home page
         } else if (id == R.id.nav_explore) {
 
-        } else if (id == R.id.nav_preferences) {
+        } else if (id == R.id.nav_follow_orgs) {
 
         } else if (id == R.id.nav_your_events) {
 
