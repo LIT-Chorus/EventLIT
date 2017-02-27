@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_menu_explore"
             android:title="Explore" />
         <item
-            android:id="@+id/nav_preferences"
-            android:icon="@drawable/ic_menu_preferences"
-            android:title="Preferences" />
+            android:id="@+id/nav_follow_orgs"
+            android:icon="@drawable/ic_menu_follow_orgs"
+            android:title="Follow Orgs" />
     </group>
 
     <group

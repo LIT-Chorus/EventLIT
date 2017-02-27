@@ -44,7 +44,7 @@ public class UserUtils {
      */
     public static void resetPassword(@NonNull final FirebaseUser user, @NonNull String currentPassword,
                                      @NonNull final String newPassword,
-                                     @NonNull final OnCompleteListener<Void> onComplete){
+                                     @NonNull final OnCompleteListener<String> onComplete){
         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
         OnCompleteListener<Void> verifyOnComplete = new OnCompleteListener<Void>() {
             @Override
@@ -56,7 +56,8 @@ public class UserUtils {
                 else {
                     // Old password was wrong
                     Log.w("Password Reset", "Old password was wrong");
-                    onComplete.onComplete(new InvalidPasswordTask());
+                    Task<String> invalidPassword = new PasswordTask("Old Password was Wrong");
+                    onComplete.onComplete(invalidPassword);
                 }
             }
         };
@@ -74,18 +75,22 @@ public class UserUtils {
      * @param onComplete - listener to notify when done
      */
     private static void updatePassword(@NonNull FirebaseUser user, @NonNull String newPassword,
-                                     @NonNull final OnCompleteListener<Void> onComplete){
+                                     @NonNull final OnCompleteListener<String> onComplete){
         OnCompleteListener<Void> verifyOnComplete = new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
                     Log.w("Password Reset", "Successful!");
-                    onComplete.onComplete(task);
+                    PasswordTask successfulPasswordResetTask = new PasswordTask("Reset Success!");
+                    onComplete.onComplete(successfulPasswordResetTask);
                 }
                 else {
                     // New Password Rejected by Firebase
                     Log.w("Password Reset", "Firebase does not like your password.");
-                    onComplete.onComplete(new InvalidPasswordTask());
+                    String fbErrorMessage = task.getException().getMessage().toString();
+                    PasswordTask invalidPassword = new
+                            PasswordTask(fbErrorMessage);
+                    onComplete.onComplete(invalidPassword);
 
                 }
             }
@@ -107,7 +112,12 @@ public class UserUtils {
     }
 
     // Task to notify that the password reset was unsuccessful
-    private static class InvalidPasswordTask extends Task<Void> {
+    private static class PasswordTask extends Task<String> {
+        String result;
+        PasswordTask(String errorMessage){
+            result = errorMessage;
+        }
+
         @Override
         public boolean isComplete() {
             return true;
@@ -115,16 +125,16 @@ public class UserUtils {
 
         @Override
         public boolean isSuccessful() {
-            return false;
+            return true;
         }
 
         @Override
-        public Void getResult() {
-            return null;
+        public String getResult() {
+            return result;
         }
 
         @Override
-        public <X extends Throwable> Void getResult(@NonNull Class<X> aClass) throws X {
+        public <X extends Throwable> String getResult(@NonNull Class<X> aClass) throws X {
             return null;
         }
 
@@ -136,37 +146,35 @@ public class UserUtils {
 
         @NonNull
         @Override
-        public Task<Void> addOnSuccessListener(@NonNull OnSuccessListener<? super Void> onSuccessListener) {
+        public Task<String> addOnSuccessListener(@NonNull OnSuccessListener<? super String> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        public Task<String> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super String> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        public Task<String> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super String> onSuccessListener) {
             return null;
         }
 
         @NonNull
         @Override
-        public Task<Void> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+        public Task<String> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
             return null;
         }
 
         @NonNull
         @Override
-        public Task<Void> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+        public Task<String> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
             return null;
         }
 
         @NonNull
         @Override
-        public Task<Void> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Task<Void> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Task<Void> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
+        public Task<String> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
             return null;
         }
     }
@@ -174,11 +182,11 @@ public class UserUtils {
 
     // TODO create methods to modify the User database
 
-    public static final void addOrgFromId(String orgid, final List<Organization> orgs) {
+    public static final void addOrgFromId(int orgid, final List<Organization> orgs) {
 
         DatabaseReference orgdb = DatabaseUtils.getOrganizationsDB();
 
-        orgdb = orgdb.child(orgid);
+        orgdb = orgdb.child(String.valueOf(orgid));
 
         orgdb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -204,9 +212,9 @@ public class UserUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User(data);
+                User user = new User();
 
-                for (String orgid: user.getOrgsManaging()) {
+                for (int orgid: user.extractPrivateData().getOrgsManaging()) {
                     addOrgFromId(orgid, orgsManaging);
                 }
             }
@@ -227,9 +235,9 @@ public class UserUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User(data);
+                User user = new User();
 
-                for (String orgid: user.getOrgsFollowing()) {
+                for (int orgid: user.extractPrivateData().getOrgsFollowing()) {
                     addOrgFromId(orgid, orgsFollowing);
                 }
             }
@@ -244,7 +252,7 @@ public class UserUtils {
     public static final void addEventFromIds(UserEventRSVP rsvp, final List<Event> eventsFollowing) {
         DatabaseReference e_db = DatabaseUtils.getEventsDB();
 
-        e_db = e_db.child(rsvp.getOrgid()).child(rsvp.getEventid());
+        e_db = e_db.child(String.valueOf(rsvp.getOrgid())).child(rsvp.getEventid());
 
         e_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -269,9 +277,9 @@ public class UserUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-                User user = new User(data);
+                User user = new User();
 
-                for (UserEventRSVP rsvp: user.getEventsFollowing()) {
+                for (UserEventRSVP rsvp: user.extractPrivateData().getEventsFollowing()) {
                     addEventFromIds(rsvp, eventsFollowing);
                 }
             }

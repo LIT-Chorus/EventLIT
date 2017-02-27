@@ -3,46 +3,55 @@ package com.cse110.eventlit.db;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserEventRSVP {
-    private String orgid;
+    private int orgid;
     private String eventid;
     private Event.RSVPStatus rsvpStatus;
 
-    public UserEventRSVP(String orgid, String eventid, Event.RSVPStatus rsvpStatus) {
+    public UserEventRSVP() {}
+
+    public UserEventRSVP(int orgid, String eventid, Event.RSVPStatus rsvpStatus) {
         this.orgid = orgid;
         this.eventid = eventid;
         this.rsvpStatus = rsvpStatus;
     }
 
-    @Override
-    public String toString() {
+    public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         try {
             json.put("orgid", orgid);
             json.put("eventid", eventid);
-            json.put("rsvpStatus", rsvpStatus);
+            json.put("rsvpStatus", rsvpStatus.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return json.toString();
+        return json;
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().toString();
     }
 
     @Override
     public boolean equals(Object other) {
         if (other instanceof UserEventRSVP) {
             UserEventRSVP rsvpOther = (UserEventRSVP) other;
-            return this.orgid.equals(rsvpOther.orgid)
+            return this.orgid == rsvpOther.orgid
                     && this.eventid.equals(rsvpOther.eventid)
                     && this.rsvpStatus == rsvpOther.rsvpStatus;
         }
         return false;
     }
 
-    public String getOrgid() {
+    public int getOrgid() {
         return orgid;
     }
 
-    public void setOrgid(String orgid) {
+    public void setOrgid(int orgid) {
         this.orgid = orgid;
     }
 

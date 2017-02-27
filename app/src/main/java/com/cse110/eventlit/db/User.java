@@ -1,14 +1,10 @@
 package com.cse110.eventlit.db;
 
-import android.util.ArrayMap;
-import android.util.Log;
-
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class holding User information.
@@ -21,25 +17,108 @@ public class User {
     private String lastName;
     private String email;
 
-    /**
-     * List of orgids of the student orgs that the user is following.
-     */
-    private List<String> orgsFollowing;
+    private PrivateData privateData;
 
-    /**
-     * Map of org ids and event ids to the user's RSVP status to each event.
-     */
-    private ArrayList<UserEventRSVP> eventsFollowing;
+    public static class PrivateData {
+        /**
+         * List of orgids of the student orgs that the user is following.
+         */
+        private List<Integer> orgsFollowing;
 
-    /**
-     * List of orgids of the student orgs that the user manages.
-     */
-    private List<String> orgsManaging;
+        /**
+         * Map of org ids and event ids to the user's RSVP status to each event.
+         */
+        private ArrayList<UserEventRSVP> eventsFollowing;
+
+        /**
+         * List of orgids of the student orgs that the user manages.
+         */
+        private List<Integer> orgsManaging;
+
+        public PrivateData() {
+            orgsFollowing = new ArrayList<>();
+            eventsFollowing = new ArrayList<>();
+            orgsManaging = new ArrayList<>();
+        }
+
+        public PrivateData(PrivateData data) {
+            this(data.getOrgsFollowing(), data.getEventsFollowing(), data.getOrgsManaging());
+        }
+
+        public PrivateData(List<Integer> orgsFollowing, ArrayList<UserEventRSVP> eventsFollowing,
+                           List<Integer> orgsManaging) {
+            this.orgsFollowing = orgsFollowing;
+            this.eventsFollowing = eventsFollowing;
+            this.orgsManaging = orgsManaging;
+        }
+
+        public List<Integer> getOrgsFollowing() {
+            return new ArrayList<>(orgsFollowing);
+        }
+
+        public ArrayList<UserEventRSVP> getEventsFollowing() {
+            return new ArrayList<>(eventsFollowing);
+        }
+
+        public List<Integer> getOrgsManaging() {
+            return new ArrayList<>(orgsManaging);
+        }
+
+        public void setOrgsFollowing(List<Integer> orgsFollowing) {
+            this.orgsFollowing = new ArrayList<>(orgsFollowing);
+        }
+
+        public void setEventsFollowing(ArrayList<UserEventRSVP> eventsFollowing) {
+            this.eventsFollowing = new ArrayList<>(eventsFollowing);
+        }
+
+        public void setOrgsManaging(List<Integer> orgsManaging) {
+            this.orgsManaging = new ArrayList<>(orgsManaging);
+        }
+
+        public JSONObject toJSON() {
+            JSONObject json = new JSONObject();
+            JSONArray eventsFollowingJSON = new JSONArray();
+            try {
+                json.put("orgsFollowing", orgsFollowing);
+                for (UserEventRSVP event : eventsFollowing) {
+                    eventsFollowingJSON.put(event.toJSON());
+                }
+                json.put("eventsFollowing", eventsFollowingJSON);
+                json.put("orgsManaging", orgsManaging);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return json;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof PrivateData) {
+                PrivateData otherData = (PrivateData) other;
+                return orgsFollowing.equals(otherData.orgsFollowing) &&
+                        eventsFollowing.equals(otherData.eventsFollowing) &&
+                        orgsManaging.equals(otherData.orgsManaging);
+            }
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return toJSON().toString();
+        }
+    }
+
+    public PrivateData extractPrivateData() {
+        return privateData;
+    }
+
+    public void applyPrivateData(PrivateData data) {
+        privateData = new PrivateData(data);
+    }
 
     public User() {
-        orgsFollowing = new ArrayList<>();
-        eventsFollowing = new ArrayList<>();
-        orgsManaging = new ArrayList<>();
+        privateData = new PrivateData();
     }
 
     /**
@@ -57,70 +136,27 @@ public class User {
      * for existing users.
      */
     public User(String firstName, String lastName, String email,
-                List<String> orgsFollowing,
+                List<Integer> orgsFollowing,
                 ArrayList<UserEventRSVP> eventsFollowing,
-                List<String> orgsManaging) {
+                List<Integer> orgsManaging) {
         this(firstName, lastName, email);
-        this.orgsFollowing = orgsFollowing;
-        this.eventsFollowing = eventsFollowing;
-        this.orgsManaging = orgsManaging;
-    }
-
-    /**
-     * Loads data from the key-value map into this User.
-     */
-    public User(Map<String, Object> data) {
-        this();
-        set(data);
-    }
-
-    /**
-     * Sets corresponding data fields with the map, overwriting whatever data existed in those
-     * fields. Useful for loading from Firebase.
-     */
-    public void set(Map<String, Object> data) {
-        for (String key : data.keySet()) {
-            Object val = data.get(key);
-            if (key.equals("firstName")) {
-                firstName = (String) val;
-            } else if (key.equals("lastName")) {
-                lastName = (String) val;
-            } else if (key.equals("email")) {
-                email = (String) val;
-            } else if (key.equals("orgsFollowing")) {
-                orgsFollowing = new ArrayList<>((ArrayList<String>) val);
-            } else if (key.equals("eventsFollowing")) {
-                // Firebase does some funky stuff with the eventsFollowing list -- we have to
-                // parse through a list of maps for the RSVP data
-                eventsFollowing = new ArrayList<>();
-                ArrayList<Map<String, Object>> following = (ArrayList<Map<String, Object>>) val;
-                for (Map<String, Object> m : following) {
-                    eventsFollowing.add(
-                            new UserEventRSVP(
-                                    (String) m.get("orgid"),
-                                    (String) m.get("eventid"),
-                                    Event.RSVPStatus.valueOf((String) m.get("rsvpStatus"))));
-                }
-            } else if (key.equals("orgsManaging")) {
-                orgsManaging = new ArrayList<>((ArrayList<String>) val);
-            }
-        }
+        privateData = new PrivateData(orgsFollowing, eventsFollowing, orgsManaging);
     }
 
     /**
      * Add an org to the user's following list.
      * @param orgid Organization ID
      */
-    public void addOrgFollowing(String orgid) {
-        orgsFollowing.add(orgid);
+    public void addOrgFollowing(int orgid) {
+        privateData.orgsFollowing.add(orgid);
     }
 
     /**
      * Add an org to the user's managing list.
      * @param orgid Organization ID
      */
-    public void addOrgManaging(String orgid) {
-        orgsManaging.add(orgid);
+    public void addOrgManaging(int orgid) {
+        privateData.orgsManaging.add(orgid);
     }
 
     /**
@@ -129,41 +165,39 @@ public class User {
      * @param eventid Event ID
      * @param status status as defined in Event.RSVPStatus
      */
-    public void addEventFollowing(String orgid, String eventid, Event.RSVPStatus status) {
-        eventsFollowing.add(new UserEventRSVP(orgid, eventid, status));
+    public void addEventFollowing(int orgid, String eventid, Event.RSVPStatus status) {
+        privateData.eventsFollowing.add(new UserEventRSVP(orgid, eventid, status));
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("firstName", firstName);
+            json.put("lastName", lastName);
+            json.put("email", email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof User) {
+            User otherUser = (User) other;
+            return firstName.equals(otherUser.firstName) &&
+                    lastName.equals(otherUser.lastName) &&
+                    email.equals(otherUser.email) &&
+                    privateData.equals(otherUser.privateData);
+        }
+        return false;
     }
 
     /**
-     * @return The public data (first name, last name, email) as a Map.
-     */
-    public Map<String, Object> getPublicDataMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("firstName", firstName);
-        map.put("lastName", lastName);
-        map.put("email", email);
-        return map;
-    }
-
-    /**
-     * @return The private data (orgs following, events following, orgs managing) as a Map.
-     */
-    public Map<String, Object> getPrivateDataMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("orgsFollowing", new ArrayList<>(orgsFollowing));
-        map.put("eventsFollowing", new ArrayList<>(eventsFollowing));
-        map.put("orgsManaging", new ArrayList<>(orgsManaging));
-        return map;
-    }
-
-    /**
-     * @return The JSON stringified form of this User's information,
-     * including all data -- public or private.
+     * @return The JSON stringified form of this User's public information.
      */
     public String toString() {
-        Map<String, Object> map = new HashMap<>();
-        map.putAll(getPublicDataMap());
-        map.putAll(getPrivateDataMap());
-        return new JSONObject(map).toString();
+        return toJSON().toString();
     }
 
     public String getFirstName() {
@@ -188,17 +222,5 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<String> getOrgsFollowing() {
-        return new ArrayList<>(orgsFollowing);
-    }
-
-    public ArrayList<UserEventRSVP> getEventsFollowing() {
-        return new ArrayList<>(eventsFollowing);
-    }
-
-    public List<String> getOrgsManaging() {
-        return new ArrayList<>(orgsManaging);
     }
 }
