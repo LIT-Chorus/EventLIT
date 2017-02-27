@@ -127,11 +127,11 @@ public class EventUtils {
         Log.w("add event, rsvp orgid", ""+rsvp.getOrgid());
         Log.w("add event, rsvp eventid", ""+rsvp.getEventid());
 
-        final CountDownLatch synchToken = new CountDownLatch(1);
+        //final CountDownLatch synchToken = new CountDownLatch(1);
 
-        eventsDB = eventsDB.child(Long.toString(rsvp.getOrgid())).child(rsvp.getEventid());
+        DatabaseReference eventReference = eventsDB.child(Long.toString(rsvp.getOrgid())).child(rsvp.getEventid());
 
-        eventsDB.addValueEventListener(new ValueEventListener() {
+        eventReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -145,7 +145,6 @@ public class EventUtils {
                 Log.w("countdown", "" + signal.getCount());
 
                 signal.countDown();
-                synchToken.countDown();
             }
 
             @Override
@@ -153,12 +152,6 @@ public class EventUtils {
 
             }
         });
-
-        try {
-            synchToken.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
     }
 }
