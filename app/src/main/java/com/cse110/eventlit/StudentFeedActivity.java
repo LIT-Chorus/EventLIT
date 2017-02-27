@@ -33,6 +33,10 @@ public class StudentFeedActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_activity_main_scrolling);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,9 +46,6 @@ public class StudentFeedActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         FragmentManager fm = getSupportFragmentManager();
         android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
@@ -52,7 +53,6 @@ public class StudentFeedActivity extends AppCompatActivity
             fragment = new CardFragment();
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
-
 
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
     }

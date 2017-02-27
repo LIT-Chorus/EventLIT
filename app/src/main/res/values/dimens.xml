@@ -15,7 +15,7 @@
     <dimen name="icon_width">60dip</dimen>
     <dimen name="icon_height">60dip</dimen>
     <dimen name="icon_padding">8dp</dimen>
-    <dimen name="card_height">250dip</dimen>
+    <dimen name="card_height">200dip</dimen>
     <dimen name="text_size">12sp</dimen>
 
     <dimen name="drawablePadding">10dp</dimen>
