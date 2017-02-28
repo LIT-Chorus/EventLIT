@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_marginBottom="10dp"
-    android:layout_height="wrap_content">
-
-    <CheckedTextView
+    <android.support.v7.widget.AppCompatCheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/org_name"
-        android:layout_marginBottom="0dp"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:checked="false" />
+        android:checked="false" android:layout_marginBottom="16dp" />
 
     <!--
     <android.support.v7.widget.SwitchCompat
@@ -19,4 +13,3 @@
         android:layout_gravity="end"
         android:id="@+id/selection"/>
      -->
-</LinearLayout>

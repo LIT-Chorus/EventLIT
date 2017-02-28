@@ -1,11 +1,12 @@
 package com.cse110.eventlit;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatCheckedTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckedTextView;
 
 import com.cse110.eventlit.db.Organization;
 import com.cse110.utils.OrganizationUtils;
@@ -38,17 +39,32 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public CheckedTextView mOrgName;
+        public AppCompatCheckedTextView mOrgName;
 
 
         public MyViewHolder(View view) {
             super(view);
-            mOrgName = (CheckedTextView) view.findViewById(R.id.org_name);
+            mOrgName = (AppCompatCheckedTextView) view.findViewById(R.id.org_name);
+            mOrgName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOrgName.isChecked())
+                    {
+                        mOrgName.setChecked(false);
+                    }
+
+                    else
+                    {
+                        mOrgName.setChecked(true);
+                    }
+                }
+            });
 
         }
 
         public void onClick(View view)
         {
+            Log.d("workflow", "click method is being called");
             if(mOrgName.isChecked())
             {
                 mOrgName.setChecked(false);
