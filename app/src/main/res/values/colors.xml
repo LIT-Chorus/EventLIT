@@ -10,4 +10,5 @@
     <color name="goingColor">#32cd32</color>
     <color name="interestedColor">#FFA500</color>
     <color name="notGoingColor">#FF0000</color>
+    <color name="circleBackground">#909090</color>
 </resources>

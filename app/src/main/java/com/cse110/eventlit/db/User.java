@@ -91,6 +91,17 @@ public class User {
         return json;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof User) {
+            User otherUser = (User) other;
+            return firstName.equals(otherUser.firstName) &&
+                    lastName.equals(otherUser.lastName) &&
+                    email.equals(otherUser.email);
+        }
+        return false;
+    }
+
     /**
      * @return The JSON stringified form of this User's public information.
      */

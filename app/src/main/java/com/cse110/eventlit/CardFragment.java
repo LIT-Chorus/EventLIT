@@ -108,6 +108,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.locationTextView.setText(list.get(position).getLocation());
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
+            holder.dateTextView.setText(monthStr + '\n' + day);
 
         }
 
@@ -123,6 +124,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatTextView timeTextView;
         public AppCompatTextView categoriesTextView;
         public AppCompatTextView eventNameTextView;
+        public AppCompatTextView dateTextView;
 
         public MyViewHolder(View v) {
             super(v);
@@ -130,7 +132,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             locationTextView = (AppCompatTextView) v.findViewById(R.id.location);
             categoriesTextView = (AppCompatTextView) v.findViewById(R.id.categories);
             eventNameTextView = (AppCompatTextView) v.findViewById(R.id.eventName);
-
+            dateTextView = (AppCompatTextView) v.findViewById(R.id.dateView);
         }
     }
 }

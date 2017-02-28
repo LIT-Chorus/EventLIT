@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    style="@style/CardView.Light"
     card_view:cardCornerRadius="4dp">
 
 
@@ -20,13 +21,23 @@
             android:layout_weight="3.2">
 
             <FrameLayout
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginTop="48dp"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_width="72dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:id="@+id/dateLayout">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/dateView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/circle"
+                    android:textSize="13sp"
+                    />
 
             </FrameLayout>
             
@@ -44,6 +55,8 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/eventNameSize"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textStyle="bold" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -54,6 +67,8 @@
                     android:textSize="@dimen/text_size"
                     android:drawableStart="@drawable/ic_access_time_black_18dp"
                     android:drawablePadding="@dimen/drawablePadding"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -64,6 +79,8 @@
                     android:textSize="@dimen/text_size"
                     android:drawableStart="@drawable/ic_location_on_black_18dp"
                     android:drawablePadding="@dimen/drawablePadding"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -73,6 +90,8 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/text_size"
                     android:drawableStart="@drawable/ic_label_black_18dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:drawablePadding="@dimen/drawablePadding" />
 
             </LinearLayout>
@@ -82,56 +101,79 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="0.8"
+            android:weightSum="3.8"
             android:orientation="horizontal"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin">
+            android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/going"
-                android:layout_width="wrap_content"
-                android:layout_marginRight="45dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/goingColor"
-                android:text="@string/going" />
-            
             <View
-                android:layout_width="1dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="45dp"
-                android:background="#000000"
-                android:id="@+id/line">
+                android:background="#FFFFFF"
+                android:layout_weight="0.2"
+                android:id="@+id/line1">
 
             </View>
 
-            <TextView
-                android:id="@+id/interested"
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/going"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="45dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textColor="@color/interestedColor"
-                android:text="@string/interested"/>
+                style="@style/EventButton"
+                android:background="@color/goingColor"
+                android:layout_weight="1"
+                android:text="@string/going" />
 
             <View
-                android:layout_width="1dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="45dp"
-                android:background="#000000"
+                android:background="#FFFFFF"
+                android:layout_weight="0.2"
                 android:id="@+id/line2">
 
             </View>
 
-            <TextView
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/interested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:textStyle="bold"
+                style="@style/EventButton"
+                android:background="@color/interestedColor"
+                android:layout_weight="1"
+                android:text="@string/interested"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:layout_weight="0.2"
+                android:id="@+id/line3">
+
+            </View>
+
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/notGoing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:textStyle="bold"
-                android:textColor="@color/notGoingColor"
+                style="@style/EventButton"
+                android:background="@color/notGoingColor"
+                android:layout_weight="1"
                 android:text="@string/cannotGo"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:layout_weight="0.2"
+                android:id="@+id/line4">
+
+            </View>
+
         </LinearLayout>
 
     </LinearLayout>
