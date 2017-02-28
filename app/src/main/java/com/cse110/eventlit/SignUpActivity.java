@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -319,6 +320,16 @@ public class SignUpActivity extends AppCompatActivity {
                             // Add a new entry to the `users` table for the user's
                             // non-auth information.
                             String uid = mFbAuth.getCurrentUser().getUid();
+                            FirebaseUser userProfile = mFbAuth.getCurrentUser();
+
+                            // Set a display name of the user
+                            UserProfileChangeRequest profileUpdates = new
+                                    UserProfileChangeRequest.Builder()
+                                    .setDisplayName(firstName + " "
+                                            + lastName).build();
+                            userProfile.updateProfile(profileUpdates);
+
+
                             DatabaseReference user = fbDB.child("users").child(uid);
                             user.setValue(new User(firstName, lastName, schoolEmail));
 

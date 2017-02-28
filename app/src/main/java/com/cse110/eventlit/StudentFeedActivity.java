@@ -13,7 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,15 +53,22 @@ public class StudentFeedActivity extends AppCompatActivity
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
 
         // TODO call updateHeader with user's name/email/pic
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            updateHeader(user.getDisplayName(), user.getEmail());
+        }
+
     }
 
     // Updates the name/email/profile pic that is displayed in the hamburger menu
     public void updateHeader(String name, String email) {
-        TextView nameTextView = (TextView) findViewById(R.id.nameTextView);
-        TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
-        nameTextView.setText(name);
-        emailTextView.setText(email);
-        // TODO update prof pic
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View profileView = navigationView.getHeaderView(0);
+            TextView nameTextView = (TextView) profileView.findViewById(R.id.nameTextView);
+            TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
+            nameTextView.setText(name);
+            emailTextView.setText(email);
+            // TODO update prof pic
     }
 
 

@@ -28,8 +28,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 
 //import com.cse110.chrous.R;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -50,6 +55,9 @@ public class SettingsActivity extends AppCompatActivity
     private ImageButton mChangePass;
     private ImageButton mReqOrgStatus;
     private de.hdodenhof.circleimageview.CircleImageView mProfilePhoto;
+    private TextView mName;
+
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -140,6 +148,10 @@ public class SettingsActivity extends AppCompatActivity
 
         // My Code
 
+        // Get Firebase user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
         // Get user's profile photo
         mProfilePhoto = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.profilePhoto);
 
@@ -148,6 +160,10 @@ public class SettingsActivity extends AppCompatActivity
         /* if ( ){
             mProfilePhoto
         } */
+
+        // Set user's name
+        mName = (TextView) findViewById(R.id.name);
+        mName.setText(user.getDisplayName());
 
 
         // Initialize buttons
