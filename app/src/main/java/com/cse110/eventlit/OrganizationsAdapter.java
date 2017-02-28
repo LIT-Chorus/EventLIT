@@ -32,6 +32,7 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     public OrganizationsAdapter(Context context)
     {
         this.mContext = context;
+        this.mOrganizations = new ArrayList<>();
         populateOrganizations();
     }
 
