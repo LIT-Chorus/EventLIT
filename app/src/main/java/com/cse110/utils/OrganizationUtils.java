@@ -28,9 +28,6 @@ public class OrganizationUtils {
                                                   final ArrayList<Organization> orgsList){
 
 
-        final DatabaseReference organizations = orgsDB.child("organizations");
-
-
         ValueEventListener postListener = new ValueEventListener() {
             // Get a snapshot of the database organizations document
             @Override
@@ -45,9 +42,9 @@ public class OrganizationUtils {
                     orgsList.add(org);
                     if (adapter != null) adapter.notifyItemChanged(adapter.getItemCount() - 1);
                 }
-                for (int i = 0; i < orgsList.size(); i++){
-                    Log.w("Organization " + i + ":",  orgsList.get(i).toString());
-                }
+//                for (int i = 0; i < orgsList.size(); i++){
+//                    Log.w("Organization " + i + ":",  orgsList.get(i).toString());
+//                }
 
                 if (adapter != null) adapter.notifyDataSetChanged();
             }
@@ -58,7 +55,7 @@ public class OrganizationUtils {
                 Log.d("OrganizerUtils", "Could not retrieve student organizations");
             }
         };
-        organizations.addListenerForSingleValueEvent(postListener);
+        orgsDB.addListenerForSingleValueEvent(postListener);
     }
 
 
