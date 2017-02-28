@@ -32,7 +32,7 @@ public class UserTest {
     private static final String USER_EMAIL = "cpence@ucsd.edu";
     private static final String USER_PASSWORD = "hellothere";
 
-    public static final String TEST_EVENTID = "Test Event ID#";
+    //public static final String TEST_EVENTID = "Test Event ID#";
 
     User user;
     FirebaseAuth fbAuth;

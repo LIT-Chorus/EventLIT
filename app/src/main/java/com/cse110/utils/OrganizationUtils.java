@@ -75,9 +75,10 @@ public class OrganizationUtils {
      */
     static final void addOrgFromId(final int orgid, final List<Organization> orgs, final CountDownLatch signal) {
 
-        orgsDB = orgsDB.child(Long.toString(orgid));
+        final DatabaseReference orgDB = orgsDB.child(Long.toString(orgid));
 
-        orgsDB.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        orgDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

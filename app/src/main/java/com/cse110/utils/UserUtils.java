@@ -220,25 +220,11 @@ public class UserUtils {
         List<Rsvp> rsvps = user.eventsFollowing;
         CountDownLatch finished = new CountDownLatch(rsvps.size());
 
-        Rsvp rsvp = rsvps.get(0);
-
-        Log.d("getEvents: rsvp object:", rsvp.toString());
-        EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
-        Log.d("getEvents list size:", "" + eventsFollowing.size());
-
-        rsvp = rsvps.get(1);
-
-        Log.d("getEvents: rsvp object:", rsvp.toString());
-        EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
-        Log.d("getEvents list size:", "" + eventsFollowing.size());
-
-        rsvp = rsvps.get(2);
-
-        Log.d("getEvents: rsvp object:", rsvp.toString());
-        EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
-        Log.d("getEvents list size:", "" + eventsFollowing.size());
-
-        finished.countDown();
+        for (Rsvp rsvp: rsvps) {
+            Log.d("getEvents: rsvp object:", rsvp.toString());
+            EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
+            Log.d("getEvents list size:", "" + eventsFollowing.size());
+        }
 
         try {
             finished.await();
