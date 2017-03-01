@@ -11,6 +11,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -18,20 +21,35 @@ import java.util.concurrent.CountDownLatch;
  */
 
 public class FileStorageUtils {
+    private static final String UPLOAD_IMAGE = "uploadImage";
+
+
     private static StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-    public static void uploadImageFromLocalFile(String id, String file_path) {
+    public static void uploadImageFromLocalFile(String id, String file_path) throws FileNotFoundException{
 
-        Uri file = Uri.fromFile(new File(file_path));
-        StorageReference imageRef = storageRef.child("images/" + id + ".jpg");
-        UploadTask uploadTask = imageRef.putFile(file);
+        Log.d(UPLOAD_IMAGE, "beginning of method");
+
+        InputStream stream = new FileInputStream(new File(file_path));
+
+
+        Log.d(UPLOAD_IMAGE, "read in file");
+
+        StorageReference imageFolderRef = storageRef.child("images");
+        StorageReference imageRef = imageFolderRef.child(id + ".png");
+
+        Log.d(UPLOAD_IMAGE, "created storage references");
+
+        UploadTask uploadTask = imageRef.putStream(stream);
+
+        Log.d(UPLOAD_IMAGE, "started task");
 
         // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
 
-                Log.d("uploadImage", "failure to upload file");
+                Log.d(UPLOAD_IMAGE, "failure to upload file");
                 // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -40,13 +58,15 @@ public class FileStorageUtils {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                Log.d("uploadImage", "upload success");
+                Log.d(UPLOAD_IMAGE, "upload success");
             }
         });
     }
 
     public static byte[] downloadImageInMemorySynch(String id) {
         StorageReference imageRef = storageRef.child("images/" + id + ".jpg");
+
+        Log.d("filestorage", imageRef.getBucket());
 
         final long ONE_MEGABYTE = 1024 * 1024;
 

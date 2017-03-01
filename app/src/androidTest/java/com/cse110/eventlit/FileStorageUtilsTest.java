@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.CountDownLatch;
 
 @RunWith(AndroidJUnit4.class)
@@ -57,6 +58,8 @@ public class FileStorageUtilsTest {
                 } else {
                     Log.e("UserUtilsTest", "Authorization task not successful!");
                 }
+
+                latch.countDown();
             }
         });
 
@@ -69,22 +72,26 @@ public class FileStorageUtilsTest {
     }
 
     @Test
-    void addPictureToUser() {
-        FileStorageUtils.uploadImageFromLocalFile(uid, "~/AndroidStudioProjects/events-android/src/main/res/drawable/app_icon.png");
+    public void addPictureToUser() {
+        try {
+            FileStorageUtils.uploadImageFromLocalFile(uid, "home/vansh/lulz.png");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    void getPictureFromUser() {
+    public void getPictureFromUser() {
 
     }
 
     @Test
-    void addPictureToEvent() {
+    public void addPictureToEvent() {
 
     }
 
     @Test
-    void getPictureFromEvent() {
+    public void getPictureFromEvent() {
 
     }
 }
