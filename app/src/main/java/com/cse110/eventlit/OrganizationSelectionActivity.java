@@ -20,7 +20,6 @@ public class OrganizationSelectionActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         initialize_adapter();
 
-
     }
 
     private void initialize_adapter() {

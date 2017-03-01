@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -29,12 +30,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 //import com.cse110.chrous.R;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.util.List;
 
@@ -49,7 +55,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatActivity
+public class SettingsActivity extends AppCompatActivity implements IPickResult
 {
 
     private ImageButton mChangePass;
@@ -186,6 +192,13 @@ public class SettingsActivity extends AppCompatActivity
             }
         });
 
+        mProfilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PickImageDialog.build(new PickSetup().setTitle("Select a new Profile Picture!")).show(SettingsActivity.this);
+            }
+        });
+
 
         // 1. Instantiate an AlertDialog.Builder with its constructor
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -196,6 +209,22 @@ public class SettingsActivity extends AppCompatActivity
         // Add edit_profilephoto xml
         final View view = factory.inflate(R.layout.edit_profilephoto, null);
         dialog.setView(view);
+    }
+
+    @Override
+    public void onPickResult(PickResult r) {
+        if (r.getError() == null) {
+
+            //If you want the Bitmap.
+            Bitmap imageSelected = r.getBitmap();
+
+            mProfilePhoto.setImageBitmap(imageSelected);
+
+        } else {
+            //Handle possible errors
+            //TODO: do what you have to do with r.getError();
+            Toast.makeText(this, r.getError().getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
 

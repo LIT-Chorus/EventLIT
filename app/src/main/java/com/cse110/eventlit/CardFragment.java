@@ -1,9 +1,11 @@
 package com.cse110.eventlit;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +46,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         MyAdapter adapter = new MyAdapter(listEvents);
         EventUtils.getAllEvents(adapter, listEvents);
+
 //        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 //            @Override
 //            public void onChanged() {
@@ -133,6 +136,21 @@ public class CardFragment extends android.support.v4.app.Fragment {
             categoriesTextView = (AppCompatTextView) v.findViewById(R.id.categories);
             eventNameTextView = (AppCompatTextView) v.findViewById(R.id.eventName);
             dateTextView = (AppCompatTextView) v.findViewById(R.id.dateView);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent openDetailedView = new Intent(getActivity(), StudentDetailedEventActivity.class);
+                    Bundle extras = new Bundle();
+                    extras.putString("time", timeTextView.getText().toString());
+                    extras.putString("location", locationTextView.getText().toString());
+                    extras.putString("category", categoriesTextView.getText().toString());
+                    extras.putString("eventName", eventNameTextView.getText().toString());
+                    extras.putString("date", dateTextView.getText().toString());
+
+                    startActivity(openDetailedView);
+                }
+            });
         }
     }
 }
