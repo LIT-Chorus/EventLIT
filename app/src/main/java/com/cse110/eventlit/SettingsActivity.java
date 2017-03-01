@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.enums.EPickType;
 import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.util.List;
@@ -195,7 +196,10 @@ public class SettingsActivity extends AppCompatActivity implements IPickResult
         mProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickImageDialog.build(new PickSetup().setTitle("Select a new Profile Picture!")).show(SettingsActivity.this);
+                PickImageDialog.build(new PickSetup()
+                        .setTitle("Select a new Profile Picture!")
+                        .setPickTypes(EPickType.GALLERY))
+                        .show(SettingsActivity.this);
             }
         });
 
