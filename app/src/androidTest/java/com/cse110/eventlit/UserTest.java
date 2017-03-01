@@ -116,6 +116,7 @@ public class UserTest {
             @Override
             public void onComplete(@NonNull Task task) {
                 signal.countDown();
+                assertEquals(task.isSuccessful(), true);
                 if (task.isSuccessful()){
                     Log.w("Password Test", "Login Successful!");
                     UserUtils.resetPassword(fbAuth.getCurrentUser(),"NewPassword", "NewPassword",
@@ -128,7 +129,7 @@ public class UserTest {
         };
 
         fbAuth
-                .signInWithEmailAndPassword("saraghun@ucsd.edu", "NewPassword")
+                .signInWithEmailAndPassword("saraghun@ucsd.edu", "Password")
                 .addOnCompleteListener(signInCompleteListener);
         try {
             signal.await();

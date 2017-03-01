@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.v7.widget.AppCompatCheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/org_name"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:checked="false" android:layout_marginBottom="16dp" />
+<android.support.v7.widget.AppCompatCheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/org_name"
+    android:checked="false"
+    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+    android:checkMarkTint="@android:color/black"
+    android:layout_marginBottom="16dp" />
 
-    <!--
-    <android.support.v7.widget.SwitchCompat
+    <!--android:checkMark="@android:drawable/checkbox_off_background"-->
+    <!--android.support.v7.widget.SwitchCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
