@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -108,7 +110,72 @@ public class StudentFeedActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort) {
-            return true;
+
+            final CharSequence[] items = {" Time "," Popularity "};
+            // arraylist to keep the selected items
+            final ArrayList seletedItems=new ArrayList();
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Sort by")
+                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                seletedItems.add(indexSelected);
+                            } else if (seletedItems.contains(indexSelected)) {
+                                // Else, if the item is already in the array, remove it
+                                seletedItems.remove(Integer.valueOf(indexSelected));
+                            }
+                        }
+                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on OK
+                            //  You can write the code  to save the selected item here
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on Cancel
+                        }
+                    }).create();
+            dialog.show();
+        }
+
+        if (id == R.id.action_filter ) {
+
+            final CharSequence[] items = {" Academics ", " Career ", " Social ", " Food ", " Faith "};
+            // arraylist to keep the selected items
+            final ArrayList seletedItems=new ArrayList();
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Select categories to view")
+                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                seletedItems.add(indexSelected);
+                            } else if (seletedItems.contains(indexSelected)) {
+                                // Else, if the item is already in the array, remove it
+                                seletedItems.remove(Integer.valueOf(indexSelected));
+                            }
+                        }
+                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on OK
+                            //  You can write the code  to save the selected item here
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on Cancel
+                        }
+                    }).create();
+            dialog.show();
+
         }
 
         return super.onOptionsItemSelected(item);

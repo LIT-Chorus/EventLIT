@@ -6,4 +6,9 @@
         android:orderInCategory="100"
         android:title="Sort"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_filter"
+        android:orderInCategory="200"
+        android:title="Filter"
+        app:showAsAction="never" />
 </menu>
