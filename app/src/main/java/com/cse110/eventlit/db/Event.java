@@ -2,6 +2,7 @@ package com.cse110.eventlit.db;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -10,15 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Event {
-    /**
-     * Enumeration of various RSVP statuses.
-     */
-    public enum RSVPStatus {
-        GOING,
-        NOT_GOING,
-        MAYBE,
-        INTERESTED
-    }
 
     /**
      * Title of the event.
@@ -127,6 +119,15 @@ public class Event {
     }
 
     /**
+     * Formats the start time given the format string following
+     * <a href="http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat conventions</a>:
+     * e.g. A format of "yyyy-MM-dd" will return "2017-03-01" for March 3rd, 2017.
+     */
+    public String formattedStartTime(String fmt) {
+        return new SimpleDateFormat(fmt).format(startTimeAsCalendar().getTime());
+    }
+
+    /**
      * Sets the end date of this event. Months are 0-indexed: e.g. Month 0 is January.
      */
     public void putEndTime(int year, int month, int dayOfMonth, int hour, int minute) {
@@ -141,6 +142,15 @@ public class Event {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(endDate);
         return c;
+    }
+
+    /**
+     * Formats the end time given the format string following
+     * <a href="http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat conventions</a>:
+     * e.g. A format of "yyyy-MM-dd" will return "2017-03-01" for March 3rd, 2017.
+     */
+    public String formattedEndTime(String fmt) {
+        return new SimpleDateFormat(fmt).format(endTimeAsCalendar().getTime());
     }
 
     /**
@@ -167,10 +177,10 @@ public class Event {
     }
 
     /**
-     * Returns a key-value mapping of the Event object.
-     * Pass this map to a Firebase setValue() method if you need to store the Event into the DB.
+     * Returns a JSON stringified version of the Event object.
      */
-    public Map<String, Object> getMap() {
+    @Override
+    public String toString() {
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
         map.put("description", description);
@@ -181,15 +191,7 @@ public class Event {
         map.put("category", category);
         map.put("maxCapacity", maxCapacity);
         map.put("attendees", new ArrayList<>(attendees));
-        return map;
-    }
-
-    /**
-     * Returns a JSON stringified version of the Event object.
-     */
-    @Override
-    public String toString() {
-        JSONObject json = new JSONObject(getMap());
+        JSONObject json = new JSONObject(map);
         return json.toString();
     }
 
