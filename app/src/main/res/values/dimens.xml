@@ -19,5 +19,5 @@
     <dimen name="text_size">12sp</dimen>
 
     <dimen name="drawablePadding">10dp</dimen>
-    <dimen name="eventNameSize">18dp</dimen>
+    <dimen name="eventNameSize">16dp</dimen>
 </resources>

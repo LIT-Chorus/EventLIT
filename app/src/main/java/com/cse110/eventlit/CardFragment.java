@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.UserUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import java.util.Locale;
  */
 
 public class CardFragment extends android.support.v4.app.Fragment {
+
     ArrayList<Event> listEvents = new ArrayList<>();
     RecyclerView MyRecyclerView;
 
@@ -45,7 +49,19 @@ public class CardFragment extends android.support.v4.app.Fragment {
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         MyAdapter adapter = new MyAdapter(listEvents);
-        EventUtils.getAllEvents(adapter, listEvents);
+
+        Bundle pageType = getArguments();
+        String type = pageType.getString("type");
+
+        if (type.equals("feed")) {
+            // TODO: Only get subscribed events instead of all events
+//            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//            UserUtils.getEventsFollowingSynch(user);
+            EventUtils.getAllEvents(adapter, listEvents);
+        } else {
+            EventUtils.getAllEvents(adapter, listEvents);
+        }
+
 
 //        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 //            @Override
@@ -147,7 +163,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("category", categoriesTextView.getText().toString());
                     extras.putString("eventName", eventNameTextView.getText().toString());
                     extras.putString("date", dateTextView.getText().toString());
-
+                    openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);
                 }
             });

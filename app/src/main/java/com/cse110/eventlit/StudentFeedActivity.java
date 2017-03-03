@@ -46,6 +46,9 @@ public class StudentFeedActivity extends AppCompatActivity
 
         if (fragment == null) {
             fragment = new CardFragment();
+            Bundle pageType = new Bundle();
+            pageType.putString("type", "feed");
+            fragment.setArguments(pageType);
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
 
