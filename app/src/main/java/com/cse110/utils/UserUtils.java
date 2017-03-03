@@ -28,7 +28,6 @@ import java.util.concurrent.Executor;
  */
 
 public class UserUtils {
-    private static DatabaseReference userPrivateDataRef = DatabaseUtils.getUserPrivateDataDB();
 
     /**
      * Reset the user's password
@@ -96,18 +95,6 @@ public class UserUtils {
         // Make a Firebase call to change the password. Use the verifyComplete to see whether
         // Firebase accepted the password
         user.updatePassword(newPassword).addOnCompleteListener(verifyOnComplete);
-    }
-
-    /**
-     * Set the users notification setting
-     *
-     * @param user       - a Firebase Authenticated user
-     * @param value      - a boolean flag for whether
-     * @param onComplete - a listener to notify when the the setting has been completed
-     */
-    public static void setNotifications(@NonNull FirebaseUser user, boolean value, @NonNull OnCompleteListener<Void> onComplete) {
-        DatabaseReference currentUserPrivateData = userPrivateDataRef.child(user.getUid());
-        currentUserPrivateData.setValue("notifications", value).addOnCompleteListener(onComplete);
     }
 
     // Task to notify that the password reset was unsuccessful
