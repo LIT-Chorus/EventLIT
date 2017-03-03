@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
-import com.cse110.eventlit.db.Rsvp;
+import com.cse110.eventlit.db.RSVP;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -121,7 +121,7 @@ public class EventUtils {
      * @param eventsFollowing
      * @param signal
      */
-    static final void addEventFromId(final Rsvp rsvp, final List<Event> eventsFollowing, final CountDownLatch signal) {
+    static final void addEventFromId(final RSVP rsvp, final List<Event> eventsFollowing, final CountDownLatch signal) {
 
 
         Log.w("add event, rsvp orgid", ""+rsvp.getOrgid());

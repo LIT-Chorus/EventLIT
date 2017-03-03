@@ -1,6 +1,5 @@
 package com.cse110.eventlit.db;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class User {
     private String lastName;
     private String email;
 
-    public List<Rsvp> eventsFollowing;
+    public List<RSVP> eventsFollowing;
     public List<Integer> orgsFollowing;
     public List<Integer> orgsManaging;
 
@@ -41,7 +40,7 @@ public class User {
      */
     public User(String firstName, String lastName, String email,
                 List<Integer> orgsFollowing,
-                List<Rsvp> eventsFollowing,
+                List<RSVP> eventsFollowing,
                 List<Integer> orgsManaging)
     {
         this.firstName = firstName;
@@ -75,8 +74,8 @@ public class User {
      * @param eventid Event ID
      * @param status status as defined in Event.RSVPStatus
      */
-    public void addEventFollowing(int orgid, String eventid, Event.RSVPStatus status) {
-        eventsFollowing.add(new Rsvp(orgid, eventid, status));
+    public void addEventFollowing(int orgid, String eventid, RSVP.Status status) {
+        eventsFollowing.add(new RSVP(orgid, eventid, status));
     }
 
     public JSONObject toJSON() {

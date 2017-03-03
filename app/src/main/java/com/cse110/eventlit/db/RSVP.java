@@ -2,14 +2,25 @@ package com.cse110.eventlit.db;
 
 import org.json.JSONObject;
 
-public class Rsvp {
+public class RSVP {
+
+    /**
+     * Enumeration of various RSVP statuses.
+     */
+    public enum Status {
+        GOING,
+        NOT_GOING,
+        MAYBE,
+        INTERESTED
+    }
+
     public int orgid;
     public String eventid;
-    public Event.RSVPStatus rsvpStatus;
+    public Status rsvpStatus;
 
-    public Rsvp() {}
+    public RSVP() {}
 
-    public Rsvp(int orgid, String eventid, Event.RSVPStatus rsvpStatus) {
+    public RSVP(int orgid, String eventid, Status rsvpStatus) {
         this.orgid = orgid;
         this.eventid = eventid;
         this.rsvpStatus = rsvpStatus;
@@ -34,8 +45,8 @@ public class Rsvp {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Rsvp) {
-            Rsvp rsvpOther = (Rsvp) other;
+        if (other instanceof RSVP) {
+            RSVP rsvpOther = (RSVP) other;
             return this.orgid == rsvpOther.orgid
                     && this.eventid.equals(rsvpOther.eventid)
                     && this.rsvpStatus == rsvpOther.rsvpStatus;
@@ -59,11 +70,11 @@ public class Rsvp {
         this.eventid = eventid;
     }
 
-    public Event.RSVPStatus getRsvpStatus() {
+    public Status getRsvpStatus() {
         return rsvpStatus;
     }
 
-    public void setRsvpStatus(Event.RSVPStatus rsvpStatus) {
+    public void setRsvpStatus(Status rsvpStatus) {
         this.rsvpStatus = rsvpStatus;
     }
 }

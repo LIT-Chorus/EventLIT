@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
-import com.cse110.eventlit.db.Rsvp;
+import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -229,10 +229,10 @@ public class UserUtils {
 
         List<Event> eventsFollowing = new ArrayList<>();
 
-        List<Rsvp> rsvps = user.eventsFollowing;
+        List<RSVP> rsvps = user.eventsFollowing;
         CountDownLatch finished = new CountDownLatch(rsvps.size());
 
-        for (Rsvp rsvp: rsvps) {
+        for (RSVP rsvp: rsvps) {
             Log.d("getEvents: rsvp object:", rsvp.toString());
             EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
             Log.d("getEvents list size:", "" + eventsFollowing.size());

@@ -101,34 +101,15 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public void onBindViewHolder(final MyViewHolder holder, int position) {
 
             Event e = list.get(position);
-
-            java.util.Calendar startEventCal = e.startTimeAsCalendar();
-            java.util.Calendar endEventCal = e.endTimeAsCalendar();
-
-            // Gets start and end times
-            int startHour = startEventCal.get(java.util.Calendar.HOUR);
-            int startMinute = startEventCal.get(java.util.Calendar.MINUTE);
-
-            int endHour = endEventCal.get(java.util.Calendar.HOUR);
-            int endMinute = endEventCal.get(java.util.Calendar.MINUTE);
-
-            // Gets month and date
-            int day = startEventCal.get(java.util.Calendar.DAY_OF_MONTH);
-            int month = startEventCal.get(java.util.Calendar.MONTH);
-            String monthStr = new DateFormatSymbols().getMonths()[month];
-
             String category = e.getCategory();
-
             String eventName = e.getTitle();
 
-
-            holder.timeTextView.setText(String.format(Locale.getDefault(), "%d:%02d - %d:%02d",
-                    startHour, startMinute, endHour, endMinute));
+            holder.timeTextView.setText(String.format("%s-%s",
+                    e.formattedStartTime("hh:mma"), e.formattedEndTime("hh:mma")));
             holder.locationTextView.setText(list.get(position).getLocation());
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
-            holder.dateTextView.setText(monthStr + '\n' + day);
-
+            holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
         }
 
         @Override

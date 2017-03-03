@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
-import com.cse110.eventlit.db.Rsvp;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.DatabaseUtils;
 import com.cse110.utils.UserUtils;
@@ -17,16 +16,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
