@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.UserUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import java.util.Locale;
  */
 
 public class CardFragment extends android.support.v4.app.Fragment {
+
     ArrayList<Event> listEvents = new ArrayList<>();
     RecyclerView MyRecyclerView;
 
@@ -45,7 +49,19 @@ public class CardFragment extends android.support.v4.app.Fragment {
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         MyAdapter adapter = new MyAdapter(listEvents);
-        EventUtils.getAllEvents(adapter, listEvents);
+
+        Bundle pageType = getArguments();
+        String type = pageType.getString("type");
+
+        if (type.equals("feed")) {
+            // TODO: Only get subscribed events instead of all events
+//            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//            UserUtils.getEventsFollowingSynch(user);
+            EventUtils.getAllEvents(adapter, listEvents);
+        } else {
+            EventUtils.getAllEvents(adapter, listEvents);
+        }
+
 
 //        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 //            @Override
@@ -85,34 +101,15 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public void onBindViewHolder(final MyViewHolder holder, int position) {
 
             Event e = list.get(position);
-
-            java.util.Calendar startEventCal = e.startTimeAsCalendar();
-            java.util.Calendar endEventCal = e.endTimeAsCalendar();
-
-            // Gets start and end times
-            int startHour = startEventCal.get(java.util.Calendar.HOUR);
-            int startMinute = startEventCal.get(java.util.Calendar.MINUTE);
-
-            int endHour = endEventCal.get(java.util.Calendar.HOUR);
-            int endMinute = endEventCal.get(java.util.Calendar.MINUTE);
-
-            // Gets month and date
-            int day = startEventCal.get(java.util.Calendar.DAY_OF_MONTH);
-            int month = startEventCal.get(java.util.Calendar.MONTH);
-            String monthStr = new DateFormatSymbols().getMonths()[month];
-
             String category = e.getCategory();
-
             String eventName = e.getTitle();
 
-
-            holder.timeTextView.setText(String.format(Locale.getDefault(), "%d:%02d - %d:%02d",
-                    startHour, startMinute, endHour, endMinute));
+            holder.timeTextView.setText(String.format("%s-%s",
+                    e.formattedStartTime("hh:mma"), e.formattedEndTime("hh:mma")));
             holder.locationTextView.setText(list.get(position).getLocation());
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
-            holder.dateTextView.setText(monthStr + '\n' + day);
-
+            holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
         }
 
         @Override
@@ -147,7 +144,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("category", categoriesTextView.getText().toString());
                     extras.putString("eventName", eventNameTextView.getText().toString());
                     extras.putString("date", dateTextView.getText().toString());
-
+                    openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);
                 }
             });

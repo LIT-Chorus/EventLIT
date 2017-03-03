@@ -1,6 +1,7 @@
 package com.cse110.eventlit;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 
@@ -25,10 +26,11 @@ public class EventTest {
     Event event;
     private JSONObject expectedJSON;
     private Map<String, Object> expectedMap;
+    Calendar now;
 
     @Before
     public void setUp() throws Exception {
-        Calendar now = new GregorianCalendar();
+        now = new GregorianCalendar();
         event = new Event("Test Event", "Here it is.", "abcdefg",
                 now, now, "Nowhere", "Other", 100);
         expectedMap = new HashMap<>();
@@ -75,12 +77,8 @@ public class EventTest {
     }
 
     @Test
-    public void testGetMap() throws Exception {
-        Map<String, Object> testMap = event.getMap();
-        for (String key : expectedMap.keySet()) {
-            Object testVal = testMap.get(key);
-            Object expectVal = expectedMap.get(key);
-            assertEquals("Could not find " + key + " in map", testVal, expectVal);
-        }
+    public void testFormat() throws Exception {
+        String fmt = "yyyy-MM-dd";
+        Log.d("testFormat", event.formattedStartTime(fmt));
     }
 }
