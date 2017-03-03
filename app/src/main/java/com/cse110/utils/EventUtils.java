@@ -5,6 +5,7 @@ import android.util.Log;
 import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.RSVP;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -153,5 +154,14 @@ public class EventUtils {
             }
         });
 
+    }
+
+    /**
+     * Create event
+     */
+    public static final void createEvent(Event event, OnCompleteListener<Void> onCompleteListener) {
+        String orgId = event.getOrgid();
+        DatabaseReference eventRef = eventsDB.child(orgId).push();
+        eventRef.setValue(event).addOnCompleteListener(onCompleteListener);
     }
 }
