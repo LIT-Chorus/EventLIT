@@ -28,8 +28,4 @@ public class DatabaseUtils {
         return fbDBRef.child("users");
     }
 
-    static DatabaseReference getUserPrivateDataDB(){
-        return fbDBRef.child("usersPrivateData");
-    }
-
 }
