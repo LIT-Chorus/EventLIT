@@ -67,7 +67,7 @@
                 android:layout_height="103dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/app_icon"
+                android:src="@drawable/ic_profile"
                 android:id="@+id/profilePhoto" />
 
             <TextView
@@ -177,7 +177,6 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/right_arrow"
                 android:elevation="0dp"
-                android:padding="-12"
                 android:layout_height="match_parent" />
         </LinearLayout>
 
