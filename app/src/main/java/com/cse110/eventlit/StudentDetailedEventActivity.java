@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import me.grantland.widget.AutofitHelper;
+
 public class StudentDetailedEventActivity extends AppCompatActivity {
 
     @Override
@@ -64,6 +66,7 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(bundle.getString("eventName"));
+        AutofitHelper.create(title);
 
         TextView date = (TextView) findViewById(R.id.timetext);
         date.setText(bundle.getString("date").replaceAll("[\\t\\n\\r]+"," ")
