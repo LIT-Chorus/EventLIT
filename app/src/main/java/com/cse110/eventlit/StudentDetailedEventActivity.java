@@ -61,12 +61,13 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
 
     /* Sets the text fields dynamically */
     private void fillFields(Bundle bundle) {
-        
+
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(bundle.getString("eventName"));
 
         TextView date = (TextView) findViewById(R.id.timetext);
-        date.setText(bundle.getString("date") + " at "  + bundle.getString("time"));
+        date.setText(bundle.getString("date").replaceAll("[\\t\\n\\r]+"," ")
+                + " at " + bundle.getString("time").trim());
 
         TextView location = (TextView) findViewById(R.id.locationtext);
         location.setText(bundle.getString("location"));

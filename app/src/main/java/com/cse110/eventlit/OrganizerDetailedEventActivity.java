@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import at.favre.lib.dali.Dali;
 
@@ -24,6 +25,11 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         setContentView(R.layout.organizer_activity_detailed_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Fill in the detailed events info with bundle passed in
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+        fillFields(extras);
 
         // TODO: Set database going/interested/not going entry
         Button goingBut = (Button) findViewById(R.id.goingButton);
@@ -59,5 +65,21 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         finish();
 
     }
+    /* Sets the text fields dynamically */
+    private void fillFields(Bundle bundle) {
 
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(bundle.getString("eventName"));
+
+        TextView date = (TextView) findViewById(R.id.timetext);
+        date.setText(bundle.getString("date").replaceAll("[\\t\\n\\r]+"," ")
+                + " at " + bundle.getString("time").trim());
+
+        TextView location = (TextView) findViewById(R.id.locationtext);
+        location.setText(bundle.getString("location"));
+
+        TextView category = (TextView) findViewById(R.id.tagtext);
+        category.setText(bundle.getString("category"));
+
+    }
 }

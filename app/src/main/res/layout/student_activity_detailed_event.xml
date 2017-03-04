@@ -23,13 +23,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/event"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingTop="24dp"
         android:text="Event Title"
+        android:maxLines="2"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintLeft_toRightOf="@+id/orgpic"
