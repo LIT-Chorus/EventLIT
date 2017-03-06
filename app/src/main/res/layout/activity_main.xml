@@ -20,7 +20,7 @@
         android:textColor="@color/white"
         android:id="@+id/loginButton"
         android:layout_gravity="center|bottom"
-        android:background="@color/loginButton"
+        android:background="@color/homeLoginButton"
         android:text="Login"
         android:textStyle="bold"
         android:layout_marginBottom="200dp"/>
@@ -31,7 +31,7 @@
         android:textColor="@color/white"
         android:id="@+id/signUpButton"
         android:layout_gravity="center|bottom"
-        android:background="@color/signUpButton"
+        android:background="@color/homeSignUpButton"
         android:text="Sign Up"
         android:layout_marginBottom="125dp"
         android:textStyle="bold"/>
