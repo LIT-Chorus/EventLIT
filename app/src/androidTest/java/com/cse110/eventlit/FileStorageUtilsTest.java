@@ -28,6 +28,8 @@ import org.junit.runner.RunWith;
 import java.io.FileNotFoundException;
 import java.util.concurrent.CountDownLatch;
 
+import static junit.framework.Assert.assertEquals;
+
 @RunWith(AndroidJUnit4.class)
 public class FileStorageUtilsTest {
 
@@ -73,16 +75,21 @@ public class FileStorageUtilsTest {
 
     @Test
     public void addPictureToUser() {
-        try {
-            FileStorageUtils.uploadImageFromLocalFile(uid, "home/vansh/lulz.png");
+        /*try {
+            FileStorageUtils.uploadImageFromLocalFile(uid, "/sdcard/lulz.png");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+            Log.d("failed", e.toString());
+        }*/
     }
 
     @Test
     public void getPictureFromUser() {
-
+        try {
+            byte[] arr = FileStorageUtils.downloadImageInMemorySynch("lulz", ".png");
+            Log.d("getPicture", "" + arr.length);
+        } catch (Exception e) {
+            Log.d("failed", e.toString());
+        }
     }
 
     @Test
