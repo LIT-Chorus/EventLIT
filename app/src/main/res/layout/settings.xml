@@ -12,28 +12,44 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/title"
-                android:text="Settings"/>
-
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
+            android:layout_height="wrap_content" />
+            //android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
 
     </android.support.design.widget.AppBarLayout>
+    <!-- Top toolbar
+<android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:text="Settings"/>
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>
+
+</android.support.design.widget.AppBarLayout>
+
+-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -43,15 +59,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/common_google_signin_btn_text_dark_disabled">
+            android:orientation="vertical" >
+            //android:background="@color/common_google_signin_btn_text_dark_disabled"
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="106dp"
+                android:layout_height="103dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/icon_margin"
-                android:src="@drawable/app_icon"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_profile"
                 android:id="@+id/profilePhoto" />
 
             <TextView
@@ -59,13 +75,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:id="@+id/name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:fontFamily="sans-serif"
                 android:textSize="30sp"
-                android:textColor="@color/cardview_dark_background"
-                android:textAllCaps="true" />
+                android:textColor="@color/black"
+                android:textAllCaps="true"
+                android:textAlignment="center" />
+            //android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+
 
             <TextView
                 android:text="Organizer"
@@ -73,11 +91,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="@dimen/icon_margin"
+                android:layout_marginBottom="20dp"
                 android:id="@+id/organizer"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="18sp"
-                android:textColor="@color/cardview_dark_background" />
+                android:textSize="18sp"/>
+
+            //android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+
+                //android:textColor="@color/cardview_dark_background"
+
 
 
         </LinearLayout>
@@ -114,6 +135,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/changePass"
             android:layout_margin="@dimen/notification_text">
 
             <TextView
@@ -122,16 +144,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:textColor="@android:color/black"
-                android:textSize="  18sp" />
+                android:textSize="18sp" />
 
             <ImageButton
                 android:text=""
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
-                android:id="@+id/changePass"
                 android:src="@drawable/right_arrow"
-                style="@android:style/Widget.Material.Light.Button.Borderless"
-                android:elevation="0dp" />
+                style="@android:color/transparent"
+                android:elevation="0dp"
+                android:background="@android:color/transparent" />
         </LinearLayout>
 
 
@@ -139,6 +161,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/reqOrgStatus"
+
             android:layout_margin="@dimen/notification_text"
             >
 
@@ -154,11 +178,10 @@
             <ImageButton
                 android:text=""
                 android:layout_width="43dp"
-                android:layout_height="match_parent"
-                android:id="@+id/reqOrgStatus"
+                android:background="@android:color/transparent"
                 android:src="@drawable/right_arrow"
-                style="@android:style/Widget.Material.Light.Button.Borderless"
-                android:elevation="0dp" />
+                android:elevation="0dp"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
     </LinearLayout>
