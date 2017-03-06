@@ -215,7 +215,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             String email = mFbAuth.getCurrentUser().getEmail();
 
-            if (email != null && email.length() > 0) {
+            if (email != null && email.length() > 0 && mPassword != null && mPassword.length() > 0) {
                 mFbAuth.signOut();
                 mFbAuth.signInWithEmailAndPassword(email, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
