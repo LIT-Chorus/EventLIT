@@ -1,9 +1,13 @@
 package com.cse110.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,8 +58,14 @@ public class FileStorageUtils {
         });
     }
 
-    public static StorageReference getImageReference(String id, String extension) {
-        return storageRef.child("images/" + id + extension);
+    public static void getImageView(ImageView imageView, Context context, String id, String extension) {
+        StorageReference imageRef = storageRef.child("images/" + id + extension);
+
+        // Load the image using Glide
+        Glide.with(context /* context */)
+                .using(new FirebaseImageLoader())
+                .load(imageRef)
+                .into(imageView);
     }
 
 
