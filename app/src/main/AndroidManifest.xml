@@ -19,7 +19,7 @@
             android:authorities="${applicationId}.com.vansuita.pickimage.provider"
             tools:replace="android:authorities">
             <meta-data
-                ndroid:name="android.support.FILE_PROVIDER_PATHS"
+                android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/picker_provider_paths" />
         </provider>
 
