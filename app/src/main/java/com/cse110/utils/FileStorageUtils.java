@@ -1,7 +1,6 @@
 package com.cse110.utils;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -12,11 +11,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by vansh on 2/28/17.
@@ -47,13 +42,14 @@ public class FileStorageUtils {
             public void onFailure(@NonNull Exception exception) {
 
                 Log.d(UPLOAD_IMAGE, "fail");
+
                 // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Log.d(UPLOAD_IMAGE, "success");
+                Log.d(UPLOAD_IMAGE, "upload success");
             }
         });
     }
@@ -62,13 +58,14 @@ public class FileStorageUtils {
         return storageRef.child("images/" + id + extension);
     }
 
+
     /*
-    public static byte[] downloadImageInMemorySynch(String id, String extension) {
-        StorageReference imageRef = storageRef.child("images/" + id + extension);
+    public static byte[] downloadImageInMemorySynch(String id) {
+        StorageReference imageRef = storageRef.child("images/" + id + ".jpg");
 
         Log.d("filestorage", imageRef.getBucket());
 
-        final long ONE_MEGABYTE = 2 * 1024 * 1024;
+        final long ONE_MEGABYTE = 1024 * 1024;
 
         final CountDownLatch synchLatch = new CountDownLatch(1);
 
@@ -99,6 +96,4 @@ public class FileStorageUtils {
         return returnArr[0];
     }
     */
-
-
 }

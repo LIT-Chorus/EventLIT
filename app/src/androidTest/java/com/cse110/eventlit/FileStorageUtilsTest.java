@@ -8,27 +8,20 @@ import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.cse110.eventlit.db.User;
-import com.cse110.utils.FileStorageUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.FileNotFoundException;
 import java.util.concurrent.CountDownLatch;
 
-import static junit.framework.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class FileStorageUtilsTest {
@@ -80,16 +73,6 @@ public class FileStorageUtilsTest {
         } catch (FileNotFoundException e) {
             Log.d("failed", e.toString());
         }*/
-    }
-
-    @Test
-    public void getPictureFromUser() {
-        try {
-            byte[] arr = FileStorageUtils.downloadImageInMemorySynch("lulz", ".png");
-            Log.d("getPicture", "" + arr.length);
-        } catch (Exception e) {
-            Log.d("failed", e.toString());
-        }
     }
 
     @Test
