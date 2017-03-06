@@ -13,9 +13,10 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-            //android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
 
     </android.support.design.widget.AppBarLayout>
     <!-- Top toolbar
@@ -26,6 +27,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+<<<<<<< HEAD
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +47,27 @@
 
     </RelativeLayout>
 
+=======
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:text="Settings"/>
+
+
+    </RelativeLayout>
+
+>>>>>>> 044f60bc409461f6b0f5b8149b5f6fd36892a20c
 </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.AppBarLayout>
@@ -79,11 +102,10 @@
                 android:id="@+id/name"
                 android:fontFamily="sans-serif"
                 android:textSize="30sp"
-                android:textColor="@color/black"
+
+                android:textColor="@color/cardview_dark_background"
                 android:textAllCaps="true"
                 android:textAlignment="center" />
-            //android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-
 
             <TextView
                 android:text="Organizer"
