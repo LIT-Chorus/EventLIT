@@ -146,10 +146,17 @@
                 android:text=""
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
+<<<<<<< HEAD
                 android:src="@drawable/right_arrow"
                 style="@android:color/transparent"
                 android:elevation="0dp"
                 android:background="@android:color/transparent" />
+=======
+                android:id="@+id/changePass"
+                android:src="@drawable/right_arrow"
+                style="@android:style/Widget.Material.Light.Button.Borderless"
+                android:elevation="0dp" />
+>>>>>>> c10263b4aacd3a7b1a485fcd32a604f99fabedfb
         </LinearLayout>
 
 

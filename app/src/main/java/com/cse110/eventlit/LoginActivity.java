@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -108,6 +109,9 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("EmailVerification", "email is verified");
                         // Starts activity based on student or organizer
                         mLoginBut.setClickable(true);
+
+                        // TODO: Add check if user has orgs following. If not, send to org selection. If they do, send to feed
+
                         Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
                         mEmailEntry.getEditText().setText("");
                         mPasswordEntry.getEditText().setText("");
@@ -116,7 +120,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     else {
                         mLoginBut.setClickable(true);
-                        Log.d("EmailVerification", "email is not verified");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogCustom);
+                        builder.setTitle("Email Not Verified")
+                                .setMessage("Please Verify your Email before using EventLIT")
+                        .setPositiveButton(android.R.string.ok, null).create().show();
                     }
 
 //                    Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);

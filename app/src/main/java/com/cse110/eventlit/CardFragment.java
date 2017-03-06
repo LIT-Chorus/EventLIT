@@ -34,6 +34,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
     ArrayList<Event> listEvents = new ArrayList<>();
     RecyclerView MyRecyclerView;
 
+    private String mDescriptionText;
+    private int mNumAttendees;
+    private int mMaxCapacity;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +114,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
+            mDescriptionText = e.getDescription();
+            mNumAttendees = e.getAttendees().size();
+            mMaxCapacity = e.getMaxCapacity();
         }
 
         @Override
@@ -144,6 +151,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("category", categoriesTextView.getText().toString());
                     extras.putString("eventName", eventNameTextView.getText().toString());
                     extras.putString("date", dateTextView.getText().toString());
+                    extras.putString("description", mDescriptionText);
+                    extras.putInt("num_attending", mNumAttendees);
+                    extras.putInt("max_capacity", mMaxCapacity);
                     openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);
                 }

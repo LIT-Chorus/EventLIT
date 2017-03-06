@@ -91,7 +91,9 @@
                 android:layout_gravity="center"
                 android:elevation="10dp"
                 android:text="Login"
-                android:textColor="@color/white"
+                android:textColor="@color/backgroundLoginPrimary"
+                android:textStyle="bold"
+                android:background="@color/loginButton"
                 android:theme="@style/AppTheme.Button" />
 
         </LinearLayout>

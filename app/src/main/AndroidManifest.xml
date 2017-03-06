@@ -4,6 +4,8 @@
     package="com.cse110.eventlit">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +19,8 @@
             android:authorities="${applicationId}.com.vansuita.pickimage.provider"
             tools:replace="android:authorities">
             <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"/>
-                <!-- android:resource="@xml/provider_paths" -->
-
+                ndroid:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/picker_provider_paths" />
         </provider>
 
         <activity

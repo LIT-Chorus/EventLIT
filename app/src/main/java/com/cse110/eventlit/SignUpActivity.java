@@ -44,6 +44,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     private OnCompleteListener<Void> mSignUpListener;
 
+    private AlertDialog mDialog;
+
+    private String mPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,18 +149,21 @@ public class SignUpActivity extends AppCompatActivity {
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (!isVerifed) {
-                                        Toast.makeText(SignUpActivity.this, "Please " +
-                                                "verify your email!", Toast.LENGTH_SHORT);
-                                    } else {
-                                        Intent selectOrgs = new Intent(SignUpActivity.this,
-                                                OrganizationSelectionActivity.class);
-                                        startActivity(selectOrgs);
-
-                                    }
                                 }
                             });
-                    builder.create().show();
+                    mDialog = builder.create();
+                    mDialog.show();
+
+                    mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                    mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent selectOrgs = new Intent(SignUpActivity.this,
+                                    OrganizationSelectionActivity.class);
+                            startActivity(selectOrgs);
+                        }
+                    });
 
                     Log.w("Task successful", "yes");
                         // Move to Organization selection
@@ -166,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
 //                            startActivity(intent);
 
                 } else {
-                    Toast.makeText(SignUpActivity.this, "Does not work", Toast.LENGTH_LONG);
+                    Toast.makeText(SignUpActivity.this, "Does not work", Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -186,6 +193,8 @@ public class SignUpActivity extends AppCompatActivity {
                         String emailText = mEmailEntry.getEditText().getText().toString();
                         String passwordText = mPasswordEntry.getEditText().getText().toString();
 
+                        mPassword = passwordText;
+
                         signUp(firstName, lastName, emailText, passwordText);
                     }
                 }
@@ -195,19 +204,56 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FirebaseUser user = mFbAuth.getCurrentUser();
+
+        if (user != null) {
+
+            String email = mFbAuth.getCurrentUser().getEmail();
+
+            if (email != null && email.length() > 0 && mPassword != null && mPassword.length() > 0) {
+                mFbAuth.signOut();
+                mFbAuth.signInWithEmailAndPassword(email, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        FirebaseUser userAuthenticated = mFbAuth.getCurrentUser();
+
+                        Log.d("Verified", userAuthenticated.isEmailVerified() + "");
+                        if (userAuthenticated.isEmailVerified()) {
+                            if (mDialog != null) {
+                                mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                            }
+                        }
+                    }
+                });
+            }
+
+
+        }
+    }
+
     protected boolean checkEmail() {
         EditText emailEditText = mEmailEntry.getEditText();
 
-        if (emailEditText.getError() != null) return false;
+        if (emailEditText != null && emailEditText.getError() != null) return false;
 
-        String emailText = emailEditText.getText().toString();
+        String emailText = null;
+        if (emailEditText != null) {
+            emailText = emailEditText.getText().toString();
+        }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
-            emailEditText.setError("Invalid Email ID");
-        } else if (!emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
-            emailEditText.setError("Please use your UCSD Email!");
-        } else {
-            return true;
+        if (emailText != null) {
+            if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+                emailEditText.setError("Invalid Email ID");
+            } else if (!emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
+                emailEditText.setError("Please use your UCSD Email!");
+            } else {
+                return true;
+            }
         }
 
         return false;
@@ -216,12 +262,15 @@ public class SignUpActivity extends AppCompatActivity {
     protected boolean checkPass() {
         EditText passEditText = mPasswordEntry.getEditText();
 
-        if (passEditText.getError() != null) return false;
+        if (passEditText != null && passEditText.getError() != null) return false;
 
-        String passwordText = passEditText.getText().toString();
+        String passwordText = null;
+        if (passEditText != null) {
+            passwordText = passEditText.getText().toString();
+        }
 
         // Password Criteria
-        if (passwordText.length() < 6) {
+        if (passwordText != null && passwordText.length() < 6) {
             passEditText.setError("Password must contain at least 6 characters");
         }
 
@@ -230,18 +279,24 @@ public class SignUpActivity extends AppCompatActivity {
 
     protected boolean checkPassMatch() {
         EditText passEditText = mPasswordEntry.getEditText();
-        if (passEditText.getError() != null) return false;
+        if (passEditText != null && passEditText.getError() != null) return false;
 
-        String passwordText = passEditText.getText().toString();
+        String passwordText = null;
+        if (passEditText != null) {
+            passwordText = passEditText.getText().toString();
+        }
 
         EditText confirmPassEditText = mConfirmPasswordEntry.getEditText();
-        if (confirmPassEditText.getError() != null) return false;
+        if (confirmPassEditText != null && confirmPassEditText.getError() != null) return false;
 
 
-        String confirmPasswordText = confirmPassEditText.getText().toString();
+        String confirmPasswordText = null;
+        if (confirmPassEditText != null) {
+            confirmPasswordText = confirmPassEditText.getText().toString();
+        }
 
         // Password Criteria
-        if (!confirmPasswordText.equals(passwordText)) {
+        if (confirmPasswordText != null && !confirmPasswordText.equals(passwordText)) {
             confirmPassEditText.setError("Passwords Don't Match");
             return false;
         }
@@ -252,12 +307,15 @@ public class SignUpActivity extends AppCompatActivity {
     protected boolean checkFirstName() {
         EditText firstNameEditText = mFirstNameEntry.getEditText();
 
-        if (firstNameEditText.getError() != null) return false;
+        if (firstNameEditText != null && firstNameEditText.getError() != null) return false;
 
 
-        String firstNameText = firstNameEditText.getText().toString();
+        String firstNameText = null;
+        if (firstNameEditText != null) {
+            firstNameText = firstNameEditText.getText().toString();
+        }
 
-        if (firstNameText.length() == 0) {
+        if (firstNameText != null && firstNameText.length() == 0) {
             firstNameEditText.setError("Enter First Name");
             return false;
         }
@@ -270,11 +328,14 @@ public class SignUpActivity extends AppCompatActivity {
 
         EditText lastNameEditText = mLastNameEntry.getEditText();
 
-        if (lastNameEditText.getError() != null) return false;
+        if (lastNameEditText != null && lastNameEditText.getError() != null) return false;
 
-        String lastNameText = lastNameEditText.getText().toString();
+        String lastNameText = null;
+        if (lastNameEditText != null) {
+            lastNameText = lastNameEditText.getText().toString();
+        }
 
-        if (lastNameText.length() == 0) {
+        if (lastNameText != null && lastNameText.length() == 0) {
             lastNameEditText.setError("Enter Last Name");
             return false;
         }
@@ -319,27 +380,29 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Add a new entry to the `users` table for the user's
                             // non-auth information.
-                            String uid = mFbAuth.getCurrentUser().getUid();
-                            FirebaseUser userProfile = mFbAuth.getCurrentUser();
+                            if (mFbAuth.getCurrentUser() != null) {
+                                String uid = mFbAuth.getCurrentUser().getUid();
+                                FirebaseUser userProfile = mFbAuth.getCurrentUser();
 
-                            // Set a display name of the user
-                            UserProfileChangeRequest profileUpdates = new
-                                    UserProfileChangeRequest.Builder()
-                                    .setDisplayName(firstName + " "
-                                            + lastName).build();
-                            userProfile.updateProfile(profileUpdates);
-
-
-                            DatabaseReference user = fbDB.child("users").child(uid);
-                            user.setValue(new User(firstName, lastName, schoolEmail));
-
-                            mNextBut.setClickable(true);
-
-                            mFbAuth.getCurrentUser().sendEmailVerification()
-                                    .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
+                                // Set a display name of the user
+                                UserProfileChangeRequest profileUpdates = new
+                                        UserProfileChangeRequest.Builder()
+                                        .setDisplayName(firstName + " "
+                                                + lastName).build();
+                                userProfile.updateProfile(profileUpdates);
 
 
-                            // TODO: Move user to email verification page (instead of LoginActivity)
+                                DatabaseReference user = fbDB.child("users").child(uid);
+                                user.setValue(new User(firstName, lastName, schoolEmail));
+
+                                mNextBut.setClickable(true);
+
+                                mFbAuth.getCurrentUser().sendEmailVerification()
+                                        .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
+
+
+                                // TODO: Move user to email verification page (instead of LoginActivity)
+                            }
 
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);

@@ -150,8 +150,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:elevation="10dp"
-                android:text="Register (will be next)"
-                android:textColor="@color/white"
+                android:text="Next"
+                android:background="@color/white"
+                android:textColor="@color/backgroundLoginPrimary"
                 android:theme="@style/AppTheme.Button" />
 
         </LinearLayout>
