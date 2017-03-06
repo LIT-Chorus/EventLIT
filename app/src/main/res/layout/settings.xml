@@ -129,7 +129,7 @@
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:id="@+id/changePass"
-                android:src="@mipmap/right_arrow"
+                android:src="@drawable/right_arrow"
                 style="@android:style/Widget.Material.Light.Button.Borderless"
                 android:elevation="0dp" />
         </LinearLayout>
@@ -156,7 +156,7 @@
                 android:layout_width="43dp"
                 android:layout_height="match_parent"
                 android:id="@+id/reqOrgStatus"
-                android:src="@mipmap/right_arrow"
+                android:src="@drawable/right_arrow"
                 style="@android:style/Widget.Material.Light.Button.Borderless"
                 android:elevation="0dp" />
         </LinearLayout>

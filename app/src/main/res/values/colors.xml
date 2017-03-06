@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="backgroundLoginPrimary">#02285E</color>
+    <color name="backgroundLoginPrimary">#7c1f2e</color>
     <color name="white">#FFFFFF</color>
-    <color name="loginButton">#FF355B</color>
-    <color name="signUpButton">#F36113</color>
+    <color name="loginButton">#FFFFFF</color>
+    <color name="signUpButton">#FFFFFF</color>
     <color name="goingColor">#32cd32</color>
     <color name="interestedColor">#FFA500</color>
     <color name="notGoingColor">#FF0000</color>
     <color name="circleBackground">#909090</color>
+    <color name="black">#000000</color>
 </resources>
