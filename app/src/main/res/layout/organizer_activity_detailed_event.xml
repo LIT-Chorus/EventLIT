@@ -23,13 +23,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/event"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingTop="24dp"
         android:text="Event Title"
+        android:maxLines="2"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintLeft_toRightOf="@+id/orgpic"
@@ -39,7 +40,6 @@
         android:id="@+id/orgname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:paddingLeft="16dp"
         android:text="Held By:"
         android:textColor="@color/white"
