@@ -9,9 +9,14 @@
     <color name="signUpButton">#FFFFFF</color>
     <color name="homeLoginButton">#FF355B</color>
     <color name="homeSignUpButton">#F36113</color>
-    <color name="goingColor">#32cd32</color>
+<!--    <color name="goingColor">#32cd32</color>
     <color name="interestedColor">#FFA500</color>
-    <color name="notGoingColor">#FF0000</color>
+    <color name="notGoingColor">#FF0000</color> -->
+
+    <color name="goingColor">#FF1743</color>
+    <color name="interestedColor">#F36113</color>
+    <color name="notGoingColor">#FFBA19</color>
+
     <color name="circleBackground">#909090</color>
     <color name="black">#000000</color>
 </resources>
