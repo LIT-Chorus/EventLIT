@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cse110.eventlit.db.User;
+import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -112,10 +114,24 @@ public class LoginActivity extends AppCompatActivity {
 
                         // TODO: Add check if user has orgs following. If not, send to org selection. If they do, send to feed
 
-                        Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
-                        mEmailEntry.getEditText().setText("");
-                        mPasswordEntry.getEditText().setText("");
-                        startActivity(openFeed);
+                        User curr = UserUtils.getCurrentUser();
+
+                        if (UserUtils.getOrgsManagingSynch(curr).size() == 0) {
+
+                            Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                            mEmailEntry.getEditText().setText("");
+                            mPasswordEntry.getEditText().setText("");
+                            mPasswordEntry.clearFocus();
+                            mEmailEntry.clearFocus();
+                            startActivity(openFeed);
+                        } else {
+                            Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
+                            mEmailEntry.getEditText().setText("");
+                            mPasswordEntry.getEditText().setText("");
+                            mPasswordEntry.clearFocus();
+                            mEmailEntry.clearFocus();
+                            startActivity(openFeed);
+                        }
                     }
 
                     else {
@@ -125,9 +141,6 @@ public class LoginActivity extends AppCompatActivity {
                                 .setMessage("Please Verify your Email before using EventLIT")
                         .setPositiveButton(android.R.string.ok, null).create().show();
                     }
-
-//                    Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
-//                    startActivity(openFeed);
                 }
             }
         };

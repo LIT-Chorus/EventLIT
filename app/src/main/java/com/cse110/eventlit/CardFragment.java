@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,9 +60,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
-//            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//            UserUtils.getEventsFollowingSynch(user);
-            EventUtils.getAllEvents(adapter, listEvents);
+            User user = UserUtils.getCurrentUser();
+            ArrayList<Event> list = UserUtils.getEventsFollowingSynch(user);
+            adapter = new MyAdapter(list);
         } else {
             EventUtils.getAllEvents(adapter, listEvents);
         }
@@ -114,6 +115,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
+//            holder.orgNameTextView.setText(UserUtils.getCurrentUser());
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();
             mMaxCapacity = e.getMaxCapacity();
@@ -132,6 +134,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatTextView categoriesTextView;
         public AppCompatTextView eventNameTextView;
         public AppCompatTextView dateTextView;
+        public AppCompatTextView orgNameTextView;
 
         public MyViewHolder(View v) {
             super(v);
@@ -140,6 +143,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             categoriesTextView = (AppCompatTextView) v.findViewById(R.id.categories);
             eventNameTextView = (AppCompatTextView) v.findViewById(R.id.eventName);
             dateTextView = (AppCompatTextView) v.findViewById(R.id.dateView);
+            orgNameTextView = (AppCompatTextView) v.findViewById(R.id.orgName);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
