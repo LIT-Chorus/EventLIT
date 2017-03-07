@@ -24,10 +24,9 @@ public class OrganizationUtils {
     /**
      * Fetch a list of student organizations at UCSD, save it off in an ArrayAdapter,
      * Notify the ArrayAdapter of the change.
-     *
      */
     public static void getAllStudentOrganizations(final OrganizationsAdapter adapter,
-                                                  final ArrayList<Organization> orgsList){
+                                                  final ArrayList<Organization> orgsList) {
 
 
         ValueEventListener postListener = new ValueEventListener() {
@@ -35,7 +34,7 @@ public class OrganizationUtils {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Reindex and add new organziations
-                for (DataSnapshot shot: dataSnapshot.getChildren()){
+                for (DataSnapshot shot : dataSnapshot.getChildren()) {
                     int orgKey = Integer.valueOf(shot.getKey());
                     String orgName = shot.getValue().toString();
                     Organization org = new Organization(orgKey, orgName);
@@ -62,7 +61,7 @@ public class OrganizationUtils {
 
     /**
      * Add an organization to a list from it's id
-     *
+     * <p>
      * NOTE: only package scope. Only to be used by other util methods
      * DO NOT MAKE PUBLIC
      *
@@ -92,4 +91,37 @@ public class OrganizationUtils {
         });
     }
 
+    static final Organization getOrgFromIdSynch(final int orgid) {
+
+        final DatabaseReference orgDB = orgsDB.child(Long.toString(orgid));
+
+        final Organization[] org = new Organization[1];
+
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        orgDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String org_name = dataSnapshot.getValue().toString();
+
+                org[0] = new Organization(orgid, org_name);
+
+                latch.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                latch.countDown();
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return org[0];
+    }
 }
