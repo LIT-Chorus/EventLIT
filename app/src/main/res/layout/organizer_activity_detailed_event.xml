@@ -149,7 +149,7 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/goingButton"
+            android:id="@+id/editButton"
             android:theme="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -157,26 +157,17 @@
             android:layout_marginRight="16dp"
             style="@style/EventButton"
             android:background="@color/goingColor"
-            android:text="GOING" />
+            android:text="EDIT EVENT" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/interestedButton"
+            android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
             style="@style/EventButton"
             android:background="@color/interestedColor"
-            android:text="INTERESTED" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/notGoingButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            style="@style/EventButton"
-            android:background="@color/notGoingColor"
-            android:text="NOT GOING" />
+            android:text="DELETE EVENT" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -32,29 +32,20 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         fillFields(extras);
 
         // TODO: Set database going/interested/not going entry
-        Button goingBut = (Button) findViewById(R.id.goingButton);
-        Button interestedBut = (Button) findViewById(R.id.interestedButton);
-        Button notGoingBut = (Button) findViewById(R.id.notGoingButton);
+        Button editBut = (Button) findViewById(R.id.editButton);
+        Button deleteBut = (Button) findViewById(R.id.deleteButton);
 
-
-        goingBut.setOnClickListener(new View.OnClickListener() {
+        editBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // TODO Open intent to edit event (send bundle of event info as well)
             }
         });
 
-        interestedBut.setOnClickListener(new View.OnClickListener() {
+        deleteBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            }
-        });
-
-        notGoingBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+                // TODO Delete event
             }
         });
     }
