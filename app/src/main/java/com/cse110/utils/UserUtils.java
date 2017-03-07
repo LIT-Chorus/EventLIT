@@ -16,7 +16,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,6 +168,39 @@ public class UserUtils {
         }
     }
 
+    public static User getUserFromIdSynch(String uid) {
+
+        DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);
+
+        final User[] user = new User[1];
+
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user[0] = dataSnapshot.getValue(User.class);
+
+                latch.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.d("getUserFromIdSynch", "user not read in correctly");
+                latch.countDown();
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return user[0];
+
+    }
 
     // TODO create methods to modify the User database
 
