@@ -262,9 +262,9 @@ public class UserUtils {
 
     }
 
-    public static final List<Event> getEventsFollowingSynch(User user) {
+    public static final ArrayList<Event> getEventsFollowingSynch(User user) {
 
-        List<Event> eventsFollowing = new ArrayList<>();
+        ArrayList<Event> eventsFollowing = new ArrayList<>();
 
         List<RSVP> rsvps = user.eventsFollowing;
         CountDownLatch finished = new CountDownLatch(rsvps.size());
