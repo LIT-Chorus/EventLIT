@@ -1,5 +1,7 @@
 package com.cse110.eventlit;
 
+import android.app.Activity;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -10,6 +12,7 @@ import com.cse110.utils.DatabaseUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,47 +43,14 @@ public class UserUtilsTest {
 
     @Before
     public void setUp() throws Exception {
-        fbAuth = FirebaseAuth.getInstance();
-        fbDB = DatabaseUtils.getUsersDB();
-
-        final CountDownLatch latch = new CountDownLatch(1);
-        fbAuth.signInWithEmailAndPassword(USER_EMAIL, USER_PASSWORD).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        Task<User> userTask = UserUtils.logIn(USER_EMAIL, USER_PASSWORD, new OnCompleteListener<User>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser fbUser = fbAuth.getCurrentUser();
-                    final String uid = fbUser.getUid();
-
-                    Log.d("onComplete", "onComplete setup");
-
-                    fbDB.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.d("onDataChange", "onDataChange setup");
-
-                            user = dataSnapshot.getValue(User.class);
-
-                            Log.d("reading in user", user.toString());
-
-                            latch.countDown();
-                            //Log.d("UserUtilsTest", user.toString());
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                } else {
-                    Log.e("UserUtilsTest", "Authorization task not successful!");
-                }
-            }
+            public void onComplete(@NonNull Task<User> task) {}
         });
 
-        latch.await();
-        Log.wtf("UserUtilsTest", "setup is complete");
-
+        // Wait for it...
+        Tasks.await(userTask);
+        user = userTask.getResult();
     }
 
     @Test
@@ -109,6 +79,64 @@ public class UserUtilsTest {
 
     }
 
+    @Test
+    public void testUpdateCurrentUser() throws Exception {
+        // User already logged in, proceed to use util function
+        User oldData = user;
+        User newData = new User("Kratiper", "Pants", "kpants@ucsd.edu");
+        UserUtils.updateCurrentUser(newData);
 
+        User currentData = UserUtils.getCurrentUser();
+        assertEquals(newData, currentData);
 
+        // It has been verified that Firebase will have the new user data after the call,
+        // now set back to old data for persistence
+        UserUtils.updateCurrentUser(oldData);
+
+        // Check for race conditions
+        currentData = UserUtils.getCurrentUser();
+        assertEquals(oldData, currentData);
+    }
+
+    @Test
+    public void testGetCurrentUser() throws Exception {
+        // User already logged in, proceed to use util function
+        User user = UserUtils.getCurrentUser();
+
+        assertEquals(user.getEmail(), USER_EMAIL);
+        assertEquals(user.getFirstName(), "Christopher");
+        assertEquals(user.getLastName(), "Pence");
+    }
+
+    @Test
+    public void testLogIn() throws Exception {
+        Task<User> userTask = UserUtils.logIn(USER_EMAIL, USER_PASSWORD, new OnCompleteListener<User>() {
+            @Override
+            public void onComplete(@NonNull Task<User> task) {}
+        });
+
+        // Wait for it...
+        Tasks.await(userTask);
+        User user = userTask.getResult();
+
+        assertEquals(user.getEmail(), USER_EMAIL);
+        assertEquals(user.getFirstName(), "Christopher");
+        assertEquals(user.getLastName(), "Pence");
+    }
+
+    @Test
+    public void testLogOut() throws Exception {
+        // User has been logged in, just call logOut now
+        Task<User> logOutTask = UserUtils.logOut(new OnCompleteListener<User>() {
+            @Override
+            public void onComplete(@NonNull Task<User> task) {
+
+            }
+        });
+
+        // Wait for it...
+        Tasks.await(logOutTask);
+
+        assertEquals(null, UserUtils.getCurrentUser());
+    }
 }

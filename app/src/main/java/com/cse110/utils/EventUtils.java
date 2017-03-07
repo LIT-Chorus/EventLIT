@@ -1,11 +1,17 @@
 package com.cse110.utils;
 
+import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.RSVP;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,6 +22,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -157,11 +164,28 @@ public class EventUtils {
     }
 
     /**
-     * Create event
+     * Create event. Sets onComplete with the event's key as the string.
      */
-    public static final void createEvent(Event event, OnCompleteListener<Void> onCompleteListener) {
+    public static final void createEvent(Event event, final OnCompleteListener<String> onCompleteListener) {
         String orgId = event.getOrgid();
         DatabaseReference eventRef = eventsDB.child(orgId).push();
-        eventRef.setValue(event).addOnCompleteListener(onCompleteListener);
+        final String eventKey = eventRef.getKey();
+        OnCompleteListener onEventCreated = new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                Task<String> eventTask = new EventTask(eventKey);
+                onCompleteListener.onComplete(eventTask);
+            }
+        };
+        eventRef.setValue(event).addOnCompleteListener(onEventCreated);
+    }
+
+    /**
+     * Delete event by passing in the eventId and orgId
+     */
+    public static final void deleteEvent(String eventId,
+                                         String orgId,
+                                         OnCompleteListener<Void> onDelete) {
+        eventsDB.child(orgId).child(eventId).removeValue().addOnCompleteListener(onDelete);
     }
 }
