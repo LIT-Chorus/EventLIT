@@ -148,27 +148,34 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/goingButton"
+            android:theme="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
+            style="@style/EventButton"
+            android:background="@color/goingColor"
             android:text="GOING" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/interestedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
+            style="@style/EventButton"
+            android:background="@color/interestedColor"
             android:text="INTERESTED" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/notGoingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            style="@style/EventButton"
+            android:background="@color/notGoingColor"
             android:text="NOT GOING" />
 
     </LinearLayout>
