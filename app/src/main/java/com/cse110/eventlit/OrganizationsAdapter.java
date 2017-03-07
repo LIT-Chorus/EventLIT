@@ -27,7 +27,7 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     public OrganizationsAdapter(Context context, ArrayList<Organization> organizations){
         this.mOrganizations = organizations;
         this.mContext = context;
-        populateOrganizations();
+        //populateOrganizations();
     }
 
     public OrganizationsAdapter(Context context)

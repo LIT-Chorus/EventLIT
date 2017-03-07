@@ -50,7 +50,7 @@ public class OrganizationSelectionActivity extends AppCompatActivity {
 
                 //set the list to have all of the organizations before filtering
                 int squery = query.length();
-                String lquery = query.toString().toLowerCase();
+                query = query.toString().toLowerCase();
 
                 ArrayList<Organization> filteredList = new ArrayList<>();
 
