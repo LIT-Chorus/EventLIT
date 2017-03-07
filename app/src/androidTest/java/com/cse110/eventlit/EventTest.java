@@ -108,4 +108,35 @@ public class EventTest {
         }
 
     }
+
+    @Test
+    public void testDeleteEvent() throws Exception {
+        Event eventToDelete = new Event("New DeletableEvent", "Nowhere", "org1", now, now,
+                                        "Nowhere", "Other", 100);
+        final CountDownLatch latch = new CountDownLatch(2);
+        final OnCompleteListener<Void> onDelete = new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                assertEquals(true, task.isSuccessful());
+                latch.countDown();
+            }
+        };
+        OnCompleteListener<String> onCompleteListener = new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                assertEquals(true, task.isSuccessful());
+                latch.countDown();
+                String key = (String) task.getResult();
+                EventUtils.deleteEvent("org1", key, onDelete);
+            }
+        };
+
+        EventUtils.createEvent(eventToDelete, onCompleteListener);
+        try {
+            latch.await();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

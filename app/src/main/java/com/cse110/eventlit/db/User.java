@@ -1,5 +1,7 @@
 package com.cse110.eventlit.db;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -39,9 +41,9 @@ public class User {
      * for existing users.
      */
     public User(String firstName, String lastName, String email,
-                List<Integer> orgsFollowing,
-                List<RSVP> eventsFollowing,
-                List<Integer> orgsManaging)
+                @NonNull List<Integer> orgsFollowing,
+                @NonNull List<RSVP> eventsFollowing,
+                @NonNull List<Integer> orgsManaging)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,6 +52,14 @@ public class User {
         this.orgsFollowing = orgsFollowing;
         this.eventsFollowing = eventsFollowing;
         this.orgsManaging = orgsManaging;
+    }
+
+    /**
+     * Copy constructor
+     * @param otherUser
+     */
+    public User(User otherUser) {
+        updateWith(otherUser);
     }
 
     /**
@@ -99,6 +109,23 @@ public class User {
                     email.equals(otherUser.email);
         }
         return false;
+    }
+
+    /**
+     * Updates this user's data to be equal to that of the one passed in.
+     * @param newData
+     * @return
+     */
+    public User updateWith(User newData) {
+        this.firstName = newData.firstName;
+        this.lastName = newData.lastName;
+        this.email = newData.email;
+
+        this.orgsFollowing = new ArrayList<>(newData.orgsFollowing);
+        this.eventsFollowing = new ArrayList<>(newData.eventsFollowing);
+        this.orgsManaging = new ArrayList<>(newData.orgsManaging);
+
+        return this;
     }
 
     /**
