@@ -13,7 +13,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.com.vansuita.pickimage.provider"
@@ -48,8 +47,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".StudentFeedActivity"
-            android:label="@string/title_activity_main_scrolling"
             android:exported="true"
+            android:label="@string/title_activity_main_scrolling"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
@@ -66,20 +65,23 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ForgotPasswordActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".OrganizationSelectionActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ChangePasswordActivity"
             android:exported="true"
             android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".CreateEventActivity"
+            android:label="@string/title_activity_create_event"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

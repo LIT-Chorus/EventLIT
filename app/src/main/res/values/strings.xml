@@ -87,4 +87,5 @@
     <string name="going">Going</string>
     <string name="interested">Interested</string>
     <string name="cannotGo">Not Going</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
 </resources>
