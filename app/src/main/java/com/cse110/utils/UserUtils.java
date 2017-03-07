@@ -270,5 +270,10 @@ public class UserUtils {
         return eventsFollowing;
     }
 
+
+    public static final void updateUserOnBackend(User user, String uid) {
+        DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);
+        userRef.setValue(user);
+    }
 }
 
