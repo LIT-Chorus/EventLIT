@@ -114,6 +114,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
+            holder.orgNameTextView.setText();
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();
             mMaxCapacity = e.getMaxCapacity();
@@ -132,6 +133,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatTextView categoriesTextView;
         public AppCompatTextView eventNameTextView;
         public AppCompatTextView dateTextView;
+        public AppCompatTextView orgNameTextView;
 
         public MyViewHolder(View v) {
             super(v);
@@ -140,6 +142,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             categoriesTextView = (AppCompatTextView) v.findViewById(R.id.categories);
             eventNameTextView = (AppCompatTextView) v.findViewById(R.id.eventName);
             dateTextView = (AppCompatTextView) v.findViewById(R.id.dateView);
+            orgNameTextView = (AppCompatTextView) v.findViewById(R.id.orgName);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
