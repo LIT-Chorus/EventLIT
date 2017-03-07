@@ -13,12 +13,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -31,6 +35,16 @@ import java.util.concurrent.Executor;
  */
 
 public class UserUtils {
+    private static FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+    private static DatabaseReference fbDB = FirebaseDatabase.getInstance().getReference();
+
+    /**
+     * Reference to the current user object.
+     * All methods in this class assume that this reference will remain constant from
+     * logIn() to logOut(). DO NOT RE-ASSIGN THIS REFERENCE IN OTHER METHODS.
+     */
+    private static User currentUser;
+    private static UserDataListener userDataListener;
 
     /**
      * Reset the user's password
@@ -49,7 +63,7 @@ public class UserUtils {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    // Try to update the password
+                    // Try to updateWith the password
                     updatePassword(user, newPassword, onComplete);
                 } else {
                     // Old password was wrong
@@ -270,10 +284,193 @@ public class UserUtils {
         return eventsFollowing;
     }
 
-
     public static final void updateUserOnBackend(User user, String uid) {
         DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);
         userRef.setValue(user);
+    }
+
+    // Wrapper to get around `final` restrictions when passing values to inner classes
+    static class WrappedTask<T> extends TaskCompletionSource<T> {
+        private Task<T> wrapped;
+
+        public void wrap(Task<T> newTask) {
+            wrapped = newTask;
+            super.setResult(wrapped.getResult()); // This will mark task as complete
+        }
+
+        public Task<T> unwrap() {
+            return getTask();
+        }
+
+        @Override
+        public Task<T> getTask() {
+            if (wrapped == null) {
+                return super.getTask();
+            } else {
+                return wrapped;
+            }
+        }
+
+        @Override
+        public void setResult(T result) {
+            super.setResult(result);
+            // If the person is setting the result, they don't want the wrapped task anymore.
+            wrapped = null;
+        }
+    }
+
+    /**
+     * For keeping track of changes in user data, and updating the associated user with it.
+     * It's important that the initial User reference does not switch references,
+     * or this listener will be lost.
+     */
+    static class UserDataListener implements ValueEventListener {
+        // User that this listener will be updating
+        private User myUser;
+
+        public UserDataListener(User u) {
+            myUser = u;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            User tmpUser = dataSnapshot.getValue(User.class);
+            myUser.updateWith(tmpUser);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("UserDataListener", "Something went wrong while listening to " + myUser + "!");
+        }
+    }
+
+    /**
+     * Replaces the singleton user with the passed in user object. The changes will also be applied
+     * to the Firebase endpoint associated with the user.
+     *
+     * Caution: Will overwrite ALL properties of the old user's data.
+     *
+     * TODO: think about and analyze any synchronization/race conditions that might occur here (with UserDataListener)
+     * @param newData
+     */
+    public static void updateCurrentUser(User newData) {
+        currentUser.updateWith(newData);
+        fbDB.child("users").child(fbAuth.getCurrentUser().getUid()).setValue(currentUser);
+    }
+
+    /**
+     * Logs in a user with their email and password.
+     * @param email The user's email.
+     * @param password The user's password.
+     * @param completionListener Listener that will receive a Task&lt;User&gt; containing a
+     *                           finalized User object when the log in is complete, and we have
+     *                           gathered all the current user information.
+     *                           If the user cannot be logged in, the completion listener will be
+     *                           notified with a NullTask, which states that the operation was
+     *                           unsuccessful.
+     */
+    public static Task<User> logIn(final String email, String password, final OnCompleteListener<User> completionListener) {
+        // Incomplete task to pass back, and so that we can asynchronously set the value in callbacks below
+        final WrappedTask<User> wrappedUserTask = new WrappedTask<>();
+
+        OnCompleteListener<AuthResult> logInCompleteListener = new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(final @NonNull Task<AuthResult> task) {
+                // If sign in successful, we want to grab the user's data from Firebase
+                if (task.isSuccessful()) {
+                    FirebaseUser fbUser = fbAuth.getCurrentUser();
+                    final DatabaseReference userRef = DatabaseUtils.getUsersDB().child(fbUser.getUid());
+
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+
+                            // Set new User with data to our singleton
+                            currentUser = user;
+
+                            // Grab that data and pass to listener, wrap *copy* in task
+                            User copy = new User(user);
+                            wrappedUserTask.setResult(copy);
+                            completionListener.onComplete(wrappedUserTask.unwrap());
+
+                            // Important: add listener to this endpoint so that we updateWith the currentUser
+                            // w.r.t. changes in the Firebase data
+                            userDataListener = new UserDataListener(currentUser);
+                            userRef.addValueEventListener(userDataListener);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e("UserUtils.logIn", "Could not get User data.");
+                        }
+                    });
+                } else {
+                    // Sign in unsuccessful, return failed Task to listener, and wrap to return
+                    NullTask<User> fail = new NullTask<User>();
+                    wrappedUserTask.wrap(fail);
+                    completionListener.onComplete(fail);
+                    Log.e("UserUtils.logIn", "Could not log in!");
+                }
+            }
+        };
+
+        fbAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(logInCompleteListener);
+
+        // Actually sign in now:
+        return wrappedUserTask.unwrap();
+    }
+
+    /**
+     * Log out the user. On completion of log out, will notify the listener.
+     * @param completionListener
+     */
+    public static Task<User> logOut(final OnCompleteListener<User> completionListener) {
+        final WrappedTask<User> logOutTask = new WrappedTask<>();
+        fbAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                // Check if user has been successfully logged out
+                if (firebaseAuth.getCurrentUser() == null) {
+                    NullTask<User> successTask = new NullTask<User>().withSuccess(true);
+                    // Remove this listener so that this method doesn't get called again.
+                    // According to the internet (stackoverflow), onAuthStateChanged may be called
+                    // multiple times for reasons unknown to (and shielded from) us, so best to remove
+                    // all connections when we're done with the user.
+                    fbAuth.removeAuthStateListener(this);
+
+                    // Remove reference to current user.
+                    currentUser = null;
+
+                    // Respond with a simple success task if we got signed out
+                    completionListener.onComplete(successTask);
+                    logOutTask.wrap(successTask);
+                    Log.d("UserUtils.logOut", "User signed out.");
+                } else {
+                    // If user not logged out, send fail task
+                    NullTask<User> failTask = new NullTask<User>();
+                    completionListener.onComplete(failTask);
+                    logOutTask.wrap(failTask);
+                    Log.e("UserUtils.logOut", "User could not be logged out!");
+                }
+            }
+        });
+
+        // Actually sign out to trigger listener
+        fbAuth.signOut();
+
+        return logOutTask.unwrap();
+    }
+
+    /**
+     * @return A *copy* of the user singleton, don't try to modify this object to modify the user,
+     *         use other methods provided in the utils class (updateCurrentUser)
+     */
+    public static User getCurrentUser() {
+        if (currentUser == null)
+            return null;
+        else
+            return new User(currentUser);
     }
 }
 
