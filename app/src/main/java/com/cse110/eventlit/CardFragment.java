@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,9 +60,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
-//            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//            UserUtils.getEventsFollowingSynch(user);
-            EventUtils.getAllEvents(adapter, listEvents);
+            User user = UserUtils.getCurrentUser();
+            ArrayList<Event> list = UserUtils.getEventsFollowingSynch(user);
+            adapter = new MyAdapter(list);
         } else {
             EventUtils.getAllEvents(adapter, listEvents);
         }
