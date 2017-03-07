@@ -37,6 +37,14 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
         populateOrganizations();
     }
 
+    public ArrayList<Organization> getmOrganizations(){
+        return mOrganizations;
+    }
+
+    public void setmOrganizations(ArrayList<Organization> filter){
+        mOrganizations = filter;
+    }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public AppCompatCheckedTextView mOrgName;
@@ -92,10 +100,13 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     /**
      * Populates the ArrayList associated with the organizations
      */
-    private void populateOrganizations() {
+    void populateOrganizations() {
         // Makes a call to the Firebase utility to get all organizations and stores in the reference
-        // Adapter will be notified of changes. 
+        // Adapter will be notified of changes.
+        //mOrganizations.clear();
         OrganizationUtils.getAllStudentOrganizations(this, mOrganizations);
+
+        Log.d("size", String.valueOf(mOrganizations.size()));
     }
 
     @Override
