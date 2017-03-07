@@ -114,7 +114,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
-            holder.orgNameTextView.setText();
+//            holder.orgNameTextView.setText(UserUtils.getCurrentUser());
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();
             mMaxCapacity = e.getMaxCapacity();
