@@ -98,8 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                 mSignInProgress.hide();
                 // Firebase reported error on the server side displayed here
                 if (!task.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_LONG);
-                    Log.d("Firebase Error", task.getException().getMessage());
+                    Toast toast = Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_LONG);
+                    toast.show();
                     mLoginBut.setClickable(true);
                 } else {
 

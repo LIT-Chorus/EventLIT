@@ -23,7 +23,7 @@ public class WrappedTask<T> extends TaskCompletionSource<T> {
         wrapped = newTask;
         super.setResult(wrapped.getResult());
         // Will mark task as complete
-        if (wrapped.getException() != null) {
+        if (wrapped.getException() != null && !wrapped.isComplete()) {
             super.setException(wrapped.getException());
         }
          // Set success based on existence of Exception
