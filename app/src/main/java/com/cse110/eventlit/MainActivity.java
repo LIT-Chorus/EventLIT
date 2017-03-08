@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent startLoginAct = new Intent(MainActivity.this, LoginActivity.class);
+                startLoginAct.putExtra("signedup", false);
                 startActivity(startLoginAct);
             }
         });

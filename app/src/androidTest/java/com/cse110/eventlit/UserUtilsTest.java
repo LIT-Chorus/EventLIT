@@ -48,6 +48,8 @@ public class UserUtilsTest {
             public void onComplete(@NonNull Task<User> task) {}
         });
 
+        fbAuth = FirebaseAuth.getInstance();
+
         // Wait for it...
         Tasks.await(userTask);
         user = userTask.getResult();

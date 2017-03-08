@@ -40,8 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout mPasswordEntry;
     private TextInputLayout mConfirmPasswordEntry;
 
-    private FirebaseAuth.AuthStateListener mFbListener;
-
     private OnCompleteListener<Void> mSignUpListener;
 
     private AlertDialog mDialog;
@@ -117,19 +115,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-
-        mFbListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d("Login Check", "Signed in as: " + user.getEmail());
-                } else {
-                    Log.d("Login Check", "Not signed in!");
-                }
-            }
-        };
-
         mSignUpListener = new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -137,35 +122,12 @@ public class SignUpActivity extends AppCompatActivity {
                 // Firebase reported error on the server side displayed here
                 if (task.isSuccessful()) {
 
-                    final boolean isVerifed = mFbAuth.getCurrentUser().isEmailVerified();
+                    Intent backToLogin = new Intent(SignUpActivity.this, LoginActivity.class);
+                    backToLogin.putExtra("signedup", true);
+                    backToLogin.putExtra("email", mEmailEntry.getEditText().getText().toString());
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this, R.style.AlertDialogCustom);
-                    builder.setTitle("Registration Successful!")
-                            .setMessage("A verification email has been sent to " +
-                                    mEmailEntry.getEditText().getText().toString() +
-                                    ". Please verify your email then click " +
-                                    "ok to begin using our application!")
-                            .setCancelable(false)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                }
-                            });
-                    mDialog = builder.create();
-                    mDialog.show();
-
-                    mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-
-                    mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent selectOrgs = new Intent(SignUpActivity.this,
-                                    OrganizationSelectionActivity.class);
-                            startActivity(selectOrgs);
-                        }
-                    });
-
-                    Log.w("Task successful", "yes");
+                    startActivity(backToLogin);
+                    finish();
                         // Move to Organization selection
 //                            Intent intent = new Intent(SignUpActivity.this, OrganizationSelectionActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -341,22 +303,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    // App resumes
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mFbAuth.addAuthStateListener(mFbListener);
-    }
-
-    // App exit
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mFbListener != null) {
-            mFbAuth.removeAuthStateListener(mFbListener);
-        }
     }
 
     /**

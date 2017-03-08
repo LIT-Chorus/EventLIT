@@ -1,10 +1,9 @@
 package com.cse110.eventlit;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import com.cse110.eventlit.db.User;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -29,15 +27,13 @@ public class LoginActivity extends AppCompatActivity {
 
     // Firebase Authutentication and Firebase Authentication state listener
     private FirebaseAuth fbAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-
     private AppCompatButton mLoginBut;
 
     private TextInputLayout mEmailEntry;
     private TextInputLayout mPasswordEntry;
 
     private ProgressDialog mSignInProgress;
-    private OnCompleteListener<AuthResult> mSignInListener;
+    private OnCompleteListener<User> mSignInListener;
 
     private TextView mForgot;
 
@@ -78,22 +74,27 @@ public class LoginActivity extends AppCompatActivity {
             // Elegantly handle this later...
         }
 
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d("Login Check", "Signed in as: " + user.getEmail());
-                } else {
-                    Log.d("Login Check", "Not signed in!");
-                }
-            }
-        };
+        Bundle extras = getIntent().getExtras();
+        boolean signedup = extras.getBoolean("signedup");
+
+        if (signedup) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogCustom);
+            builder.setTitle("Registration Successful!")
+                    .setMessage("A verification email has been sent to " +
+                            mEmailEntry.getEditText().getText().toString() +
+                            ". Please verify your email then log back in to begin using our application!")
+                    .setCancelable(true)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).create().show();
+        }
 
         // TODO #Frontend change this to go to new activity with intent
-        mSignInListener = new OnCompleteListener<AuthResult>(){
+        mSignInListener = new OnCompleteListener<User>(){
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task){
+            public void onComplete(@NonNull Task<User> task){
                 mSignInProgress.hide();
                 // Firebase reported error on the server side displayed here
                 if (!task.isSuccessful()) {
@@ -104,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     // TODO: Backend team add logic to check if user is a student or an organizer
 
-                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    FirebaseUser currentUser = fbAuth.getCurrentUser();
 
                     if (currentUser.isEmailVerified()) {
 
@@ -117,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                         User curr = UserUtils.getCurrentUser();
 
                         if (curr == null) {
-                            Log.d("User", null);
+                            Log.d("User", "Failed getting current user");
                         } else {
 
                             if (curr.orgsManaging.size() == 0) {
@@ -137,9 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(openFeed);
                             }
                         }
-                    }
-
-                    else {
+                    } else {
                         mLoginBut.setClickable(true);
                         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogCustom);
                         builder.setTitle("Email Not Verified")
@@ -192,8 +191,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param passwordText
      */
     protected void signIn(final String emailText, final String passwordText) {
-            fbAuth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(this,
-                    mSignInListener);
+            UserUtils.logIn(emailText, passwordText, mSignInListener);
     }
 
     protected void checkEmail() {
@@ -209,25 +207,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-    // App resumes
-    @Override
-    protected void onStart() {
-        super.onStart();
-        fbAuth.addAuthStateListener(mAuthStateListener);
-    }
-
-    // App exit
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mAuthStateListener != null) {
-            fbAuth.removeAuthStateListener(mAuthStateListener);
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finish();
     }
 }
