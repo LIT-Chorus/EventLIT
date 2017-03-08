@@ -36,13 +36,14 @@ public class EventTest {
     @Before
     public void setUp() throws Exception {
         now = new GregorianCalendar();
-        event = new Event("Test Event", "Here it is.", "abcdefg",
+        event = new Event("Test Event", "Here it is.", "helloevent", "abcdefg",
                 now, now, "Nowhere", "Other", 100);
         expectedMap = new HashMap<>();
         expectedJSON = new JSONObject();
 
         expectedMap.put("title", "Test Event");
         expectedMap.put("description", "Here it is.");
+        expectedMap.put("eventid", "helloevent");
         expectedMap.put("orgid", "abcdefg");
         expectedMap.put("startTime", event.getStartDate());
         expectedMap.put("endTime", event.getEndDate());
@@ -89,7 +90,7 @@ public class EventTest {
 
     @Test
     public void testCreatedEvent() throws  Exception {
-        Event createdEvent = new Event("Test Create Event", "Here it is.", "test-org-1",
+        Event createdEvent = new Event("Test Create Event", "Here it is.", "helloevent", "test-org-1",
                 now, now, "Nowhere", "Other", 100);
         final CountDownLatch latch = new CountDownLatch(1);
         OnCompleteListener onCompleteListener = new OnCompleteListener() {
@@ -111,7 +112,7 @@ public class EventTest {
 
     @Test
     public void testDeleteEvent() throws Exception {
-        Event eventToDelete = new Event("New DeletableEvent", "Nowhere", "org1", now, now,
+        Event eventToDelete = new Event("New DeletableEvent", "Nowhere", "helloevent", "org1", now, now,
                                         "Nowhere", "Other", 100);
         final CountDownLatch latch = new CountDownLatch(2);
         final OnCompleteListener<Void> onDelete = new OnCompleteListener<Void>() {
