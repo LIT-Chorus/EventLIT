@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("User", "Failed getting current user");
                         } else {
 
-                            if (curr.orgsManaging.size() == 0) {
+                            if (curr.getOrgsManaging().size() == 0) {
 
                                 Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
                                 mEmailEntry.getEditText().setText("");

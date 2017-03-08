@@ -154,7 +154,7 @@ public class UserUtils {
 
         List<Organization> orgsFollowing = new ArrayList<>();
 
-        List<String> orgid_following = user.orgsFollowing;
+        List<String> orgid_following = user.getOrgsFollowing();
         CountDownLatch finished = new CountDownLatch(orgid_following.size());
 
         for (String orgid : orgid_following) {
@@ -177,7 +177,7 @@ public class UserUtils {
 
         ArrayList<Organization> orgsManaging = new ArrayList<>();
 
-        List<String> orgid_managing = user.orgsManaging;
+        List<String> orgid_managing = user.getOrgsManaging();
         CountDownLatch finished = new CountDownLatch(orgid_managing.size());
 
         for (String orgid : orgid_managing) {
@@ -297,7 +297,7 @@ public class UserUtils {
 
     public static void updateEventsFollowing(String eventid, RSVP rsvp) {
         currentUser.addEventFollowing(eventid, rsvp);
-        currentUserDB.child("eventsFollowing").setValue(currentUser.eventsFollowing);
+        currentUserDB.child("eventsFollowing").setValue(currentUser.getEventsFollowing());
     }
 
     /**

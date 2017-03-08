@@ -20,9 +20,9 @@ public class User {
     private String lastName;
     private String email;
 
-    public HashMap<String, RSVP> eventsFollowing;
-    public List<String> orgsFollowing;
-    public List<String> orgsManaging;
+    private HashMap<String, RSVP> eventsFollowing;
+    private List<String> orgsFollowing;
+    private List<String> orgsManaging;
 
     public User() {
         eventsFollowing = new HashMap<>();
@@ -171,6 +171,10 @@ public class User {
 
     public void setEventsFollowing(HashMap<String, RSVP> eventsFollowing) {
         this.eventsFollowing = new HashMap<>(eventsFollowing);
+    }
+
+    public HashMap<String, RSVP> getEventsFollowing() {
+        return new HashMap<>(eventsFollowing);
     }
 
     public List<String> getOrgsFollowing() {
