@@ -86,8 +86,12 @@ public class User {
      * @param eventid Event ID
      * @param status status as defined in Event.RSVPStatus
      */
-    public void addEventFollowing(int orgid, String eventid, RSVP.Status status) {
+    public void addEventFollowing(String orgid, String eventid, RSVP.Status status) {
         eventsFollowing.put(eventid, new RSVP(orgid, eventid, status));
+    }
+
+    public void addEventFollowing(String eventid, RSVP rsvp) {
+        eventsFollowing.put(eventid, rsvp);
     }
 
     public JSONObject toJSON() {
@@ -161,7 +165,7 @@ public class User {
         this.email = email;
     }
 
-    public Collection<RSVP> getEventsFollowing() {
+    public Collection<RSVP> extractEventsFollowing() {
         return eventsFollowing.values();
     }
 

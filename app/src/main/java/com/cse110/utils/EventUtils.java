@@ -174,7 +174,7 @@ public class EventUtils {
 
         //final CountDownLatch synchToken = new CountDownLatch(1);
 
-        DatabaseReference eventReference = eventsDB.child(Long.toString(rsvp.getOrgid())).child(rsvp.getEventid());
+        DatabaseReference eventReference = eventsDB.child(rsvp.getOrgid()).child(rsvp.getEventid());
 
         eventReference.addValueEventListener(new ValueEventListener() {
             @Override

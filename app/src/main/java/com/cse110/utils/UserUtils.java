@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
@@ -199,7 +201,7 @@ public class UserUtils {
 
         ArrayList<Event> eventsFollowing = new ArrayList<>();
 
-        List<RSVP> rsvps = user.eventsFollowing;
+        Collection<RSVP> rsvps = user.extractEventsFollowing();
         CountDownLatch finished = new CountDownLatch(rsvps.size());
 
         for (RSVP rsvp: rsvps) {
@@ -286,9 +288,9 @@ public class UserUtils {
         currentUserDB.child("orgsManaging").setValue(orgs);
     }
 
-    public static void updateEventsFollowing(ArrayList<RSVP> events) {
-        currentUser.setEventsFollowing(events);
-        currentUserDB.child("eventsFollowing").setValue(events);
+    public static void updateEventsFollowing(String eventid, RSVP rsvp) {
+        currentUser.addEventFollowing(eventid, rsvp);
+        currentUserDB.child("eventsFollowing").setValue(currentUser.eventsFollowing);
     }
 
     /**

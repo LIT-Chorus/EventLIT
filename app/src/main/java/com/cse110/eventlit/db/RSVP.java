@@ -10,17 +10,16 @@ public class RSVP {
     public enum Status {
         GOING,
         NOT_GOING,
-        MAYBE,
         INTERESTED
     }
 
-    public int orgid;
+    public String orgid;
     public String eventid;
     public Status rsvpStatus;
 
     public RSVP() {}
 
-    public RSVP(int orgid, String eventid, Status rsvpStatus) {
+    public RSVP(String orgid, String eventid, Status rsvpStatus) {
         this.orgid = orgid;
         this.eventid = eventid;
         this.rsvpStatus = rsvpStatus;
@@ -54,11 +53,11 @@ public class RSVP {
         return false;
     }
 
-    public int getOrgid() {
+    public String getOrgid() {
         return orgid;
     }
 
-    public void setOrgid(int orgid) {
+    public void setOrgid(String orgid) {
         this.orgid = orgid;
     }
 
