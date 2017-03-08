@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Organization;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -43,9 +45,6 @@ public class OrganizationUtils {
                     orgsList.add(org);
                     if (adapter != null) adapter.notifyItemChanged(adapter.getItemCount() - 1);
                 }
-//                for (int i = 0; i < orgsList.size(); i++){
-//                    Log.w("Organization " + i + ":",  orgsList.get(i).toString());
-//                }
 
                 if (adapter != null) adapter.notifyDataSetChanged();
             }
@@ -69,7 +68,8 @@ public class OrganizationUtils {
      * @param orgs
      * @param signal
      */
-    public static void addOrgFromId(final String orgid, final List<Organization> orgs, final CountDownLatch signal) {
+    public static void addOrgFromId(final String orgid, final List<Organization> orgs,
+                                    final CountDownLatch signal) {
 
         final DatabaseReference orgDB = orgsDB.child(orgid);
 
@@ -91,37 +91,32 @@ public class OrganizationUtils {
         });
     }
 
-    public static Organization getOrgFromIdSynch(final String orgid) {
+    public static void getOrgFromIdAsync(final String orgid, final OnCompleteListener<Organization> onComplete) {
 
         final DatabaseReference orgDB = orgsDB.child(orgid);
 
         final Organization[] org = new Organization[1];
 
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        orgDB.addListenerForSingleValueEvent(new ValueEventListener() {
+        orgDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    String org_name = dataSnapshot.getValue().toString();
+                    org[0] = new Organization(orgid, org_name);
+                }
+                else {
+                    org[0] = new Organization(orgid, "Unknown");
+                }
 
-                String org_name = dataSnapshot.getValue().toString();
-
-                org[0] = new Organization(orgid, org_name);
-
-                latch.countDown();
+                WrappedTask<Organization> resultTask = new WrappedTask<Organization>();
+                resultTask.setResult(org[0]);
+                onComplete.onComplete(resultTask.unwrap());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                latch.countDown();
+
             }
         });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return org[0];
     }
 }
