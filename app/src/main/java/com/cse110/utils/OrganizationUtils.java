@@ -99,7 +99,7 @@ public class OrganizationUtils {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        orgDB.addListenerForSingleValueEvent(new ValueEventListener() {
+        orgDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

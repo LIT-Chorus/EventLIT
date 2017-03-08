@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -71,6 +72,12 @@ public class OrganizationSelectionActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();  // data set changed
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class));
+        finish();
     }
 
 }
