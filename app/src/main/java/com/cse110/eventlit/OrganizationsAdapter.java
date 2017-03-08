@@ -118,6 +118,9 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
         if (user != null && user.isFollowingOrg(orgId)) {
             holder.mOrgName.setChecked(true);
         }
+        else {
+            holder.mOrgName.setChecked(false);
+        }
 
     }
 
