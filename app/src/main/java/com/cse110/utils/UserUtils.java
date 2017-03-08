@@ -37,6 +37,7 @@ import java.util.concurrent.Executor;
 public class UserUtils {
     private static FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     private static DatabaseReference fbDB = FirebaseDatabase.getInstance().getReference();
+    private static DatabaseReference currentUserDB;
 
     /**
      * Reference to the current user object.
@@ -257,7 +258,37 @@ public class UserUtils {
      */
     public static void updateCurrentUser(User newData) {
         currentUser.updateWith(newData);
-        fbDB.child("users").child(fbAuth.getCurrentUser().getUid()).setValue(currentUser);
+        currentUserDB.setValue(currentUser);
+    }
+
+    public static void updateUserFirstName(String firstName) {
+        currentUser.setFirstName(firstName);
+        currentUserDB.child("firstName").setValue(firstName);
+    }
+
+    public static void updateUserLastName(String lastName) {
+        currentUser.setLastName(lastName);
+        currentUserDB.child("lastName").setValue(lastName);
+    }
+
+    public static void updateUserEmail(String email) {
+        currentUser.setEmail(email);
+        currentUserDB.child("email").setValue(email);
+    }
+
+    public static void updateOrgsFollowing(ArrayList<String> orgs) {
+        currentUser.setOrgsFollowing(orgs);
+        currentUserDB.child("orgsFollowing").setValue(orgs);
+    }
+
+    public static void updateOrgsManaging(ArrayList<String> orgs) {
+        currentUser.setOrgsManaging(orgs);
+        currentUserDB.child("orgsManaging").setValue(orgs);
+    }
+
+    public static void updateEventsFollowing(ArrayList<RSVP> events) {
+        currentUser.setEventsFollowing(events);
+        currentUserDB.child("eventsFollowing").setValue(events);
     }
 
     /**
@@ -290,6 +321,7 @@ public class UserUtils {
 
                             // Set new User with data to our singleton
                             currentUser = user;
+                            currentUserDB = userRef;
 
                             // Grab that data and pass to listener, wrap *copy* in task
                             User copy = new User(user);
@@ -343,6 +375,7 @@ public class UserUtils {
 
                     // Remove reference to current user.
                     currentUser = null;
+                    currentUserDB = null;
 
                     // Respond with a simple success task if we got signed out
                     completionListener.onComplete(successTask);

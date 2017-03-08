@@ -158,4 +158,28 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public List<RSVP> getEventsFollowing() {
+        return new ArrayList<>(eventsFollowing);
+    }
+
+    public void setEventsFollowing(List<RSVP> eventsFollowing) {
+        this.eventsFollowing = new ArrayList<>(eventsFollowing);
+    }
+
+    public List<String> getOrgsFollowing() {
+        return new ArrayList<>(orgsFollowing);
+    }
+
+    public void setOrgsFollowing(List<String> orgsFollowing) {
+        this.orgsFollowing = new ArrayList<>(orgsFollowing);
+    }
+
+    public List<String> getOrgsManaging() {
+        return new ArrayList<>(orgsManaging);
+    }
+
+    public void setOrgsManaging(List<String> orgsManaging) {
+        this.orgsManaging = new ArrayList<>(orgsManaging);
+    }
 }
