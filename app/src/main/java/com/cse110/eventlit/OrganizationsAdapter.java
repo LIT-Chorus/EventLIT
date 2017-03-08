@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cse110.eventlit.db.Organization;
+import com.cse110.eventlit.db.User;
 import com.cse110.utils.OrganizationUtils;
+import com.cse110.utils.UserUtils;
 
 import java.util.ArrayList;
 
@@ -58,11 +60,26 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
                 public void onClick(View v) {
                     if(mOrgName.isChecked())
                     {
+                        int index = getAdapterPosition();
+                        User user = UserUtils.getCurrentUser();
+                        if (user != null && mOrganizations.size() != 0) {
+                            user.removeOrgFollowing(mOrganizations.get(index).getOrgId());
+                            UserUtils.updateCurrentUser(user);
+                        }
                         mOrgName.setChecked(false);
                     }
 
                     else
                     {
+                        // Get the organization selected in the checkbox
+                        // Add it to the list of orgs the user is following
+                        int index = getAdapterPosition();
+                        User user = UserUtils.getCurrentUser();
+                        if (user != null && mOrganizations.size() != 0) {
+                            Log.w("Added Org", mOrganizations.get(index).getOrgId());
+                            user.addOrgFollowing(mOrganizations.get(index).getOrgId());
+                            UserUtils.updateCurrentUser(user);
+                        }
                         mOrgName.setChecked(true);
                     }
                 }
@@ -80,6 +97,7 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
 
             else
             {
+
                 mOrgName.setChecked(true);
             }
         }

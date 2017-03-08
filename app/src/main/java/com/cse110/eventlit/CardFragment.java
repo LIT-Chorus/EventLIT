@@ -60,8 +60,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
             User user = UserUtils.getCurrentUser();
-            //ArrayList<Event> eventsFollowing = UserUtils.getEventsFollowingSynch(user);
+            ArrayList<Event> eventsFollowing = UserUtils.getEventsFollowingSynch(user);
             UserUtils.getEventsForOrgs(adapter, listEvents, user);
+            listEvents.addAll(eventsFollowing);
             //adapter = new MyAdapter(list);
         } else {
             EventUtils.getAllEvents(adapter, listEvents);

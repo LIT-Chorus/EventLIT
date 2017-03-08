@@ -81,6 +81,14 @@ public class User {
     }
 
     /**
+     * Remove an org a user was following
+     * @param orgid
+     */
+    public void removeOrgFollowing(String orgid) {
+        orgsFollowing.remove(orgid);
+    }
+
+    /**
      * Add an event to the user's event following list.
      * @param orgid Organization ID
      * @param eventid Event ID
