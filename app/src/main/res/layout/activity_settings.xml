@@ -1,194 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-
-    </android.support.design.widget.AppBarLayout>
-    <!-- Top toolbar
-<android.support.design.widget.AppBarLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-<<<<<<< HEAD
-
+    <include
+        layout="@layout/student_app_bar_main_scrolling"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" >
+        android:layout_height="match_parent" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:background="@drawable/side_nav_bar"
+        app:itemTextColor="#BDBDBD"
+        app:itemIconTint="#BDBDBD"
+        app:headerLayout="@layout/nav_header_main_scrolling"
+        app:menu="@menu/student_activity_main_scrolling_drawer" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:text="Settings"/>
-
-
-    </RelativeLayout>
-
-=======
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" >
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:text="Settings"/>
-
-
-    </RelativeLayout>
-
->>>>>>> 044f60bc409461f6b0f5b8149b5f6fd36892a20c
-</android.support.v7.widget.Toolbar>
-
-</android.support.design.widget.AppBarLayout>
-
--->
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="1dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="106dp"
-                android:layout_height="103dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/ic_profile"
-                android:id="@+id/profilePhoto" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:text="@string/pref_default_display_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:id="@+id/name"
-                android:fontFamily="sans-serif"
-                android:textSize="30sp"
-
-                android:textColor="@color/cardview_dark_background"
-                android:textAllCaps="true"
-                android:textAlignment="center" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:text="Organizer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:id="@+id/organizer"
-                android:textSize="18sp"/>
-
-        </LinearLayout>
-
-
-    </ScrollView>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <!--<FrameLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="4"-->
-            <!--android:layout_margin="@dimen/notification_text">-->
-
-            <!--<android.support.v7.widget.AppCompatTextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Notifications"-->
-                <!--android:fontFamily="sans-serif"-->
-                <!--android:textAllCaps="false"-->
-                <!--android:textSize="18sp" />-->
-
-            <!--<android.support.v7.widget.SwitchCompat-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="right"-->
-                <!--style="@style/SwitchStyle"-->
-                <!--android:id="@+id/notifications" />-->
-
-        <!--</FrameLayout>-->
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/changePass"
-            android:layout_margin="@dimen/notification_text">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:text="Change Password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/reqOrgStatus"
-
-            android:layout_margin="@dimen/notification_text"
-            >
-
-            <android.support.v7.widget.AppCompatTextView
-                android:text="Request Organizer Status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <include layout="@layout/content_main_scrolling" />
-
-
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>
