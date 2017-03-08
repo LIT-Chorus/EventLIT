@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -54,6 +55,7 @@ import com.vansuita.pickimage.listeners.IPickResult;
  */
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private boolean mOrganizerStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
         // setupActionBar();
         setContentView(R.layout.activity_settings);
+
+        mOrganizerStatus = getIntent().getExtras().getBoolean("organizer");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,11 +85,30 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         }
 
         // My Code
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            updateHeader(user.getDisplayName(), user.getEmail());
+        }
+    }
+
+    // Updates the name/email/profile pic that is displayed in the hamburger menu
+    public void updateHeader(String name, String email) {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View profileView = navigationView.getHeaderView(0);
+        TextView nameTextView = (TextView) profileView.findViewById(R.id.nameTextView);
+        TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
+        nameTextView.setText(name);
+        emailTextView.setText(email);
+        // TODO update prof pic
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
+        if (mOrganizerStatus) {
+            startActivity(new Intent(SettingsActivity.this, OrganizerFeedActivity.class));
+        } else {
+            startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
+        }
         finish();
     }
 
@@ -121,15 +144,24 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
+            if (mOrganizerStatus) {
+                startActivity(new Intent(SettingsActivity.this, OrganizerFeedActivity.class ));
+            } else {
+                startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
+            }
             finish();
         } else if (id == R.id.nav_explore) {
-            startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
+            Intent act = new Intent(SettingsActivity.this, ExploreActivity.class);
+            act.putExtra("organizer", mOrganizerStatus);
+            startActivity(act);
             finish();
         } else if (id == R.id.nav_follow_orgs) {
-            startActivity(new Intent(SettingsActivity.this, OrganizationSelectionActivity.class));
+            Intent act = new Intent(SettingsActivity.this, OrganizationSelectionActivity.class);
+            act.putExtra("organizer", mOrganizerStatus);
+            startActivity(act);
             finish();
         } else if (id == R.id.nav_settings) {
+            //
         } else if (id == R.id.nav_help) {
 
         } else if (id == R.id.nav_logout) {

@@ -198,7 +198,12 @@ public class UserUtils {
 
         ArrayList<Event> eventsFollowing = new ArrayList<>();
 
-        Collection<RSVP> rsvps = user.extractEventsFollowing();
+        Collection<RSVP> rsvps = user.getEventsFollowing().values();
+
+        if (rsvps.size() == 0) {
+            return eventsFollowing;
+        }
+
         CountDownLatch finished = new CountDownLatch(rsvps.size());
 
         for (RSVP rsvp: rsvps) {

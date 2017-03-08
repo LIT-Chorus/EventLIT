@@ -20,13 +20,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +39,14 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
 
     private OrganizationSelectionFragment mFragment;
 
+    private boolean mOrganizerStatus = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organization_selection);
+
+        mOrganizerStatus = getIntent().getExtras().getBoolean("organizer");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,11 +67,31 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            updateHeader(user.getDisplayName(), user.getEmail());
+        }
+
+    }
+
+    // Updates the name/email/profile pic that is displayed in the hamburger menu
+    public void updateHeader(String name, String email) {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View profileView = navigationView.getHeaderView(0);
+        TextView nameTextView = (TextView) profileView.findViewById(R.id.nameTextView);
+        TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
+        nameTextView.setText(name);
+        emailTextView.setText(email);
+        // TODO update prof pic
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class));
+        if (mOrganizerStatus) {
+            startActivity(new Intent(OrganizationSelectionActivity.this, OrganizerFeedActivity.class ));
+        } else {
+            startActivity(new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class));
+        }
         finish();
     }
 
@@ -100,15 +128,23 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class));
+            if (mOrganizerStatus) {
+                startActivity(new Intent(OrganizationSelectionActivity.this, OrganizerFeedActivity.class ));
+            } else {
+                startActivity(new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class));
+            }
             finish();
         } else if (id == R.id.nav_explore) {
-            startActivity(new Intent(OrganizationSelectionActivity.this, ExploreActivity.class));
+            Intent act = new Intent(OrganizationSelectionActivity.this, ExploreActivity.class);
+            act.putExtra("organizer", mOrganizerStatus);
+            startActivity(act);
             finish();
         } else if (id == R.id.nav_follow_orgs) {
             //
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(OrganizationSelectionActivity.this, SettingsActivity.class));
+            Intent act = new Intent(OrganizationSelectionActivity.this, SettingsActivity.class);
+            act.putExtra("organizer", mOrganizerStatus);
+            startActivity(act);
             finish();
         } else if (id == R.id.nav_help) {
 

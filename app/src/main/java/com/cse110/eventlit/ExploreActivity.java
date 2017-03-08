@@ -3,6 +3,7 @@ package com.cse110.eventlit;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -16,7 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cse110.eventlit.db.User;
 import com.cse110.utils.UserUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -28,10 +32,14 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     private DrawerLayout mDrawerLayout;
 
+    private boolean mOrganizerStatus = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_activity_main_scrolling);
+
+        mOrganizerStatus = getIntent().getExtras().getBoolean("organizer");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -110,19 +118,34 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(ExploreActivity.this, StudentFeedActivity.class ));
+            if (mOrganizerStatus) {
+                startActivity(new Intent(ExploreActivity.this, OrganizerFeedActivity.class ));
+            } else {
+                startActivity(new Intent(ExploreActivity.this, StudentFeedActivity.class));
+            }
+            finish();
         } else if (id == R.id.nav_explore) {
             // This activity
         } else if (id == R.id.nav_follow_orgs) {
-            startActivity(new Intent(ExploreActivity.this, OrganizationSelectionActivity.class ));
+            Intent act = new Intent(ExploreActivity.this, OrganizationSelectionActivity.class);
+            act.putExtra("organizer", mOrganizerStatus);
+            startActivity(act);
+            finish();
 
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(ExploreActivity.this, SettingsActivity.class));
+            Intent act = new Intent(ExploreActivity.this, SettingsActivity.class);
+            act.putExtra("organizer", mOrganizerStatus);
+            startActivity(act);
+            finish();
         } else if (id == R.id.nav_help) {
 
         } else if (id == R.id.nav_logout) {
-//            UserUtils.logOut(mCompleteListener);
-            finish();
+            UserUtils.logOut(new OnCompleteListener<User>() {
+                @Override
+                public void onComplete(@NonNull Task<User> task) {
+                    finish();
+                }
+            });
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -131,7 +154,11 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ExploreActivity.this, StudentFeedActivity.class));
+        if (mOrganizerStatus) {
+            startActivity(new Intent(ExploreActivity.this, OrganizerFeedActivity.class ));
+        } else {
+            startActivity(new Intent(ExploreActivity.this, StudentFeedActivity.class));
+        }
         finish();
     }
 }

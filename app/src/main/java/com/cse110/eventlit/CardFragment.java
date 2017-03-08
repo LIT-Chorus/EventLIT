@@ -39,6 +39,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
     private int mNumAttendees;
     private int mMaxCapacity;
 
+    private boolean mOrganizerStatus = false;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         Bundle pageType = getArguments();
         String type = pageType.getString("type");
+
+        mOrganizerStatus = getArguments().getBoolean("organizer");
+
 
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
@@ -195,6 +200,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent openDetailedView = new Intent(getActivity(), StudentDetailedEventActivity.class);
+
+                    // TODO: ADD LOGIC TO CHECK IF EVENT IS RUN BY THIS USER
+
                     Bundle extras = new Bundle();
                     extras.putString("time", timeTextView.getText().toString());
                     extras.putString("location", locationTextView.getText().toString());

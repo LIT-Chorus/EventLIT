@@ -59,6 +59,7 @@ public class StudentFeedActivity extends AppCompatActivity
             fragment = new CardFragment();
             Bundle pageType = new Bundle();
             pageType.putString("type", "feed");
+            pageType.putBoolean("organizer", false);
             fragment.setArguments(pageType);
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
@@ -218,13 +219,19 @@ public class StudentFeedActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Go to home page
         } else if (id == R.id.nav_explore) {
-            startActivity(new Intent(StudentFeedActivity.this, ExploreActivity.class));
+            Intent act = new Intent(StudentFeedActivity.this, ExploreActivity.class);
+            act.putExtra("organizer", false);
+            startActivity(act);
             finish();
         } else if (id == R.id.nav_follow_orgs) {
-            startActivity(new Intent(StudentFeedActivity.this, OrganizationSelectionActivity.class ));
+            Intent act = new Intent(StudentFeedActivity.this, OrganizationSelectionActivity.class);
+            act.putExtra("organizer", false);
+            startActivity(act);
             finish();
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(StudentFeedActivity.this, SettingsActivity.class));
+            Intent act = new Intent(StudentFeedActivity.this, SettingsActivity.class);
+            act.putExtra("organizer", false);
+            startActivity(act);
             finish();
         } else if (id == R.id.nav_help) {
 
