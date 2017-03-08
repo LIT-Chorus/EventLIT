@@ -31,13 +31,42 @@ import java.util.concurrent.Executor;
 public class EventUtils {
 
     private static DatabaseReference eventsDB = DatabaseUtils.getEventsDB();
+
+    private static Event getEventSnapshot(DataSnapshot eventSnapshot) {
+        String orgId = eventSnapshot.child("orgid").getValue().toString();
+        // Get all fields in an event object
+        String title = eventSnapshot.child("title").getValue()
+                .toString();
+        String category = eventSnapshot.child("category").getValue().toString();
+        String description = eventSnapshot.child("description").getValue()
+                .toString();
+
+        Calendar startDate = new GregorianCalendar();
+        String startMilli = eventSnapshot.child("startDate").getValue()
+                .toString();
+        startDate.setTimeInMillis(Long.parseLong(startMilli));
+
+        Calendar endDate = new GregorianCalendar();
+        String endMilli = eventSnapshot.child("endDate").getValue().toString();
+        endDate.setTimeInMillis(Long.parseLong(endMilli));
+
+        String location = eventSnapshot.child("location").getValue().toString();
+        int maxCapacity = Integer
+                .parseInt(eventSnapshot.child("maxCapacity")
+                        .getValue().toString());
+        Event event = new Event(title, description, orgId, startDate,
+                endDate,location, category, maxCapacity);
+        return event;
+
+    }
+
     /**
      * Fetch a list of events and save it off in an ArrayAdapter. Notify the ArrayAdapter of the
      * change.
      */
-    public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
+    private static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
-                                        final String orgId, final boolean notifyComplete){
+                                        final String orgId, final int popularity, final boolean notifyComplete){
         final DatabaseReference events = eventsDB.child(orgId);
         ValueEventListener eventListener = new ValueEventListener() {
             // Get a snapshot of events db
@@ -47,31 +76,8 @@ public class EventUtils {
                     if (eventSnapshot.hasChild("orgid")){
                         String eventOrgId = eventSnapshot.child("orgid").getValue().toString();
                         if (eventOrgId.equals(orgId)){
-
-                            // Get all fields in an event object
-                            String title = eventSnapshot.child("title").getValue()
-                                    .toString();
-                            String category = eventSnapshot.child("category").getValue().toString();
-                            String description = eventSnapshot.child("description").getValue()
-                                    .toString();
-
-                            Calendar startDate = new GregorianCalendar();
-                            String startMilli = eventSnapshot.child("startDate").getValue()
-                                    .toString();
-                            startDate.setTimeInMillis(Long.parseLong(startMilli));
-
-                            Calendar endDate = new GregorianCalendar();
-                            String endMilli = eventSnapshot.child("endDate").getValue().toString();
-                            endDate.setTimeInMillis(Long.parseLong(endMilli));
-
-                            String location = eventSnapshot.child("location").getValue().toString();
-                            int maxCapacity = Integer
-                                    .parseInt(eventSnapshot.child("maxCapacity")
-                                            .getValue().toString());
-
                             // Create an event object and add it to the adapter
-                            Event event = new Event(title, description, orgId, startDate,
-                                    endDate,location, category, maxCapacity);
+                            Event event = getEventSnapshot(eventSnapshot);
                             adapterArray.add(event);
                             adapter.notifyItemChanged(adapter.getItemCount() - 1);
                         }
@@ -92,6 +98,36 @@ public class EventUtils {
     }
 
     /**
+     *
+     * @param adapter
+     * @param minPopularity -
+     * @param eventList
+     */
+    public static void filterEventsByPopularity(final CardFragment.MyAdapter adapter,
+                                                final int minPopularity,
+                                                final ArrayList<Event> eventList) {
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Enumerate through all the organizations
+                for (DataSnapshot org : dataSnapshot.getChildren()){
+                    // Makes call to other method to get events for the org
+                    getEventsByOrgId(adapter, eventList, org.getKey(), minPopularity, true);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("DatabaseUtils", "Could not retrieve events");
+            }
+        };
+        eventsDB.addValueEventListener(eventListener);
+    }
+
+
+    /**
      * Fetch a list of all events regardless of organization.
      *
      * @param adapter - the adapter to notify once the ArrayList has been populated
@@ -105,7 +141,7 @@ public class EventUtils {
                 // Enumerate through all the organizations
                 for (DataSnapshot org : dataSnapshot.getChildren()){
                     // Makes call to other method to get events for the org
-                    getEventsByOrgId(adapter, eventList, org.getKey(), true);
+                    getEventsByOrgId(adapter, eventList, org.getKey(), 0, true);
                     adapter.notifyDataSetChanged();
                 }
 
