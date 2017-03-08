@@ -52,6 +52,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".ExploreActivity"
+            android:exported="true"
+            android:label="@string/title_activity_explore"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".OrganizerDetailedEventActivity"
             android:exported="true"
             android:label="Event"
@@ -69,19 +75,21 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".OrganizationSelectionActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ChangePasswordActivity"
             android:exported="true"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CreateEventActivity"
             android:label="@string/title_activity_create_event"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
