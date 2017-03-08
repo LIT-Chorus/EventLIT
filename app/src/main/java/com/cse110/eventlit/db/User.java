@@ -90,10 +90,24 @@ public class User {
 
     /**
      * Checks if a user is following a given org
-     * @param orgid
+     * @param orgid - the org id of an organization
      */
     public boolean isFollowingOrg(String orgid) {
         return orgsFollowing.contains(orgid);
+    }
+
+    /**
+     * Given an event id, returns the user's RSVP status
+     * @param eventId - the event id of an event
+     * @return the RSVP status of the event, or null if the event doesn't exist
+     */
+    public RSVP.Status attendanceStatus(String eventId) {
+        if (eventsFollowing.containsKey(eventId)) {
+            return eventsFollowing.get(eventId).getRsvpStatus();
+        }
+        else {
+            return null;
+        }
     }
 
     /**
