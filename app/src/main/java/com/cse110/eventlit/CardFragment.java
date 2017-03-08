@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
+import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.OrganizationUtils;
@@ -20,7 +21,9 @@ import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by rahulsabnis on 2/22/17.
@@ -57,8 +60,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
             User user = UserUtils.getCurrentUser();
-            ArrayList<Event> list = UserUtils.getEventsFollowingSynch(user);
-            adapter = new MyAdapter(list);
+            //ArrayList<Event> eventsFollowing = UserUtils.getEventsFollowingSynch(user);
+            UserUtils.getEventsForOrgs(adapter, listEvents, user);
+            //adapter = new MyAdapter(list);
         } else {
             EventUtils.getAllEvents(adapter, listEvents);
         }

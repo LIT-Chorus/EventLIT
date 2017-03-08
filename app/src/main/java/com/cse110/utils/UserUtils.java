@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.RSVP;
@@ -214,6 +215,16 @@ public class UserUtils {
 
         return eventsFollowing;
     }
+
+    public static final void getEventsForOrgs(final CardFragment.MyAdapter adapter,
+                                              final ArrayList<Event> events,
+                                              User user) {
+        List<String> orgIds = user.getOrgsFollowing();
+        for (String orgId : orgIds) {
+            EventUtils.getEventsByOrgId(adapter, events, orgId, 0, true);
+        }
+    }
+
 
     public static final void updateUserOnBackend(User user, String uid) {
         DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);

@@ -66,7 +66,7 @@ public class EventUtils {
      * Fetch a list of events and save it off in an ArrayAdapter. Notify the ArrayAdapter of the
      * change.
      */
-    private static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
+    public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
                                         final String orgId, final int popularity, final boolean notifyComplete){
         final DatabaseReference events = eventsDB.child(orgId);
@@ -80,8 +80,10 @@ public class EventUtils {
                         if (eventOrgId.equals(orgId)){
                             // Create an event object and add it to the adapter
                             Event event = getEventSnapshot(eventSnapshot);
-                            adapterArray.add(event);
-                            adapter.notifyItemChanged(adapter.getItemCount() - 1);
+                            if (notifyComplete) {
+                                adapterArray.add(event);
+                                adapter.notifyItemChanged(adapter.getItemCount() - 1);
+                            }
                         }
                     }
                 }
