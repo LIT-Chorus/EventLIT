@@ -56,7 +56,7 @@ public class EventUtils {
         int maxCapacity = Integer
                 .parseInt(eventSnapshot.child("maxCapacity")
                         .getValue().toString());
-        Event event = new Event(title, description, orgId, startDate,
+        Event event = new Event(title, description, orgId, eventSnapshot.getKey(), startDate,
                 endDate,location, category, maxCapacity);
         return event;
 
