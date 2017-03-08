@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,12 +20,12 @@ public class User {
     private String lastName;
     private String email;
 
-    public List<RSVP> eventsFollowing;
+    public HashMap<String, RSVP> eventsFollowing;
     public List<String> orgsFollowing;
     public List<String> orgsManaging;
 
     public User() {
-        eventsFollowing = new ArrayList<>();
+        eventsFollowing = new HashMap<>();
         orgsFollowing = new ArrayList<>();
         orgsManaging = new ArrayList<>();
     }
@@ -42,7 +44,7 @@ public class User {
      */
     public User(String firstName, String lastName, String email,
                 @NonNull List<String> orgsFollowing,
-                @NonNull List<RSVP> eventsFollowing,
+                @NonNull HashMap<String, RSVP> eventsFollowing,
                 @NonNull List<String> orgsManaging)
     {
         this.firstName = firstName;
@@ -85,7 +87,7 @@ public class User {
      * @param status status as defined in Event.RSVPStatus
      */
     public void addEventFollowing(int orgid, String eventid, RSVP.Status status) {
-        eventsFollowing.add(new RSVP(orgid, eventid, status));
+        eventsFollowing.put(eventid, new RSVP(orgid, eventid, status));
     }
 
     public JSONObject toJSON() {
@@ -122,7 +124,7 @@ public class User {
         this.email = newData.email;
 
         this.orgsFollowing = new ArrayList<>(newData.orgsFollowing);
-        this.eventsFollowing = new ArrayList<>(newData.eventsFollowing);
+        this.eventsFollowing = new HashMap<>(newData.eventsFollowing);
         this.orgsManaging = new ArrayList<>(newData.orgsManaging);
 
         return this;
@@ -159,12 +161,12 @@ public class User {
         this.email = email;
     }
 
-    public List<RSVP> getEventsFollowing() {
-        return new ArrayList<>(eventsFollowing);
+    public Collection<RSVP> getEventsFollowing() {
+        return eventsFollowing.values();
     }
 
-    public void setEventsFollowing(List<RSVP> eventsFollowing) {
-        this.eventsFollowing = new ArrayList<>(eventsFollowing);
+    public void setEventsFollowing(HashMap<String, RSVP> eventsFollowing) {
+        this.eventsFollowing = new HashMap<>(eventsFollowing);
     }
 
     public List<String> getOrgsFollowing() {
