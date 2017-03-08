@@ -1,9 +1,15 @@
 package com.cse110.utils;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Organization;
+import com.cse110.eventlit.db.OrganizationList;
+import com.cse110.eventlit.db.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +25,10 @@ import java.util.concurrent.CountDownLatch;
  */
 
 public class OrganizationUtils {
+
+    private static List<Organization> orgsList;
+    private static OrganizationList orgsListListener;
+
     private static DatabaseReference orgsDB = DatabaseUtils.getOrganizationsDB();
 
     /**
@@ -91,10 +101,21 @@ public class OrganizationUtils {
         });
     }
 
-    public static Organization getOrgFromIdSynch(final String orgid) {
+    public static Organization getOrgFromIdSynch(final String orgid, final OnCompleteListener<User> completeListener) {
+
+        final WrappedTask<User> getOrgTask = new WrappedTask<>();
+
+        OnCompleteListener<AuthResult> getOrgCompleteListener = new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if (task.isSuccessful()) {
+
+                }
+            }
+        }
 
         final DatabaseReference orgDB = orgsDB.child(orgid);
-
         final Organization[] org = new Organization[1];
 
         final CountDownLatch latch = new CountDownLatch(1);
@@ -114,6 +135,7 @@ public class OrganizationUtils {
             public void onCancelled(DatabaseError databaseError) {
                 latch.countDown();
             }
+
         });
 
         try {
