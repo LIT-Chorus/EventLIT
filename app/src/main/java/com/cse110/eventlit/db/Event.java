@@ -27,6 +27,9 @@ public class Event {
      */
     private String orgid;
 
+
+    private String eventid;
+
     /**
      * Start and end dates of the event, as milliseconds since the Unix epoch (Jan 1, 1970).
      */
@@ -56,11 +59,12 @@ public class Event {
     /**
      * Full constructor containing all event information.
      */
-    public Event(String title, String description, String orgid, Calendar startDate,
+    public Event(String title, String description, String orgid, String eventid, Calendar startDate,
                  Calendar endDate, String location, String category, int maxCapacity) {
         this.title = title;
         this.description = description;
         this.orgid = orgid;
+        this.eventid = eventid;
         this.startDate = startDate.getTimeInMillis();
         this.endDate = endDate.getTimeInMillis();
         this.location = location;
@@ -73,24 +77,24 @@ public class Event {
      * Constructor less the start and end dates. The dates are automatically initialized to the
      * current date and time.
      */
-    public Event(String title, String description, String orgid, String location, String category,
+    public Event(String title, String description, String orgid, String eventid, String location, String category,
                  int maxCapacity) {
-        this(title, description, orgid,
+        this(title, description, orgid, eventid,
                 new GregorianCalendar(), new GregorianCalendar(), location, category, maxCapacity);
     }
 
     /**
      * Constructor less dates, location and max capacity.
      */
-    public Event(String title, String description, String orgid, String category) {
-        this(title, description, orgid, "Nowhere", category, 100);
+    public Event(String title, String description, String orgid, String eventid, String category) {
+        this(title, description, orgid, eventid, "Nowhere", category, 100);
     }
 
     /**
      * No-arg constructor, fills in fields with 'blank' information.
      */
     public Event() {
-        this("Untitled", "No description.", null, "None");
+        this("Untitled", "No description.", "No org", null, "None");
     }
 
     public long getEndDate() {
@@ -243,4 +247,13 @@ public class Event {
     public void setMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
+
+    public String getEventid() {
+        return eventid;
+    }
+
+    public void setEventid(String eventid) {
+        this.eventid = eventid;
+    }
+
 }
