@@ -27,7 +27,7 @@ public class FileStorageUtils {
 
     private static StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-    public static void uploadImageFromLocalFile(String id, Bitmap bitmap) throws FileNotFoundException{
+    public static void uploadImageFromLocalFile(String id, String extension, Bitmap bitmap) throws FileNotFoundException{
 
         Log.d(UPLOAD_IMAGE, "beginning of method");
 
@@ -37,7 +37,7 @@ public class FileStorageUtils {
         byte[] data = baos.toByteArray();
 
         StorageReference imageFolderRef = storageRef.child("images");
-        StorageReference imageRef = imageFolderRef.child(id + ".png");
+        StorageReference imageRef = imageFolderRef.child(id + extension);
 
         UploadTask uploadTask = imageRef.putBytes(data);
 

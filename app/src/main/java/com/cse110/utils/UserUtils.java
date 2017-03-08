@@ -289,36 +289,6 @@ public class UserUtils {
         userRef.setValue(user);
     }
 
-    // Wrapper to get around `final` restrictions when passing values to inner classes
-    static class WrappedTask<T> extends TaskCompletionSource<T> {
-        private Task<T> wrapped;
-
-        public void wrap(Task<T> newTask) {
-            wrapped = newTask;
-            super.setResult(wrapped.getResult()); // This will mark task as complete
-        }
-
-        public Task<T> unwrap() {
-            return getTask();
-        }
-
-        @Override
-        public Task<T> getTask() {
-            if (wrapped == null) {
-                return super.getTask();
-            } else {
-                return wrapped;
-            }
-        }
-
-        @Override
-        public void setResult(T result) {
-            super.setResult(result);
-            // If the person is setting the result, they don't want the wrapped task anymore.
-            wrapped = null;
-        }
-    }
-
     /**
      * For keeping track of changes in user data, and updating the associated user with it.
      * It's important that the initial User reference does not switch references,
