@@ -13,12 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_height"
         android:orientation="vertical"
-        android:weightSum="4">
+        android:weightSum="3.3">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="3.2">
+            android:layout_weight="2.7">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,8 +48,7 @@
                     android:textSize="@dimen/orgNameSize"
                     android:layout_marginBottom="8dp"
                     android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textStyle="bold" />
+                    android:ellipsize="end" />
 
             </LinearLayout>
 
@@ -125,24 +124,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="0.8"
-            android:weightSum="3.8"
+            android:layout_weight="0.6"
+            android:weightSum="3.4"
             android:orientation="horizontal"
             android:gravity="center_horizontal">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="#FFFFFF"
-                android:layout_weight="0.2"
-                android:id="@+id/line1">
-
-            </View>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/going"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 style="@style/EventButton"
@@ -163,7 +152,6 @@
                 android:id="@+id/interested"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:textStyle="bold"
                 style="@style/EventButton"
                 android:background="@color/interestedColor"
@@ -183,21 +171,11 @@
                 android:id="@+id/notGoing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:textStyle="bold"
                 style="@style/EventButton"
                 android:background="@color/notGoingColor"
                 android:layout_weight="1"
                 android:text="@string/cannotGo"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="#FFFFFF"
-                android:layout_weight="0.2"
-                android:id="@+id/line4">
-
-            </View>
 
         </LinearLayout>
 

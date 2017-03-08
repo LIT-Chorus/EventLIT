@@ -1,12 +1,14 @@
 package com.cse110.eventlit;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -46,8 +48,9 @@ import com.vansuita.pickimage.listeners.IPickResult;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatActivity implements IPickResult,
-        NavigationView.OnNavigationItemSelectedListener {
+public class SettingsActivity extends AppCompatActivity implements IPickResult
+//        , NavigationView.OnNavigationItemSelectedListener
+{
 
     private LinearLayout mChangePass;
     private LinearLayout mReqOrgStatus;
@@ -150,47 +153,47 @@ public class SettingsActivity extends AppCompatActivity implements IPickResult,
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.student_activity_main_scrolling_drawer, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
-            finish();
-        } else if (id == R.id.nav_explore) {
-            startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
-            finish();
-        } else if (id == R.id.nav_follow_orgs) {
-            startActivity(new Intent(SettingsActivity.this, OrganizationSelectionActivity.class ));
-            finish();
-        } else if (id == R.id.nav_settings) {
-            finish();
-        } else if (id == R.id.nav_help) {
-
-        } else if (id == R.id.nav_logout) {
-            UserUtils.logOut(new OnCompleteListener<User>() {
-                @Override
-                public void onComplete(@NonNull Task<User> task) {
-                    finish();
-                }
-            });
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.student_activity_main_scrolling_drawer, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle navigation view item clicks here.
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_home) {
+//            startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
+//            finish();
+//        } else if (id == R.id.nav_explore) {
+//            startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
+//            finish();
+//        } else if (id == R.id.nav_follow_orgs) {
+//            startActivity(new Intent(SettingsActivity.this, OrganizationSelectionActivity.class ));
+//            finish();
+//        } else if (id == R.id.nav_settings) {
+//            finish();
+//        } else if (id == R.id.nav_help) {
+//
+//        } else if (id == R.id.nav_logout) {
+//            UserUtils.logOut(new OnCompleteListener<User>() {
+//                @Override
+//                public void onComplete(@NonNull Task<User> task) {
+//                    finish();
+//                }
+//            });
+//        }
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        return false;
+//    }
 }
 
 

@@ -15,10 +15,10 @@
     <dimen name="icon_width">60dip</dimen>
     <dimen name="icon_height">60dip</dimen>
     <dimen name="icon_padding">8dp</dimen>
-    <dimen name="card_height">200dip</dimen>
+    <dimen name="card_height">225dip</dimen>
     <dimen name="text_size">12sp</dimen>
 
     <dimen name="drawablePadding">10dp</dimen>
     <dimen name="eventNameSize">16sp</dimen>
-    <dimen name="orgNameSize">10sp</dimen>
+    <dimen name="orgNameSize">12sp</dimen>
 </resources>
