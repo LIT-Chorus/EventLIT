@@ -129,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                                 mPasswordEntry.clearFocus();
                                 mEmailEntry.clearFocus();
                                 startActivity(openFeed);
+                                finish();
                             } else {
                                 Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
                                 mEmailEntry.getEditText().setText("");
@@ -136,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                                 mPasswordEntry.clearFocus();
                                 mEmailEntry.clearFocus();
                                 startActivity(openFeed);
+                                finish();
                             }
                         }
                     } else {
@@ -179,6 +181,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent forgotPage = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(forgotPage);
+                finish();
             }
         });
 
