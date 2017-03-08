@@ -80,8 +80,10 @@ public class EventUtils {
                         if (eventOrgId.equals(orgId)){
                             // Create an event object and add it to the adapter
                             Event event = getEventSnapshot(eventSnapshot);
-                            if (notifyComplete) {
+                            if (event.getAttendees().size() >= popularity) {
                                 adapterArray.add(event);
+                            }
+                            if (notifyComplete) {
                                 adapter.notifyItemChanged(adapter.getItemCount() - 1);
                             }
                         }
@@ -102,6 +104,11 @@ public class EventUtils {
     }
 
     /**
+     *
+     */
+
+    /**
+     * Given a lower bound on popularity, return the all events with these many
      *
      * @param adapter
      * @param minPopularity -
