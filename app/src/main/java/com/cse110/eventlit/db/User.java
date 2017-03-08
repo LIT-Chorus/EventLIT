@@ -89,6 +89,14 @@ public class User {
     }
 
     /**
+     * Checks if a user is following a given org
+     * @param orgid
+     */
+    public boolean isFollowingOrg(String orgid) {
+        return orgsFollowing.contains(orgid);
+    }
+
+    /**
      * Add an event to the user's event following list.
      * @param orgid Organization ID
      * @param eventid Event ID

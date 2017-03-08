@@ -60,8 +60,8 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
                 public void onClick(View v) {
                     if(mOrgName.isChecked())
                     {
-                        int index = getAdapterPosition();
                         User user = UserUtils.getCurrentUser();
+                        int index = getAdapterPosition();
                         if (user != null && mOrganizations.size() != 0) {
                             user.removeOrgFollowing(mOrganizations.get(index).getOrgId());
                             UserUtils.updateCurrentUser(user);
@@ -71,10 +71,10 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
 
                     else
                     {
+                        User user = UserUtils.getCurrentUser();
                         // Get the organization selected in the checkbox
                         // Add it to the list of orgs the user is following
                         int index = getAdapterPosition();
-                        User user = UserUtils.getCurrentUser();
                         if (user != null && mOrganizations.size() != 0) {
                             Log.w("Added Org", mOrganizations.get(index).getOrgId());
                             user.addOrgFollowing(mOrganizations.get(index).getOrgId());
@@ -113,6 +113,12 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     @Override
     public void onBindViewHolder(OrganizationsAdapter.MyViewHolder holder, int position) {
         holder.mOrgName.setText(mOrganizations.get(position).getName());
+        User user = UserUtils.getCurrentUser();
+        String orgId = mOrganizations.get(position).getOrgId();
+        if (user != null && user.isFollowingOrg(orgId)) {
+            holder.mOrgName.setChecked(true);
+        }
+
     }
 
     /**
