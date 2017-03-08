@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -106,7 +107,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-            Event e = list.get(position);
+            final Event e = list.get(position);
             String category = e.getCategory();
             String eventName = e.getTitle();
 
@@ -131,6 +132,31 @@ public class CardFragment extends android.support.v4.app.Fragment {
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();
             mMaxCapacity = e.getMaxCapacity();
+
+            holder.goingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.GOING);
+                    UserUtils.updateEventsFollowing(e.getEventid(), status);
+                }
+            });
+
+            holder.interestedButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.INTERESTED);
+                    UserUtils.updateEventsFollowing(e.getEventid(), status);
+                }
+            });
+
+            holder.notGoingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.NOT_GOING);
+                    UserUtils.updateEventsFollowing(e.getEventid(), status);
+                }
+            });
+
         }
 
         @Override
@@ -148,6 +174,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatTextView dateTextView;
         public AppCompatTextView orgNameTextView;
 
+        public AppCompatButton goingButton;
+        public AppCompatButton interestedButton;
+        public AppCompatButton notGoingButton;
+
         public MyViewHolder(View v) {
             super(v);
             timeTextView = (AppCompatTextView) v.findViewById(R.id.time);
@@ -156,6 +186,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
             eventNameTextView = (AppCompatTextView) v.findViewById(R.id.eventName);
             dateTextView = (AppCompatTextView) v.findViewById(R.id.dateView);
             orgNameTextView = (AppCompatTextView) v.findViewById(R.id.orgName);
+
+            goingButton = (AppCompatButton) v.findViewById(R.id.going);
+            interestedButton = (AppCompatButton) v.findViewById(R.id.interested);
+            notGoingButton = (AppCompatButton) v.findViewById(R.id.notGoing);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
