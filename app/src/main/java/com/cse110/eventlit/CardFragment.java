@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.OrganizationUtils;
@@ -117,8 +118,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
 
+            Organization org = OrganizationUtils.getOrgFromIdSynch(e.getOrgid());
 
-//            holder.orgNameTextView.setText(UserUtils.getCurrentUser());
+            holder.orgNameTextView.setText(org.getName());
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();
             mMaxCapacity = e.getMaxCapacity();
@@ -161,6 +163,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("description", mDescriptionText);
                     extras.putInt("num_attending", mNumAttendees);
                     extras.putInt("max_capacity", mMaxCapacity);
+                    extras.putString("org_name", orgNameTextView.getText().toString());
                     openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);
                 }
