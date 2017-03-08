@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -71,8 +72,7 @@ public class UserUtils {
                 } else {
                     // Old password was wrong
                     Log.w("Password Reset", "Old password was wrong");
-                    Task<String> invalidPassword = new PasswordTask("Old Password was Wrong");
-                    onComplete.onComplete(invalidPassword);
+                    onComplete.onComplete(Tasks.forResult("Old Password was Wrong"));
                 }
             }
         };
@@ -97,17 +97,13 @@ public class UserUtils {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.w("Password Reset", "Successful!");
-
-                    PasswordTask successfulPasswordResetTask = new PasswordTask("Reset Success!");
-                    onComplete.onComplete(successfulPasswordResetTask);
+                    onComplete.onComplete(Tasks.forResult("Reset Success!"));
                 }
                 else {
                     // New Password Rejected by Firebase
                     Log.w("Password Reset", "Firebase does not like your password.");
                     String fbErrorMessage = task.getException().getMessage().toString();
-                    PasswordTask invalidPassword = new
-                            PasswordTask(fbErrorMessage);
-                    onComplete.onComplete(invalidPassword);
+                    onComplete.onComplete(Tasks.forResult(fbErrorMessage));
 
                 }
             }
