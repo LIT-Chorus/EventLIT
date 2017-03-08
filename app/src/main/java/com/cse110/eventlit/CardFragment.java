@@ -21,10 +21,12 @@ import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by rahulsabnis on 2/22/17.
@@ -66,9 +68,23 @@ public class CardFragment extends android.support.v4.app.Fragment {
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
             User user = UserUtils.getCurrentUser();
-            ArrayList<Event> eventsFollowing = UserUtils.getEventsFollowingSynch(user);
+            Task<ArrayList<Event>> events = UserUtils.getEventsFollowing(null);
+            try {
+                Tasks.await(events);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            ArrayList<Event> eventsFollowing = events.getResult();
+
             UserUtils.getEventsForOrgs(adapter, listEvents, user);
-            listEvents.addAll(eventsFollowing);
+
+            for (int i = 0; i < eventsFollowing.size(); i++) {
+                if (!listEvents.contains(eventsFollowing.get(i))) {
+                    listEvents.add(eventsFollowing.get(i));
+                }
+            }
+
             //adapter = new MyAdapter(list);
         } else {
             EventUtils.getAllEvents(adapter, listEvents);
