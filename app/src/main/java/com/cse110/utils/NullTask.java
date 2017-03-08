@@ -56,7 +56,7 @@ public class NullTask<T> extends Task<T> {
     @Nullable
     @Override
     public Exception getException() {
-        return null;
+        return success ? null : new Exception();
     }
 
     @NonNull
