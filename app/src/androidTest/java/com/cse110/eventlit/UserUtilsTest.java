@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -79,6 +80,14 @@ public class UserUtilsTest {
         }
 
 
+    }
+
+    @Test
+    public void testgetEventsFollowingAsync() throws Exception {
+        Task<ArrayList<Event>> eventsTask = UserUtils.getEventsFollowing(null);
+
+        Tasks.await(eventsTask);
+        Log.wtf("yo", eventsTask.getResult().toString());
     }
 
     @Test

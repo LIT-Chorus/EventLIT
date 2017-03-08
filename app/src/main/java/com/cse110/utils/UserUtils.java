@@ -25,12 +25,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
@@ -219,6 +221,32 @@ public class UserUtils {
         }
 
         return eventsFollowing;
+    }
+
+    public static Task<ArrayList<Event>> getEventsFollowing(final OnCompleteListener<ArrayList<Event>> completeListener) {
+        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
+        currentUserDB.child("eventsFollowing").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Event> eventMap = (Map<String, Event>) dataSnapshot.getValue();
+                // If null, means that there are no events following -- initialize empty map.
+                if (eventMap == null)
+                    eventMap = new HashMap<String, Event>();
+                ArrayList<Event> events = new ArrayList<>(eventMap.values());
+                Task<ArrayList<Event>> eventsTask = Tasks.forResult(events);
+
+                wrappedTask.wrap(eventsTask);
+                if (completeListener != null)
+                    completeListener.onComplete(eventsTask);
+                Log.d("getEventsFollowing", "Got events following successfully!");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("getEventsFollowing", currentUser.toString());
+            }
+        });
+        return wrappedTask.unwrap();
     }
 
     public static final void getEventsForOrgs(final CardFragment.MyAdapter adapter,
