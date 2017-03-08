@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -210,8 +211,7 @@ public class EventUtils {
         OnCompleteListener onEventCreated = new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
-                Task<String> eventTask = new EventTask(eventKey);
-                onCompleteListener.onComplete(eventTask);
+                onCompleteListener.onComplete(Tasks.forResult(eventKey));
             }
         };
         eventRef.setValue(event).addOnCompleteListener(onEventCreated);
