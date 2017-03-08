@@ -33,8 +33,9 @@ public class EventUtils {
     private static DatabaseReference eventsDB = DatabaseUtils.getEventsDB();
 
     private static Event getEventSnapshot(DataSnapshot eventSnapshot) {
-        String orgId = eventSnapshot.child("orgid").getValue().toString();
         // Get all fields in an event object
+        String orgId = eventSnapshot.child("orgid").getValue().toString();
+
         String title = eventSnapshot.child("title").getValue()
                 .toString();
         String category = eventSnapshot.child("category").getValue().toString();
