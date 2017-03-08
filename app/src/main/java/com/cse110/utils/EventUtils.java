@@ -8,6 +8,7 @@ import android.util.Log;
 import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.RSVP;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,7 +69,9 @@ public class EventUtils {
      */
     public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
-                                        final String orgId, final int popularity, final boolean notifyComplete){
+                                        final String orgId, final int popularity,
+                                        final ArrayList<String> categories,
+                                        final boolean notifyComplete){
         final DatabaseReference events = eventsDB.child(orgId);
         ValueEventListener eventListener = new ValueEventListener() {
             // Get a snapshot of events db
@@ -80,8 +83,17 @@ public class EventUtils {
                         if (eventOrgId.equals(orgId)){
                             // Create an event object and add it to the adapter
                             Event event = getEventSnapshot(eventSnapshot);
-                            if (event.getAttendees().size() >= popularity) {
-                                adapterArray.add(event);
+                            if (categories != null && categories.size() > 0) {
+                                String category = event.getCategory();
+                                if (categories.contains(category) &&
+                                        event.getAttendees().size() >= popularity) {
+                                    adapterArray.add(event);
+                                }
+                            }
+                            else {
+                                if (event.getAttendees().size() >= popularity) {
+                                    adapterArray.add(event);
+                                }
                             }
                             if (notifyComplete) {
                                 adapter.notifyItemChanged(adapter.getItemCount() - 1);
@@ -114,8 +126,9 @@ public class EventUtils {
      * @param minPopularity -
      * @param eventList
      */
-    public static void filterEventsByPopularity(final CardFragment.MyAdapter adapter,
+    public static void filterEvents(final CardFragment.MyAdapter adapter,
                                                 final int minPopularity,
+                                                final ArrayList<String> categories,
                                                 final ArrayList<Event> eventList) {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
@@ -123,7 +136,7 @@ public class EventUtils {
                 // Enumerate through all the organizations
                 for (DataSnapshot org : dataSnapshot.getChildren()){
                     // Makes call to other method to get events for the org
-                    getEventsByOrgId(adapter, eventList, org.getKey(), minPopularity, true);
+                    getEventsByOrgId(adapter, eventList, org.getKey(), minPopularity, categories, true);
                     adapter.notifyDataSetChanged();
                 }
 
@@ -152,7 +165,7 @@ public class EventUtils {
                 // Enumerate through all the organizations
                 for (DataSnapshot org : dataSnapshot.getChildren()){
                     // Makes call to other method to get events for the org
-                    getEventsByOrgId(adapter, eventList, org.getKey(), 0, true);
+                    getEventsByOrgId(adapter, eventList, org.getKey(), 0, null, true);
                     adapter.notifyDataSetChanged();
                 }
 
