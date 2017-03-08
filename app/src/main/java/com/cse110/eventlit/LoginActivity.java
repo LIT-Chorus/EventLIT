@@ -116,21 +116,26 @@ public class LoginActivity extends AppCompatActivity {
 
                         User curr = UserUtils.getCurrentUser();
 
-                        if (UserUtils.getOrgsManagingSynch(curr).size() == 0) {
-
-                            Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
-                            mEmailEntry.getEditText().setText("");
-                            mPasswordEntry.getEditText().setText("");
-                            mPasswordEntry.clearFocus();
-                            mEmailEntry.clearFocus();
-                            startActivity(openFeed);
+                        if (curr == null) {
+                            Log.d("User", null);
                         } else {
-                            Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
-                            mEmailEntry.getEditText().setText("");
-                            mPasswordEntry.getEditText().setText("");
-                            mPasswordEntry.clearFocus();
-                            mEmailEntry.clearFocus();
-                            startActivity(openFeed);
+
+                            if (curr.orgsManaging.size() == 0) {
+
+                                Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                                mEmailEntry.getEditText().setText("");
+                                mPasswordEntry.getEditText().setText("");
+                                mPasswordEntry.clearFocus();
+                                mEmailEntry.clearFocus();
+                                startActivity(openFeed);
+                            } else {
+                                Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
+                                mEmailEntry.getEditText().setText("");
+                                mPasswordEntry.getEditText().setText("");
+                                mPasswordEntry.clearFocus();
+                                mEmailEntry.clearFocus();
+                                startActivity(openFeed);
+                            }
                         }
                     }
 

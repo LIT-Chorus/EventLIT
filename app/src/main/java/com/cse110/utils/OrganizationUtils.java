@@ -70,7 +70,7 @@ public class OrganizationUtils {
      * @param orgs
      * @param signal
      */
-    static final void addOrgFromId(final int orgid, final List<Organization> orgs, final CountDownLatch signal) {
+    static void addOrgFromId(final int orgid, final List<Organization> orgs, final CountDownLatch signal) {
 
         final DatabaseReference orgDB = orgsDB.child(Long.toString(orgid));
 

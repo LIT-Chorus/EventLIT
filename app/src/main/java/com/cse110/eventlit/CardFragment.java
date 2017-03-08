@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -115,6 +116,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
+
+
 //            holder.orgNameTextView.setText(UserUtils.getCurrentUser());
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();

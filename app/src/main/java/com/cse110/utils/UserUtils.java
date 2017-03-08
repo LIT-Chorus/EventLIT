@@ -241,9 +241,9 @@ public class UserUtils {
 
     // TODO create methods to modify the User database
 
-    public static final List<Organization> getOrgsManagingSynch(User user) {
+    public static final ArrayList<Organization> getOrgsManagingSynch(User user) {
 
-        List<Organization> orgsManaging = new ArrayList<>();
+        ArrayList<Organization> orgsManaging = new ArrayList<>();
 
         List<Integer> orgid_managing = user.orgsManaging;
         CountDownLatch finished = new CountDownLatch(orgid_managing.size());
