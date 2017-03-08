@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/student_app_bar_main_scrolling"
+        layout="@layout/organizer_app_bar_main_scrolling"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -21,8 +21,8 @@
         android:fitsSystemWindows="true"
         android:background="@drawable/side_nav_bar"
         app:headerLayout="@layout/nav_header_main_scrolling"
-        app:itemTextColor="#BDBDBD"
-        app:itemIconTint="#BDBDBD"
+        app:itemTextColor="#FFFFFF"
+        app:itemIconTint="#FFFFFF"
         app:menu="@menu/organizer_activity_main_scrolling_drawer"
         />
 

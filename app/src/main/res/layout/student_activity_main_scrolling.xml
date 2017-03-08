@@ -20,8 +20,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="@drawable/side_nav_bar"
-        app:itemTextColor="#BDBDBD"
-        app:itemIconTint="#BDBDBD"
+        app:itemTextColor="#FFFFFF"
+        app:itemIconTint="#FFFFFF"
         app:headerLayout="@layout/nav_header_main_scrolling"
         app:menu="@menu/student_activity_main_scrolling_drawer" />
 
