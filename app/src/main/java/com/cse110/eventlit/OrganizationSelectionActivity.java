@@ -2,76 +2,63 @@ package com.cse110.eventlit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.cse110.eventlit.db.Organization;
+import com.cse110.eventlit.db.User;
+import com.cse110.utils.UserUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrganizationSelectionActivity extends AppCompatActivity {
+public class OrganizationSelectionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private RecyclerView mRecyclerView;
-    public EditText search;
-    private LinearLayoutManager mLinearLayoutManager;
-    private List<Organization> list = new ArrayList<>();
-    private OrganizationsAdapter adapter;
+    private OrganizationSelectionFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organization_selection);
-        search = (EditText) findViewById(R.id.search);
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_orgs);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-       adapter = new OrganizationsAdapter(getApplicationContext());
-        mRecyclerView.setAdapter(adapter);
-        list = adapter.getmOrganizations();
-        addTextListener();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-    public void addTextListener(){
+        FragmentManager fm = getSupportFragmentManager();
+        android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
-        search.addTextChangedListener(new TextWatcher() {
+        if (fragment == null) {
+            fragment = new OrganizationSelectionFragment();
+            mFragment = (OrganizationSelectionFragment) fragment;
+            fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+        }
 
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence query, int start, int before, int count) {
-
-                //set the list to have all of the organizations before filtering
-                int squery = query.length();
-                query = query.toString().toLowerCase();
-
-                ArrayList<Organization> filteredList = new ArrayList<>();
-
-                for (int i = 0; i < list.size(); i++) {
-
-                    final String text = list.get(i).getName().toLowerCase();
-                    if (text.contains(query)) {
-                        Log.d("filter", String.valueOf(squery));
-                        filteredList.add(list.get(i));
-                    }
-                }
-
-                Log.d("filter size", String.valueOf(list.size()));
-
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(OrganizationSelectionActivity.this));
-                adapter = new OrganizationsAdapter(OrganizationSelectionActivity.this, filteredList);
-                mRecyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();  // data set changed
-            }
-        });
     }
 
     @Override
@@ -80,4 +67,62 @@ public class OrganizationSelectionActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
+                // see https://code.google.com/p/android/issues/detail?id=24599
+                searchView.clearFocus();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mFragment.filter(newText);
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            startActivity(new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class));
+            finish();
+        } else if (id == R.id.nav_explore) {
+            startActivity(new Intent(OrganizationSelectionActivity.this, ExploreActivity.class));
+            finish();
+        } else if (id == R.id.nav_follow_orgs) {
+            //
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(OrganizationSelectionActivity.this, SettingsActivity.class));
+            finish();
+        } else if (id == R.id.nav_help) {
+
+        } else if (id == R.id.nav_logout) {
+            UserUtils.logOut(new OnCompleteListener<User>() {
+                @Override
+                public void onComplete(@NonNull Task<User> task) {
+                    finish();
+                }
+            });
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
