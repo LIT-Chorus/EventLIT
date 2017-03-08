@@ -154,10 +154,10 @@ public class UserUtils {
 
         List<Organization> orgsFollowing = new ArrayList<>();
 
-        List<Integer> orgid_following = user.orgsFollowing;
+        List<String> orgid_following = user.orgsFollowing;
         CountDownLatch finished = new CountDownLatch(orgid_following.size());
 
-        for (int orgid : orgid_following) {
+        for (String orgid : orgid_following) {
             OrganizationUtils.addOrgFromId(orgid, orgsFollowing, finished);
         }
 
@@ -177,10 +177,10 @@ public class UserUtils {
 
         ArrayList<Organization> orgsManaging = new ArrayList<>();
 
-        List<Integer> orgid_managing = user.orgsManaging;
+        List<String> orgid_managing = user.orgsManaging;
         CountDownLatch finished = new CountDownLatch(orgid_managing.size());
 
-        for (int orgid : orgid_managing) {
+        for (String orgid : orgid_managing) {
             OrganizationUtils.addOrgFromId(orgid, orgsManaging, finished);
         }
 

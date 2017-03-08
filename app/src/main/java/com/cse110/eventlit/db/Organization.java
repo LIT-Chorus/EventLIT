@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 public class Organization {
     // Firebase id for the organization
-    private int id;
+    private String id;
 
     // Name of the organization
     private String name;
@@ -20,7 +20,7 @@ public class Organization {
      * @param id - orgId on the Firebase DB
      * @param name - the organization's name
      */
-    public Organization(int id, String name){
+    public Organization(String id, String name){
         this.id = id;
         this.name = name;
     }
@@ -29,7 +29,7 @@ public class Organization {
      * Getter method for the organization id private variable
      * @return id
      */
-    public int getOrgId(){
+    public String getOrgId(){
         return id;
     }
 

@@ -19,8 +19,8 @@ public class User {
     private String email;
 
     public List<RSVP> eventsFollowing;
-    public List<Integer> orgsFollowing;
-    public List<Integer> orgsManaging;
+    public List<String> orgsFollowing;
+    public List<String> orgsManaging;
 
     public User() {
         eventsFollowing = new ArrayList<>();
@@ -41,9 +41,9 @@ public class User {
      * for existing users.
      */
     public User(String firstName, String lastName, String email,
-                @NonNull List<Integer> orgsFollowing,
+                @NonNull List<String> orgsFollowing,
                 @NonNull List<RSVP> eventsFollowing,
-                @NonNull List<Integer> orgsManaging)
+                @NonNull List<String> orgsManaging)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -66,7 +66,7 @@ public class User {
      * Add an org to the user's following list.
      * @param orgid Organization ID
      */
-    public void addOrgFollowing(int orgid) {
+    public void addOrgFollowing(String orgid) {
         orgsFollowing.add(orgid);
     }
 
@@ -74,7 +74,7 @@ public class User {
      * Add an org to the user's managing list.
      * @param orgid Organization ID
      */
-    public void addOrgManaging(int orgid) {
+    public void addOrgManaging(String orgid) {
         orgsManaging.add(orgid);
     }
 

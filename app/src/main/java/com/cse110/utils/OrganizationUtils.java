@@ -35,7 +35,7 @@ public class OrganizationUtils {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Reindex and add new organziations
                 for (DataSnapshot shot : dataSnapshot.getChildren()) {
-                    int orgKey = Integer.valueOf(shot.getKey());
+                    String orgKey = shot.getKey();
                     String orgName = shot.getValue().toString();
                     Organization org = new Organization(orgKey, orgName);
 
@@ -69,9 +69,9 @@ public class OrganizationUtils {
      * @param orgs
      * @param signal
      */
-    static void addOrgFromId(final int orgid, final List<Organization> orgs, final CountDownLatch signal) {
+    public static void addOrgFromId(final String orgid, final List<Organization> orgs, final CountDownLatch signal) {
 
-        final DatabaseReference orgDB = orgsDB.child(Long.toString(orgid));
+        final DatabaseReference orgDB = orgsDB.child(orgid);
 
 
         orgDB.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -91,9 +91,9 @@ public class OrganizationUtils {
         });
     }
 
-    static final Organization getOrgFromIdSynch(final int orgid) {
+    public static Organization getOrgFromIdSynch(final String orgid) {
 
-        final DatabaseReference orgDB = orgsDB.child(Long.toString(orgid));
+        final DatabaseReference orgDB = orgsDB.child(orgid);
 
         final Organization[] org = new Organization[1];
 
