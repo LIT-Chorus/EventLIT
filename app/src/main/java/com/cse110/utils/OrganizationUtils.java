@@ -1,10 +1,16 @@
 package com.cse110.utils;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Organization;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.cse110.eventlit.db.OrganizationList;
+import com.cse110.eventlit.db.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +27,10 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class OrganizationUtils {
+
+    private static List<Organization> orgsList;
+    private static OrganizationList orgsListListener;
+
     private static DatabaseReference orgsDB = DatabaseUtils.getOrganizationsDB();
 
     /**
@@ -93,8 +103,9 @@ public class OrganizationUtils {
 
     public static void getOrgFromIdAsync(final String orgid, final OnCompleteListener<Organization> onComplete) {
 
-        final DatabaseReference orgDB = orgsDB.child(orgid);
+        final WrappedTask<User> getOrgTask = new WrappedTask<>();
 
+        final DatabaseReference orgDB = orgsDB.child(orgid);
         final Organization[] org = new Organization[1];
 
         orgDB.addValueEventListener(new ValueEventListener() {
@@ -117,6 +128,7 @@ public class OrganizationUtils {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
         });
     }
 }
