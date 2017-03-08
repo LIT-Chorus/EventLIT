@@ -1,41 +1,32 @@
 package com.cse110.eventlit;
 
 
-import android.annotation.TargetApi;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 //import com.cse110.chrous.R;
 
+import com.cse110.eventlit.db.User;
+import com.cse110.utils.UserUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.vansuita.pickimage.bean.PickResult;
@@ -44,32 +35,32 @@ import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.enums.EPickType;
 import com.vansuita.pickimage.listeners.IPickResult;
 
-import java.util.List;
-
 /**
- * A {@link PreferenceActivity} that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
+ * A {@link PreferenceActivity} that presents a set of application activity_settings. On
+ * handset devices, activity_settings are presented as a single list. On tablets,
+ * activity_settings are split by category, with category headers shown to the left of
+ * the list of activity_settings.
  * <p>
  * See <a href="http://developer.android.com/design/patterns/settings.html">
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatActivity implements IPickResult {
+public class SettingsActivity extends AppCompatActivity implements IPickResult,
+        NavigationView.OnNavigationItemSelectedListener {
 
     private LinearLayout mChangePass;
     private LinearLayout mReqOrgStatus;
     private de.hdodenhof.circleimageview.CircleImageView mProfilePhoto;
-    private TextView mName;
+    private AppCompatTextView mName;
+    private SwitchCompat mSwitch;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setupActionBar();
-        setContentView(R.layout.settings);
+        setContentView(R.layout.activity_settings);
 
         // My Code
 
@@ -87,8 +78,12 @@ public class SettingsActivity extends AppCompatActivity implements IPickResult {
         } */
 
         // Set user's name
-        mName = (TextView) findViewById(R.id.name);
+        mName = (AppCompatTextView) findViewById(R.id.name);
         mName.setText(user.getDisplayName());
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 
         // Initialize buttons
@@ -147,6 +142,54 @@ public class SettingsActivity extends AppCompatActivity implements IPickResult {
             //TODO: do what you have to do with r.getError();
             Toast.makeText(this, r.getError().getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.student_activity_main_scrolling_drawer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            startActivity(new Intent(SettingsActivity.this, StudentFeedActivity.class));
+            finish();
+        } else if (id == R.id.nav_explore) {
+            startActivity(new Intent(SettingsActivity.this, ExploreActivity.class));
+            finish();
+        } else if (id == R.id.nav_follow_orgs) {
+            startActivity(new Intent(SettingsActivity.this, OrganizationSelectionActivity.class ));
+            finish();
+        } else if (id == R.id.nav_settings) {
+            finish();
+        } else if (id == R.id.nav_help) {
+
+        } else if (id == R.id.nav_logout) {
+            UserUtils.logOut(new OnCompleteListener<User>() {
+                @Override
+                public void onComplete(@NonNull Task<User> task) {
+                    finish();
+                }
+            });
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
     }
 }
 

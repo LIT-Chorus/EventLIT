@@ -21,8 +21,12 @@ public class WrappedTask<T> extends TaskCompletionSource<T> {
      */
     public void wrap(Task<T> newTask) {
         wrapped = newTask;
-        super.setResult(wrapped.getResult());       // Will mark task as complete
-        super.setException(wrapped.getException()); // Set success based on existence of Exception
+        super.setResult(wrapped.getResult());
+        // Will mark task as complete
+        if (wrapped.getException() != null) {
+            super.setException(wrapped.getException());
+        }
+         // Set success based on existence of Exception
     }
 
     public Task<T> unwrap() {

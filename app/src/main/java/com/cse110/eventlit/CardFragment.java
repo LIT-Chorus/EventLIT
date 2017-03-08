@@ -123,7 +123,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 }
             });
 
-
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();
             mMaxCapacity = e.getMaxCapacity();

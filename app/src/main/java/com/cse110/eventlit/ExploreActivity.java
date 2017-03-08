@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cse110.utils.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -77,25 +78,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         // TODO update prof pic
     }
 
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            new AlertDialog.Builder(this, R.style.AlertDialogCustom)
-                    .setTitle("Really Exit?")
-                    .setMessage("Are you sure you want to exit?")
-                    .setNegativeButton(R.string.no, null)
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            finish();
-                        }
-                    }).create().show();
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -138,9 +120,18 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             startActivity(new Intent(ExploreActivity.this, SettingsActivity.class));
         } else if (id == R.id.nav_help) {
 
+        } else if (id == R.id.nav_logout) {
+//            UserUtils.logOut(mCompleteListener);
+            finish();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ExploreActivity.this, StudentFeedActivity.class));
+        finish();
     }
 }

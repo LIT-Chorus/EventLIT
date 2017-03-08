@@ -83,7 +83,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-            //android:background="@color/common_google_signin_btn_text_dark_disabled"
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="106dp"
@@ -93,7 +92,7 @@
                 android:src="@drawable/ic_profile"
                 android:id="@+id/profilePhoto" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:text="@string/pref_default_display_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +106,7 @@
                 android:textAllCaps="true"
                 android:textAlignment="center" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:text="Organizer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -116,12 +115,6 @@
                 android:layout_marginBottom="20dp"
                 android:id="@+id/organizer"
                 android:textSize="18sp"/>
-
-            //android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-
-                //android:textColor="@color/cardview_dark_background"
-
-
 
         </LinearLayout>
 
@@ -134,24 +127,28 @@
         android:layout_height="wrap_content">
 
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:layout_margin="@dimen/notification_text">
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="4"-->
+            <!--android:layout_margin="@dimen/notification_text">-->
 
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Notifications"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textSize="18sp" />-->
 
-            <Switch
-                android:text="Notifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/notifications"
-                android:fontFamily="sans-serif"
-                android:textAllCaps="false"
-                android:textSize="18sp" />
+            <!--<android.support.v7.widget.SwitchCompat-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="right"-->
+                <!--style="@style/SwitchStyle"-->
+                <!--android:id="@+id/notifications" />-->
 
-        </LinearLayout>
+        <!--</FrameLayout>-->
 
         <LinearLayout
             android:orientation="horizontal"
@@ -160,22 +157,13 @@
             android:id="@+id/changePass"
             android:layout_margin="@dimen/notification_text">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:text="Change Password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
-
-            <ImageButton
-                android:text=""
-                android:layout_width="43dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/right_arrow"
-                style="@android:color/transparent"
-                android:elevation="0dp"
-                android:background="@android:color/transparent" />
         </LinearLayout>
 
 
@@ -188,7 +176,7 @@
             android:layout_margin="@dimen/notification_text"
             >
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:text="Request Organizer Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,17 +184,11 @@
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 
-
-            <ImageButton
-                android:text=""
-                android:layout_width="43dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/right_arrow"
-                android:elevation="0dp"
-                android:layout_height="match_parent" />
         </LinearLayout>
 
     </LinearLayout>
+
+    <include layout="@layout/content_main_scrolling" />
 
 
 </LinearLayout>

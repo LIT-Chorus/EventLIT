@@ -35,8 +35,6 @@ public class StudentFeedActivity extends AppCompatActivity
 
     private OnCompleteListener<User> mCompleteListener;
 
-    private ProgressDialog mLogoutProgress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,14 +76,9 @@ public class StudentFeedActivity extends AppCompatActivity
             @Override
             public void onComplete(@NonNull Task<User> task) {
                 Log.d("Logout.User", "User successfully logged out");
+                finish();
             }
         };
-
-        // Set up ProgressDialog
-        mLogoutProgress = new ProgressDialog(this);
-        mLogoutProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mLogoutProgress.setTitle("Logout");
-        mLogoutProgress.setMessage("Logging out of EventLIT");
 
     }
 
@@ -114,12 +107,10 @@ public class StudentFeedActivity extends AppCompatActivity
 
                         public void onClick(DialogInterface arg0, int arg1) {
 
-                            mLogoutProgress.show();
 
                             UserUtils.logOut(new OnCompleteListener<User>() {
                                 @Override
                                 public void onComplete(@NonNull Task<User> task) {
-                                    mLogoutProgress.dismiss();
                                     finish();
                                 }
                             });
@@ -131,7 +122,7 @@ public class StudentFeedActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_scrolling, menu);
+        getMenuInflater().inflate(R.menu.student_activity_main_scrolling_drawer, menu);
         return true;
     }
 
@@ -228,15 +219,17 @@ public class StudentFeedActivity extends AppCompatActivity
             // Go to home page
         } else if (id == R.id.nav_explore) {
             startActivity(new Intent(StudentFeedActivity.this, ExploreActivity.class));
+            finish();
         } else if (id == R.id.nav_follow_orgs) {
             startActivity(new Intent(StudentFeedActivity.this, OrganizationSelectionActivity.class ));
+            finish();
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(StudentFeedActivity.this, SettingsActivity.class));
+            finish();
         } else if (id == R.id.nav_help) {
 
         } else if (id == R.id.nav_logout) {
             UserUtils.logOut(mCompleteListener);
-            finish();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
