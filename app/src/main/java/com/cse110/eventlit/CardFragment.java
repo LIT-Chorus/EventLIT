@@ -1,19 +1,15 @@
 package com.cse110.eventlit;
 
-import android.app.Fragment;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
@@ -21,12 +17,10 @@ import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Created by rahulsabnis on 2/22/17.
@@ -117,6 +111,18 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
+
+            OrganizationUtils.getOrgFromIdAsync(e.getOrgid(), new OnCompleteListener<Organization>() {
+                @Override
+                public void onComplete(@NonNull Task<Organization> task) {
+                    if (task.isSuccessful()) {
+                        Organization org = task.getResult();
+                        holder.orgNameTextView.setText(org.getName());
+                    }
+
+                }
+            });
+
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees().size();
             mMaxCapacity = e.getMaxCapacity();
