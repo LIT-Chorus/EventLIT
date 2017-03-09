@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,8 +58,16 @@ public class OrganizationSelectionFragment extends Fragment {
         for (int i = 0; i < list.size(); i++) {
 
             final String text = list.get(i).getName().toLowerCase();
-            if (text.contains(query)) {
+            if (text.startsWith(query)) {
                 Log.d("filter", String.valueOf(squery));
+                filteredList.add(list.get(i));
+            }
+        }
+
+        for(int i = 0; i < list.size(); i++){
+            final String text = list.get(i).getName().toLowerCase();
+
+            if(text.contains(query) && !filteredList.contains(list.get(i))){
                 filteredList.add(list.get(i));
             }
         }
