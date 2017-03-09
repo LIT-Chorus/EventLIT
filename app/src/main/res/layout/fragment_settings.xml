@@ -91,13 +91,13 @@
                 android:id="@+id/changePass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="4"
                 android:layout_margin="@dimen/notification_text"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_height="match_parent"
                     android:text="Change Password"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
@@ -109,13 +109,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/notification_text"
+                android:layout_weight="4"
 
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_height="match_parent"
                     android:text="Request Organizer Status"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />

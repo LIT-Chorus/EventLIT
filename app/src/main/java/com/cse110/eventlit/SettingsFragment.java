@@ -90,7 +90,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
         mReqOrgStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO implement the request org status
+                // TODO: KEVIN PUT YOUR LOGIC IN HERE FOR NOW
             }
         });
 
