@@ -29,6 +29,13 @@
         <item name="colorControlHighlight">@color/black</item>
     </style>
 
+    <style name="InputTextBurgundy" parent="Widget.Design.TextInputLayout">
+        <item name="android:textColorHint">@color/backgroundLoginPrimary</item>
+        <item name="colorControlNormal">@color/backgroundLoginPrimary</item>
+        <item name="colorControlActivated">@color/backgroundLoginPrimary</item>
+        <item name="colorControlHighlight">@color/backgroundLoginPrimary</item>
+    </style>
+
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/white</item>
