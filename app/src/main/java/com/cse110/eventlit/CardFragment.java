@@ -68,22 +68,16 @@ public class CardFragment extends android.support.v4.app.Fragment {
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
             User user = UserUtils.getCurrentUser();
-            Task<ArrayList<Event>> events = UserUtils.getEventsFollowing(null);
-            try {
-                Tasks.await(events);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-            ArrayList<Event> eventsFollowing = events.getResult();
+            // TODO: FIX EVENTS FOLLOWING AND UNCOMMENT CODE
+//            Task<ArrayList<Event>> events = UserUtils.getEventsFollowing(new OnCompleteListener<ArrayList<Event>>() {
+//                @Override
+//                public void onComplete(@NonNull Task<ArrayList<Event>> task) {
+//                    listEvents.addAll(task.getResult());
+//                }
+//            });
 
             UserUtils.getEventsForOrgs(adapter, listEvents, user);
-
-            for (int i = 0; i < eventsFollowing.size(); i++) {
-                if (!listEvents.contains(eventsFollowing.get(i))) {
-                    listEvents.add(eventsFollowing.get(i));
-                }
-            }
 
             //adapter = new MyAdapter(list);
         } else {
