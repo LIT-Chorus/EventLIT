@@ -6,13 +6,5 @@
     android:id="@+id/org_name"
     android:checked="false"
     android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-    android:checkMarkTint="@android:color/black"
+    android:checkMarkTint="@android:color/holo_blue_bright"
     android:layout_marginBottom="16dp" />
-
-    <!--android:checkMark="@android:drawable/checkbox_off_background"-->
-    <!--android.support.v7.widget.SwitchCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:id="@+id/selection"/>
-     -->
