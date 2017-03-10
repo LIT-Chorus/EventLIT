@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private OnCompleteListener<Void> mSignUpListener;
 
-    private AlertDialog mDialog;
+    private ProgressDialog mDialog;
 
     private String mPassword;
 
@@ -66,6 +67,12 @@ public class SignUpActivity extends AppCompatActivity {
         Log.w("FBAuth", mFbAuth + "");
         mFbAuth = FirebaseAuth.getInstance();
         Log.w("FBAuth", mFbAuth.toString());
+
+        // Set up Progress Dialog
+        mDialog = new ProgressDialog(this);
+        mDialog.setTitle("Registering");
+        mDialog.setMessage("Creating your EventLIT account!");
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
         // Set up database reference.
         fbDB = FirebaseDatabase.getInstance().getReference();
@@ -126,6 +133,8 @@ public class SignUpActivity extends AppCompatActivity {
                     backToLogin.putExtra("signedup", true);
                     backToLogin.putExtra("email", mEmailEntry.getEditText().getText().toString());
 
+                    mDialog.dismiss();
+
                     startActivity(backToLogin);
                     finish();
                         // Move to Organization selection
@@ -149,6 +158,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                     if (checkFirstName() && checkLastName() && checkEmail() && checkPass() &&
                             checkPassMatch()) {
+
+                        mDialog.show();
 
                         String firstName = mFirstNameEntry.getEditText().getText().toString();
                         String lastName = mLastNameEntry.getEditText().getText().toString();
@@ -345,9 +356,6 @@ public class SignUpActivity extends AppCompatActivity {
 
                                 mFbAuth.getCurrentUser().sendEmailVerification()
                                         .addOnCompleteListener(SignUpActivity.this, mSignUpListener);
-
-
-                                // TODO: Move user to email verification page (instead of LoginActivity)
                             }
 
                         } else {

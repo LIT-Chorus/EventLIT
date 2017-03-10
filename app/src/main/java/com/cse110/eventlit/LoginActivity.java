@@ -76,12 +76,12 @@ public class LoginActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         boolean signedup = extras.getBoolean("signedup");
+        String emailIdSignUp = extras.getString("email");
 
         if (signedup) {
             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogCustom);
             builder.setTitle("Registration Successful!")
-                    .setMessage("A verification email has been sent to " +
-                            mEmailEntry.getEditText().getText().toString() +
+                    .setMessage("A verification email has been sent to " + emailIdSignUp +
                             ". Please verify your email then log back in to begin using our application!")
                     .setCancelable(true)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -98,8 +98,12 @@ public class LoginActivity extends AppCompatActivity {
                 mSignInProgress.hide();
                 // Firebase reported error on the server side displayed here
                 if (!task.isSuccessful()) {
-                    Toast toast = Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_LONG);
-                    toast.show();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogCustom);
+                    builder.setTitle("Invalid Credentials")
+                            .setMessage("Please enter your registered account credentials!")
+                            .setPositiveButton(android.R.string.ok, null)
+                            .create().show();
                     mLoginBut.setClickable(true);
                 } else {
 
