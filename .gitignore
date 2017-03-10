@@ -38,3 +38,5 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+build/generated/mockable-android-25.jar
