@@ -1,8 +1,6 @@
 package com.cse110.utils;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cse110.eventlit.CardFragment;
@@ -11,10 +9,7 @@ import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -34,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -223,27 +217,26 @@ public class UserUtils {
         return eventsFollowing;
     }
 
-    public static Task<ArrayList<Event>> getEventsFollowing(final OnCompleteListener<ArrayList<Event>> completeListener) {
+    public static Task<ArrayList<Event>> getEventsFollowing() {
         final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
         currentUserDB.child("eventsFollowing").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Event> eventMap = (Map<String, Event>) dataSnapshot.getValue();
+                GenericTypeIndicator<Map<String, Event>> maptype = new GenericTypeIndicator<Map<String, Event>>(){};
+                Map<String, Event> eventMap = dataSnapshot.getValue(maptype);
                 // If null, means that there are no events following -- initialize empty map.
                 if (eventMap == null)
-                    eventMap = new HashMap<String, Event>();
+                    eventMap = new HashMap<>();
                 ArrayList<Event> events = new ArrayList<>(eventMap.values());
                 Task<ArrayList<Event>> eventsTask = Tasks.forResult(events);
 
                 wrappedTask.wrap(eventsTask);
-                if (completeListener != null)
-                    completeListener.onComplete(eventsTask);
                 Log.d("getEventsFollowing", "Got events following successfully!");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("getEventsFollowing", currentUser.toString());
+                Log.e("getEventsFollowing", "Bad things @ " + currentUser.toString());
             }
         });
         return wrappedTask.unwrap();

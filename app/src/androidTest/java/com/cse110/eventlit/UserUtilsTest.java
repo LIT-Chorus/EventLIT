@@ -84,10 +84,17 @@ public class UserUtilsTest {
 
     @Test
     public void testgetEventsFollowingAsync() throws Exception {
-        Task<ArrayList<Event>> eventsTask = UserUtils.getEventsFollowing(null);
+        Task<ArrayList<Event>> eventsTask = UserUtils.getEventsFollowing();
 
         Tasks.await(eventsTask);
-        Log.wtf("yo", eventsTask.getResult().toString());
+        ArrayList<Event> events = (ArrayList<Event>) eventsTask.getResult();
+        Log.wtf("yo", events.toString());
+
+        ArrayList<String> descriptions = new ArrayList<>();
+        for (int i = 0; i < events.size(); i++) {
+            descriptions.add(events.get(i).getDescription());
+        }
+        Log.wtf("yo", descriptions.toString());
     }
 
     @Test

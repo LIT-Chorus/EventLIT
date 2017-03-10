@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         MyRecyclerView.setHasFixedSize(true);
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        MyAdapter adapter = new MyAdapter(listEvents);
+        final MyAdapter adapter = new MyAdapter(listEvents);
 
         Bundle pageType = getArguments();
         String type = pageType.getString("type");
@@ -67,17 +68,16 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
-            User user = UserUtils.getCurrentUser();
+            final User user = UserUtils.getCurrentUser();
 
             // TODO: FIX EVENTS FOLLOWING AND UNCOMMENT CODE
-//            Task<ArrayList<Event>> events = UserUtils.getEventsFollowing(new OnCompleteListener<ArrayList<Event>>() {
-//                @Override
-//                public void onComplete(@NonNull Task<ArrayList<Event>> task) {
-//                    listEvents.addAll(task.getResult());
-//                }
-//            });
-
-            UserUtils.getEventsForOrgs(adapter, listEvents, user);
+            Task<ArrayList<Event>> events = UserUtils.getEventsFollowing().addOnCompleteListener(new OnCompleteListener<ArrayList<Event>>() {
+                @Override
+                public void onComplete(@NonNull Task<ArrayList<Event>> task) {
+                    listEvents.addAll(task.getResult());
+                    UserUtils.getEventsForOrgs(adapter, listEvents, user);
+                }
+            });
 
             //adapter = new MyAdapter(list);
         } else {
