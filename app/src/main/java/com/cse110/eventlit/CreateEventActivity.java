@@ -259,8 +259,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     /* Gets the text fields to make event in database */
     private void addEventToDB() {
-        // TODO Get inputs and make event
-
         String title = mTitle.getEditText().getText().toString();
         String location = mLocation.getEditText().getText().toString();
         String description = mDescription.getEditText().getText().toString();
@@ -295,7 +293,9 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         Log.w("End Time", endTime.getTimeInMillis() + "");
         Log.w("End Date", endDate.getTimeInMillis() + "");
 
-        Log.w("Capacity", capacity);
+        if (capacity.equals("")) {
+            capacity = "0";
+        }
 
         Event event = new Event(title, description, orgId, "0", location, "Uncateogorized", Integer.parseInt(capacity));
         event.putStartTime(startDate.get(Calendar.YEAR),
@@ -312,9 +312,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 if (task.isSuccessful()) {
-                    Log.w("Added event with id", task.getResult());
-                    String eventId = task.getResult();
-
+                    // TODO dismiss activity, Event has been created at this point
                 }
 
             }
