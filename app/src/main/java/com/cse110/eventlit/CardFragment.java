@@ -168,12 +168,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public int getItemCount() {
             return list.size();
         }
-
-        public void sortChronologically() {
-            Collections.sort(listEvents, Event.eventComparatorDate);
-            Log.w("Sort Chrono Called", "Called");
-            this.notifyDataSetChanged();
-        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

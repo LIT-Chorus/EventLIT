@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -106,6 +107,7 @@ public class EventUtils {
                                         eventIdsAdded.add(event.getEventid());
 
                                         adapterArray.add(event);
+                                        Collections.sort(adapterArray, Event.eventComparatorDate);
                                         adapter.notifyItemChanged(adapter.getItemCount() - 1);
                                         adapter.notifyDataSetChanged();
                                     }
@@ -118,6 +120,7 @@ public class EventUtils {
                                         eventIdsAdded.add(event.getEventid());
 
                                         adapterArray.add(event);
+                                        Collections.sort(adapterArray, Event.eventComparatorDate);
                                         adapter.notifyItemChanged(adapter.getItemCount() - 1);
                                         adapter.notifyDataSetChanged();
                                     }
@@ -198,8 +201,6 @@ public class EventUtils {
                     // Makes call to other method to get events for the org
 
                     getEventsByOrgId(adapter, eventlist, eventIdsAdded, org.getKey(), 0, null, true);
-                    Log.w("Event", "Event!");
-                    adapter.sortChronologically();
                     adapter.notifyDataSetChanged();
                 }
 
