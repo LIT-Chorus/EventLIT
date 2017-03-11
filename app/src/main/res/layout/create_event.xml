@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
+        <ImageView1111
             android:id="@+id/event"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
@@ -33,7 +33,7 @@
                 android:hint="Event Title"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:textColorHint="@color/mdtp_light_gray" />
         </android.support.design.widget.TextInputLayout>
 
         <Spinner
@@ -200,34 +200,42 @@
 
         <!-- CANCEL/CREATE BUTTONS -->
         <LinearLayout
-            android:id="@+id/linearlayout"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="0.6"
+            android:weightSum="3.4"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/cancelButton"
-                style="@style/EventButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1"
+                android:textStyle="bold"
+                style="@style/EventButton"
                 android:background="@color/notGoingColor"
-                android:text="CANCEL"
-                android:theme="@style/AppTheme.Button" />
+                android:layout_weight="1"
+                android:text="CANCEL"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:layout_weight="0.2"
+                android:id="@+id/line2">
+
+            </View>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/createButton"
-                style="@style/EventButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1"
+                android:textStyle="bold"
+                style="@style/EventButton"
                 android:background="@color/goingColor"
-                android:text="CREATE"
-                android:theme="@style/AppTheme.Button" />
+                android:layout_weight="1"
+                android:text="CREATE" />
+
 
         </LinearLayout>
 
