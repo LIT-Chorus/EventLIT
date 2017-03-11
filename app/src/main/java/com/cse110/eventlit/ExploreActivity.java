@@ -39,6 +39,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     private CardFragment fragment;
 
+    private ArrayList<String> categoriesCurrent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             fragment.setArguments(pageType);
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
+
+        categoriesCurrent = new ArrayList<>();
 
 
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
@@ -149,9 +153,50 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         }
 
         else if (id == R.id.action_filter) {
-            ArrayList<String> categories = new ArrayList<>();
-            categories.add("Film and Television");
-            fragment.filterBy(categories);
+            final CharSequence[] items = {" Academics "," Career "," Faith "," Food "," Social "};
+            boolean[] checked = new boolean[5];
+
+            for (int i = 0; i < items.length; i++) {
+                if (categoriesCurrent.contains(items[i].toString())) {
+                    checked[i] = true;
+                }
+            }
+
+            final ArrayList<String> categories = new ArrayList<>();
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Filter by")
+                    .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                categories.add(items[indexSelected].toString());
+                                categoriesCurrent.add(items[indexSelected].toString());
+                            }
+                            if (categories.contains(items[indexSelected].toString())) {
+                                // Else, if the item is already in the array, remove it
+                                categories.remove(items[indexSelected].toString());
+                                if (indexSelected == 0) {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(1, false);
+                                }
+                                else {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(0, false);
+                                }
+                            }
+                        }
+                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            fragment.filterBy(categories);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            categoriesCurrent = new ArrayList<>();
+                        }
+                    }).create();
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);
