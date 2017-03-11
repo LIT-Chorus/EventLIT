@@ -35,8 +35,7 @@ import java.util.Collections;
  * Created by Michelle on 2/23/2017.
  */
 
-public class OrganizerRequestActivity extends AppCompatActivity implements
-        AppCompatAutoCompleteTextView.Validator, AppCompatAutoCompleteTextView.OnFocusChangeListener {
+public class OrganizerRequestActivity extends AppCompatActivity implements AppCompatAutoCompleteTextView.OnFocusChangeListener {
 
     private AppCompatAutoCompleteTextView mOrgName;
     private AppCompatButton mRequestButton;
@@ -63,7 +62,6 @@ public class OrganizerRequestActivity extends AppCompatActivity implements
 
         mOrgList = new ArrayList<>();
 
-
         mOrgs = OrganizationUtils.getAllStudentOrganizations();
 
         if (mOrgs.size() == 0) {
@@ -77,7 +75,6 @@ public class OrganizerRequestActivity extends AppCompatActivity implements
                         mOrgList.add(org.getName());
                     }
                     mOrgName.setAdapter(new ArrayAdapter<String>(OrganizerRequestActivity.this, android.R.layout.simple_dropdown_item_1line, mOrgList));
-                    mOrgName.setValidator(OrganizerRequestActivity.this);
                 }
             });
         } else {
@@ -86,7 +83,6 @@ public class OrganizerRequestActivity extends AppCompatActivity implements
                 mOrgList.add(org.getName());
             }
             mOrgName.setAdapter(new ArrayAdapter<String>(OrganizerRequestActivity.this, android.R.layout.simple_dropdown_item_1line, mOrgList));
-            mOrgName.setValidator(OrganizerRequestActivity.this);
         }
 
         // Get the Firebase user instance
@@ -96,35 +92,37 @@ public class OrganizerRequestActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Log.wtf("OrganizerRequestActivity", "going to call checkPermission");
-                StringBuilder message = new StringBuilder();
-                message.append(user.getFirstName());
-                message.append(" ");
-                message.append(user.getLastName());
-                message.append(" ");
-                message.append("(");
-                message.append(user.getEmail());
-                message.append(") wants to request organizer status for ");
-                message.append(mOrgName.getText().toString());
-                sendingMessage = message.toString();
-                checkPermission(sendingMessage);
+
+                String orgName = mOrgName.getText().toString();
+
+                if (isValid(orgName)) {
+
+                    StringBuilder message = new StringBuilder();
+                    message.append(user.getFirstName());
+                    message.append(" ");
+                    message.append(user.getLastName());
+                    message.append(" ");
+                    message.append("(");
+                    message.append(user.getEmail());
+                    message.append(") wants to request organizer status for ");
+                    message.append(mOrgName.getText().toString());
+                    sendingMessage = message.toString();
+                    checkPermission(sendingMessage);
+                } else {
+                    mOrgName.setError("Not a Valid Student Organization!");
+                }
             }
         });
     }
 
-    @Override
     public boolean isValid(CharSequence text) {
         Log.d("Test", "Checking if valid: " + text);
         Collections.sort(mOrgList);
-        if (Collections.binarySearch(mOrgList, text.toString()) > 0) {
+        if (Collections.binarySearch(mOrgList, text.toString()) >= 0) {
             return true;
         }
 
         return false;
-    }
-
-    @Override
-    public CharSequence fixText(CharSequence charSequence) {
-        return null;
     }
 
     @Override
