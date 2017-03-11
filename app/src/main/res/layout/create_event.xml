@@ -13,7 +13,6 @@
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:padding="3dp"
             android:src="@drawable/event_pic" />
 
         <android.support.design.widget.TextInputLayout
@@ -23,6 +22,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:layout_marginTop="4dp"
             android:theme="@style/InputTextBlack">
 
             <EditText
@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:textSize="15dp"
                 android:hint="Event Title"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
@@ -39,7 +40,8 @@
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_left_margin" />
 
         <!--BUTTONS FOR START TIME/DATE -->
         <LinearLayout
@@ -124,6 +126,7 @@
                 android:drawablePadding="15dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:textSize="15dp"
                 android:hint="Location"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
@@ -147,6 +150,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="Description"
+                android:textSize="15dp"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
@@ -170,6 +174,7 @@
                 android:focusableInTouchMode="true"
                 android:hint="Maximum Capacity"
                 android:inputType="number"
+                android:textSize="15dp"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
@@ -192,6 +197,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="Tag"
+                android:textSize="15dp"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
