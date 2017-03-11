@@ -113,41 +113,6 @@ public class UserUtils {
         user.updatePassword(newPassword).addOnCompleteListener(verifyOnComplete);
     }
 
-    /*
-    public static User getUserFromIdSynch(String uid) {
-
-        DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);
-
-        final User[] user = new User[1];
-
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user[0] = dataSnapshot.getValue(User.class);
-
-                latch.countDown();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                Log.d("getUserFromIdSynch", "user not read in correctly");
-                latch.countDown();
-            }
-        });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return user[0];
-
-    }
-    */
 
     // TODO create methods to modify the User database
 
@@ -172,57 +137,6 @@ public class UserUtils {
 
     }
 
-    // TODO create methods to modify the User database
-
-    public static final ArrayList<Organization> getOrgsManagingSynch(User user) {
-
-        ArrayList<Organization> orgsManaging = new ArrayList<>();
-
-        List<String> orgid_managing = user.getOrgsManaging();
-        CountDownLatch finished = new CountDownLatch(orgid_managing.size());
-
-        for (String orgid : orgid_managing) {
-            OrganizationUtils.addOrgFromId(orgid, orgsManaging, finished);
-        }
-
-        try {
-            finished.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return orgsManaging;
-
-    }
-
-    /*
-    public static final ArrayList<Event> getEventsFollowingSynch(User user) {
-
-        ArrayList<Event> eventsFollowing = new ArrayList<>();
-
-        Collection<RSVP> rsvps = user.getEventsFollowing().values();
-
-        if (rsvps.size() == 0) {
-            return eventsFollowing;
-        }
-
-        CountDownLatch finished = new CountDownLatch(rsvps.size());
-
-        for (RSVP rsvp: rsvps) {
-            Log.d("getEvents: rsvp object:", rsvp.toString());
-            EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
-            Log.d("getEvents list size:", "" + eventsFollowing.size());
-        }
-
-        try {
-            finished.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return eventsFollowing;
-    }
-    */
 
     public static void getEventsFollowing(final CardFragment.MyAdapter adapter,
                                           final ArrayList<Event> events,
