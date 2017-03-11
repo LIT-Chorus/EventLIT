@@ -47,8 +47,8 @@ public class OrganizerFeedActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Add new event", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(OrganizerFeedActivity.this, CreateEventActivity.class);
+                startActivity(intent);
             }
         });
 
