@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import at.favre.lib.dali.Dali;
+import me.grantland.widget.AutofitHelper;
 
 public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
@@ -95,7 +96,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO: Go back to organizer feed
+        startActivity(new Intent(this, OrganizerFeedActivity.class));
         finish();
 
     }
@@ -103,6 +104,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
     private void fillFields(Bundle bundle) {
 
         title.setText(bundle.getString("eventName"));
+        AutofitHelper.create(title);
 
         date.setText(bundle.getString("date").replaceAll("[\\t\\n\\r]+"," ")
                 + " at " + bundle.getString("time").trim());
@@ -110,6 +112,18 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         location.setText(bundle.getString("location"));
 
         category.setText(bundle.getString("category"));
+
+        TextView description = (TextView) findViewById(R.id.descriptiontext);
+        description.setText(bundle.getString("description"));
+
+        TextView numAttend = (TextView) findViewById(R.id.peopletext);
+        numAttend.setText("" + bundle.getInt("num_attending"));
+
+        TextView name = (TextView) findViewById(R.id.orgname);
+        name.setText("Hosted By " + bundle.getString("org_name"));
+
+        String orgId = bundle.getString("org_id");
+        String eventId = bundle.getString("event_id");
 
     }
 }

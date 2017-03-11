@@ -101,7 +101,7 @@ public class EventUtils {
 
 
                                 if (categories.contains(category) &&
-                                        event.getAttendees().size() >= popularity) {
+                                        event.getAttendees() >= popularity) {
 
                                     if (!eventIdsAdded.contains(event.getEventid())) {
 
@@ -119,7 +119,7 @@ public class EventUtils {
                                 }
                             }
                             else {
-                                if (event.getAttendees().size() >= popularity) {
+                                if (event.getAttendees() >= popularity) {
                                     if (!eventIdsAdded.contains(event.getEventid())) {
 
                                         eventIdsAdded.add(event.getEventid());

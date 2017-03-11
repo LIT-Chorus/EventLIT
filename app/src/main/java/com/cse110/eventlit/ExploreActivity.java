@@ -39,6 +39,10 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     private CardFragment fragment;
 
+    private final ArrayList<String> categoriesCurrent = new ArrayList<>();
+
+    private boolean[] checked = {true, true, true, true, true};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,12 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             fragment.setArguments(pageType);
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
+
+        categoriesCurrent.add("Academics");
+        categoriesCurrent.add("Career");
+        categoriesCurrent.add("Faith");
+        categoriesCurrent.add("Food");
+        categoriesCurrent.add("Social");
 
 
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
@@ -149,9 +159,44 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         }
 
         else if (id == R.id.action_filter) {
-            ArrayList<String> categories = new ArrayList<>();
-            categories.add("Film and Television");
-            fragment.filterBy(categories);
+            final CharSequence[] items = {"Academics","Career","Faith","Food","Social"};
+
+            final ArrayList<String> categoryChanges = new ArrayList<>();
+            categoryChanges.addAll(categoriesCurrent);
+
+            for (int i = 0; i < items.length; i++) {
+                if (categoriesCurrent.contains(items[i].toString())) {
+                    checked[i] = true;
+                }
+            }
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Filter by")
+                    .setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                categoryChanges.add(items[indexSelected].toString());
+                            } else {
+                                categoryChanges.remove(items[indexSelected].toString());
+                            }
+                        }
+                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            categoriesCurrent.clear();
+                            categoriesCurrent.addAll(categoryChanges);
+                            fragment.filterBy(categoriesCurrent);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            categoryChanges.clear();
+                            categoryChanges.addAll(categoriesCurrent);
+                        }
+                    }).create();
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);

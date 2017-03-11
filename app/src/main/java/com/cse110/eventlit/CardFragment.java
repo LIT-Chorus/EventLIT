@@ -168,7 +168,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             });
 
             mDescriptionText = e.getDescription();
-            mNumAttendees = e.getAttendees().size();
+            mNumAttendees = e.getAttendees();
             mMaxCapacity = e.getMaxCapacity();
 
             holder.goingButton.setOnClickListener(new View.OnClickListener() {
@@ -247,24 +247,31 @@ public class CardFragment extends android.support.v4.app.Fragment {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent openDetailedView = new Intent(getActivity(), StudentDetailedEventActivity.class);
-
-                    // TODO: ADD LOGIC TO CHECK IF EVENT IS RUN BY THIS USER
-
                     Bundle extras = new Bundle();
 
                     String eventid = eventIdTextView.getText().toString();
-                    if (events.containsKey(eventid)) {
-                        RSVP.Status stat = events.get(eventid).getRsvpStatus();
-                        if (stat == RSVP.Status.GOING) {
-                            extras.putInt("RSVP", 1);
-                        } else if (stat == RSVP.Status.INTERESTED) {
-                            extras.putInt("RSVP", 2);
-                        } else if (stat == RSVP.Status.NOT_GOING) {
-                            extras.putInt("RSVP", 3);
-                        }
+                    String orgId = orgIdTextView.getText().toString();
+
+                    User user = UserUtils.getCurrentUser();
+
+                    Intent openDetailedView = null;
+
+                    if (mOrganizerStatus && user.getOrgsManaging().contains(orgId)) {
+                        openDetailedView = new Intent(getActivity(), OrganizerDetailedEventActivity.class);
                     } else {
-                        extras.putInt("RSVP", 0);
+                        openDetailedView = new Intent(getActivity(), StudentDetailedEventActivity.class);
+                        if (events.containsKey(eventid)) {
+                            RSVP.Status stat = events.get(eventid).getRsvpStatus();
+                            if (stat == RSVP.Status.GOING) {
+                                extras.putInt("RSVP", 1);
+                            } else if (stat == RSVP.Status.INTERESTED) {
+                                extras.putInt("RSVP", 2);
+                            } else if (stat == RSVP.Status.NOT_GOING) {
+                                extras.putInt("RSVP", 3);
+                            }
+                        } else {
+                            extras.putInt("RSVP", 0);
+                        }
                     }
 
                     extras.putString("time", timeTextView.getText().toString());
@@ -276,7 +283,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putInt("num_attending", mNumAttendees);
                     extras.putInt("max_capacity", mMaxCapacity);
                     extras.putString("org_name", orgNameTextView.getText().toString());
-                    extras.putString("org_id", orgIdTextView.getText().toString());
+                    extras.putString("org_id", orgId);
                     extras.putString("event_id", eventid);
                     openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);

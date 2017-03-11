@@ -3,6 +3,7 @@ package com.cse110.eventlit;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,6 +52,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.cse110.eventlit.R.id.fab;
+
 public class CreateEventActivity extends AppCompatActivity implements IPickResult{
 
     // Fields for Organizer User to fill in
@@ -76,8 +79,8 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         setSupportActionBar(toolbar);
 
         // TODO: FAB for adding event picture
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mEventPic = (ImageView) findViewById(R.id.event);
+        mEventPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                PickImageDialog.build(new PickSetup()
@@ -313,10 +316,27 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             public void onComplete(@NonNull Task<String> task) {
                 if (task.isSuccessful()) {
                     // TODO dismiss activity, Event has been created at this point
+                    String eventId = task.getResult();
+
+                    try {
+                        // Store in db
+                        FileStorageUtils.uploadImageFromLocalFile(eventId,
+                                ((BitmapDrawable)mEventPic.getDrawable()).getBitmap());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
         });
+
+        // Store event pic AFTER making event object
+    /*    try {
+            // TODO Store in db
+         //   FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }*/
 
 
     }
@@ -356,19 +376,13 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     @Override
     public void onPickResult(PickResult r) {
+
+        // Check for errors with event picture selection
         if (r.getError() == null) {
 
-            //If you want the Bitmap.
+            // Store image Organizer User selected in global var (will store in db later)
             Bitmap imageSelected = r.getBitmap();
-
             mEventPic.setImageBitmap(imageSelected);
-
-            try {
-                // TODO Store in db
-                FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
 
         } else {
             //Handle possible errors
