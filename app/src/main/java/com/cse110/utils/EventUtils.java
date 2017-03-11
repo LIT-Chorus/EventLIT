@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
@@ -85,6 +86,14 @@ public class EventUtils {
                         if (eventOrgId.equals(orgId)){
                             // Create an event object and add it to the adapter
                             Event event = getEventSnapshot(eventSnapshot);
+
+                            Date eventDate = new Date(event.getStartDate());
+                            Date today = new Date();
+
+                            if (today.after(eventDate)) {
+                                EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);
+                            }
+
                             if (categories != null && categories.size() > 0) {
                                 String category = event.getCategory();
 
@@ -200,50 +209,6 @@ public class EventUtils {
             }
         };
         eventsDB.addValueEventListener(eventListener);
-    }
-
-    /**
-     * Add an Event object to an input param eventsFollowing based off of an RSVP object.
-     *
-     * NOTE: only package scope. Only to be used by other util methods
-     * DO NOT MAKE PUBLIC
-     *
-     * @param rsvp
-     * @param eventsFollowing
-     * @param signal
-     */
-    static final void addEventFromId(final RSVP rsvp, final List<Event> eventsFollowing, final CountDownLatch signal) {
-
-
-        Log.w("add event, rsvp orgid", ""+rsvp.getOrgid());
-        Log.w("add event, rsvp eventid", ""+rsvp.getEventid());
-
-        //final CountDownLatch synchToken = new CountDownLatch(1);
-
-        DatabaseReference eventReference = eventsDB.child(rsvp.getOrgid()).child(rsvp.getEventid());
-
-        eventReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Event event = dataSnapshot.getValue(Event.class);
-
-                Log.d("in eventutils rsvp is ", "" + rsvp);
-                Log.d("in eventutils event is ", "" + event);
-                if (event != null)
-                    eventsFollowing.add(dataSnapshot.getValue(Event.class));
-
-                Log.w("countdown", "" + signal.getCount());
-
-                signal.countDown();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     /**

@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -135,7 +134,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.GOING);
-                    UserUtils.updateEventsFollowing(e.getEventid(), status);
+                    UserUtils.addEventsFollowing(e.getEventid(), status);
                     Toast going = Toast.makeText(getActivity(), "Going to: " + eventName, Toast.LENGTH_LONG);
                     going.show();
                 }
@@ -145,7 +144,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.INTERESTED);
-                    UserUtils.updateEventsFollowing(e.getEventid(), status);
+                    UserUtils.addEventsFollowing(e.getEventid(), status);
                     Toast interested = Toast.makeText(getActivity(), "Interested In: " + eventName, Toast.LENGTH_LONG);
                     interested.show();
                 }
@@ -155,7 +154,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.NOT_GOING);
-                    UserUtils.updateEventsFollowing(e.getEventid(), status);
+                    UserUtils.addEventsFollowing(e.getEventid(), status);
                     Toast notGoing = Toast.makeText(getActivity(), "Not going to: " + eventName, Toast.LENGTH_LONG);
                     notGoing.show();
                 }
