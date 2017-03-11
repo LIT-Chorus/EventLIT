@@ -104,6 +104,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
             public void onClick(View v) {
                 // TODO: KEVIN PUT YOUR LOGIC IN HERE FOR NOW
                 startActivity(new Intent(getActivity(), OrganizerRequestActivity.class));
+                getActivity().finish();
             }
         });
 

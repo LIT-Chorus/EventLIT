@@ -97,7 +97,11 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
         // Gets the Orgs that the Organization User is managing
         User user = UserUtils.getCurrentUser();
-        orgsManaging = user.getOrgsManaging(); 
+        ArrayList<Organization> orgs = UserUtils.getOrgsManaging();
+        orgsManaging = new ArrayList<>();
+        for (Organization org: orgs) {
+            orgsManaging.add(org.getName());
+        }
 
         // Cancel and Create button functionality
         Button cancelBut = (Button) findViewById(R.id.cancelButton);
@@ -124,10 +128,9 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
         spinner.setPrompt("Organization holding event");
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, orgsManaging);
+                android.R.layout.simple_spinner_item, android.R.id.text1, orgsManaging);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-        spinnerAdapter.notifyDataSetChanged();
 
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
@@ -234,6 +237,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
     @Override
     public void onBackPressed() {
         // TODO: Go back to organizer feed
+        startActivity(new Intent(this, OrganizerFeedActivity.class));
         finish();
 
     }

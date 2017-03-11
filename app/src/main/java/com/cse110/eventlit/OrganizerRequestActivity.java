@@ -1,6 +1,7 @@
 package com.cse110.eventlit;
 
 import android.*;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
+import com.cse110.utils.LitUtils;
 import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -134,6 +136,13 @@ public class OrganizerRequestActivity extends AppCompatActivity implements AppCo
         Log.wtf("SettingsFragment", "sendSMS is called");
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, null, null);
+
+        Intent openSettings = new Intent(this, SettingsActivity.class);
+        openSettings.putExtra("message", true);
+        openSettings.putExtra("orgName", mOrgName.getText().toString());
+        LitUtils.hideSoftKeyboard(this, mOrgName);
+        startActivity(openSettings);
+        finish();
     }
 
     @Override
@@ -182,5 +191,13 @@ public class OrganizerRequestActivity extends AppCompatActivity implements AppCo
             Log.wtf("SettingsFragment", "no need to ask for permission");
             sendSms(message);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent openSettings = new Intent(this, SettingsActivity.class);
+        openSettings.putExtra("message", false);
+        openSettings.putExtra("orgName", "");
+        startActivity(openSettings);
     }
 }
