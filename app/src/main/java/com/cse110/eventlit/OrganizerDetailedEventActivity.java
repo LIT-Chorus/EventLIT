@@ -91,6 +91,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                         Log.w("Updated Event", task.getResult());
                     }
                 });
+                //EventUtils.updateEvent(event);
             }
         });
 

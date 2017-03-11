@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.cse110.utils.FileStorageUtils;
+import com.cse110.utils.UserUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.vansuita.pickimage.bean.PickResult;
@@ -69,7 +70,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
         mReqOrgStatus = (LinearLayout) view.findViewById(R.id.reqOrgStatus);
         mOrgStatus = (AppCompatTextView) view.findViewById(R.id.organizer);
 
-        mOrganizerStatus = getArguments().getBoolean("organizer");
+        mOrganizerStatus = UserUtils.isOrganizer();
 
         if (mOrganizerStatus) {
             mOrgStatus.setText("Organizer");
