@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -107,6 +108,16 @@ public class CardFragment extends android.support.v4.app.Fragment {
         }
         adapter.notifyDataSetChanged();
     }
+
+    public void sortBy(Comparator<Event> eventComparator) {
+        listEvents.clear();
+        Collections.sort(allEvents, eventComparator);
+        for (Event e: allEvents) {
+            listEvents.add(e);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 
     public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         private ArrayList<Event> list;
@@ -203,13 +214,15 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     holder.interestedButton.setBackgroundColor(Color.GRAY);
                 }
             });
-
         }
 
         @Override
         public int getItemCount() {
             return list.size();
         }
+
+
+
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

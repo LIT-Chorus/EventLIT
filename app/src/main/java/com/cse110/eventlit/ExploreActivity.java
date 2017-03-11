@@ -13,11 +13,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -121,26 +123,17 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.action_sort) {
             final CharSequence[] items = {" Time "," Popularity "};
             // arraylist to keep the selected items
-            final ArrayList seletedItems=new ArrayList();
-
+            int checkedItem = 0;
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Sort by")
-                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    .setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                            if (isChecked) {
-                                // If the user checked the item, add it to the selected items
-                                seletedItems.add(indexSelected);
+                        public void onClick(DialogInterface dialog, int indexSelected) {
+                            if (indexSelected == 0) {
+                                fragment.sortBy(Event.eventComparatorDate);
                             }
-                            if (seletedItems.contains(indexSelected)) {
-                                // Else, if the item is already in the array, remove it
-                                seletedItems.remove(Integer.valueOf(indexSelected));
-                                if (indexSelected == 0) {
-                                    ((AlertDialog) dialog).getListView().setItemChecked(1, false);
-                                }
-                                else {
-                                    ((AlertDialog) dialog).getListView().setItemChecked(0, false);
-                                }
+                            else {
+                                fragment.sortBy(Event.eventComparatorPopularity);
                             }
                         }
                     }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
