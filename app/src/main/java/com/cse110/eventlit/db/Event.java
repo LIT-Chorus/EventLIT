@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,23 @@ public class Event {
      * List of UIDs of attendees to the event.
      */
     private List<String> attendees;
+
+
+    public static Comparator<Event> eventComparatorDate = new Comparator<Event>() {
+        @Override
+        public int compare(Event o1, Event o2) {
+            if (o2.startDate > o1.startDate) {
+                return 1;
+            }
+            else if (o2.startDate < o1.startDate) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        }
+    };
+
 
     /**
      * Full constructor containing all event information.

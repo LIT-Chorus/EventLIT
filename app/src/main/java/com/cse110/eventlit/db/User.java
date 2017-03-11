@@ -124,6 +124,8 @@ public class User {
         eventsFollowing.put(eventid, rsvp);
     }
 
+    public void removeEventFollowing(String eventid) {eventsFollowing.remove(eventid);}
+
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         try {
