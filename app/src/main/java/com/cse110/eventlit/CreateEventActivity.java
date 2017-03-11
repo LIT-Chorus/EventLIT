@@ -259,6 +259,14 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             }
         });
 
+        // Store event pic AFTER making event object
+        try {
+            // TODO Store in db
+            FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -297,19 +305,13 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     @Override
     public void onPickResult(PickResult r) {
+
+        // Check for errors with event picture selection
         if (r.getError() == null) {
 
-            //If you want the Bitmap.
+            // Store image Organizer User selected in global var (will store in db later)
             Bitmap imageSelected = r.getBitmap();
-
             mEventPic.setImageBitmap(imageSelected);
-
-            try {
-                // TODO Store in db
-                FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
 
         } else {
             //Handle possible errors
