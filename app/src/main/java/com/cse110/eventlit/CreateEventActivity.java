@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CreateEventActivity extends AppCompatActivity {
 
     private TextInputLayout mTitle;
+    private TextInputLayout mDate;
     private TextInputLayout mTime;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
@@ -54,6 +55,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
+        mDate = (TextInputLayout) findViewById(R.id.datetext);
         mTime = (TextInputLayout) findViewById(R.id.timetext);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
@@ -66,6 +68,14 @@ public class CreateEventActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     checkTitle();
+                }
+            }
+        });
+        mDate.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    checkDate();
                 }
             }
         });
@@ -143,6 +153,9 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     // TODO write validity checks
+    protected boolean checkDate() {
+        return true;
+    }
     protected boolean checkTime() {
         return true;
     }

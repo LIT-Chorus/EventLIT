@@ -46,7 +46,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/timetext"
+        android:id="@+id/datetext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -59,9 +59,36 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_event_black_24dp"
+            android:drawablePadding="15dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="Date"
+            android:inputType="datetime"
+            android:soundEffectsEnabled="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/timetext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:theme="@style/InputTextBlack"
+        android:layout_marginTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/datetext"
+        tools:layout_editor_absoluteX="8dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_access_time_black_24dp"
+            android:drawablePadding="15dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="Time"
             android:inputType="datetime"
             android:soundEffectsEnabled="true"
             android:textColor="@color/black"
@@ -74,7 +101,6 @@
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:srcCompat="@drawable/ic_location"
         tools:layout_editor_absoluteY="0dp" />
 
     <android.support.design.widget.TextInputLayout
@@ -91,6 +117,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp"
+            android:drawablePadding="15dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="Location"
@@ -113,6 +141,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_description_black_24dp"
+            android:drawablePadding="15dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="Description"
@@ -134,6 +164,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_label_black_24dp"
+            android:drawablePadding="15dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="Tag"
@@ -155,6 +187,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_person_black_24dp"
+            android:drawablePadding="15dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="Maximum Capacity"
