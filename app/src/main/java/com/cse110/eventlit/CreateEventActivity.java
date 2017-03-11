@@ -260,12 +260,12 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         });
 
         // Store event pic AFTER making event object
-        try {
+    /*    try {
             // TODO Store in db
-            FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
+         //   FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }
