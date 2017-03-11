@@ -287,6 +287,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                         }
                     }
 
+                    extras.putBoolean("organizer", mOrganizerStatus);
                     extras.putString("time", timeTextView.getText().toString());
                     extras.putString("location", locationTextView.getText().toString());
                     extras.putString("category", categoriesTextView.getText().toString());

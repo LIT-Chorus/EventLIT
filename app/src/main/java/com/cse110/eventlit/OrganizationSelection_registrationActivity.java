@@ -48,9 +48,6 @@ public class OrganizationSelection_registrationActivity extends AppCompatActivit
 
     @Override
     public void onBackPressed() {
-
-        startActivity(new Intent(OrganizationSelection_registrationActivity.this, StudentFeedActivity.class));
-        finish();
     }
 
     public void HandleClick1(View v){

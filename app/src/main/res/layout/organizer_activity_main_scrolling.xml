@@ -23,7 +23,7 @@
         app:headerLayout="@layout/nav_header_main_scrolling"
         app:itemTextColor="#FFFFFF"
         app:itemIconTint="#FFFFFF"
-        app:menu="@menu/organizer_activity_main_scrolling_drawer"
+        app:menu="@menu/student_activity_main_scrolling_drawer"
         />
 
 </android.support.v4.widget.DrawerLayout>
