@@ -69,7 +69,7 @@
                 android:id="@+id/changePass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:layout_margin="@dimen/notification_text"
                 android:orientation="horizontal">
 
@@ -81,17 +81,12 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@android:color/black" />
-
             <LinearLayout
                 android:id="@+id/reqOrgStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/notification_text"
-                android:layout_weight="3"
+                android:layout_weight="4"
 
                 android:orientation="horizontal">
 
@@ -103,11 +98,6 @@
                     android:textSize="18sp" />
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@android:color/black" />
 
         </LinearLayout>
 
