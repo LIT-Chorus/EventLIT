@@ -70,26 +70,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
             // TODO: Only get subscribed events instead of all events
             final User user = UserUtils.getCurrentUser();
 
-            Task<ArrayList<Event>> events = UserUtils.getEventsFollowing().addOnCompleteListener(new OnCompleteListener<ArrayList<Event>>() {
-                @Override
-                public void onComplete(@NonNull Task<ArrayList<Event>> task) {
-                    listEvents.addAll(task.getResult());
-                    UserUtils.getEventsForOrgs(adapter, listEvents, user);
-                }
-            });
-
-            //adapter = new MyAdapter(list);
+            UserUtils.getEventsFollowing(adapter, listEvents);
+            UserUtils.getEventsForOrgs(adapter, listEvents, user);
         } else {
             EventUtils.getAllEvents(adapter, listEvents);
         }
-
-
-//        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-//            @Override
-//            public void onChanged() {
-//                super.onChanged();
-//            }
-//        });
+        
         MyRecyclerView.setAdapter(adapter);
         MyRecyclerView.setLayoutManager(MyLayoutManager);
 
