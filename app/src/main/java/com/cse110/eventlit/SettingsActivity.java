@@ -81,6 +81,9 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
         if (fragment == null) {
             fragment = new SettingsFragment();
+            Bundle arguments = new Bundle();
+            arguments.putBoolean("organizer", mOrganizerStatus);
+            fragment.setArguments(arguments);
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
 

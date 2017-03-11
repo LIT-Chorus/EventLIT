@@ -1,7 +1,9 @@
 package com.cse110.utils;
 
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
@@ -217,27 +219,49 @@ public class UserUtils {
         return eventsFollowing;
     }
 
-    public static Task<ArrayList<Event>> getEventsFollowing() {
-        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
-        currentUserDB.child("eventsFollowing").addListenerForSingleValueEvent(new ValueEventListener() {
+    public static void getEventsFollowing(final CardFragment.MyAdapter adapter,
+                                                            final ArrayList<Event> events) {
+//        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
+        DatabaseReference userEvents = currentUserDB.child("eventsFollowing");
+        userEvents.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, Event>> maptype = new GenericTypeIndicator<Map<String, Event>>(){};
-                Map<String, Event> eventMap = dataSnapshot.getValue(maptype);
-                // If null, means that there are no events following -- initialize empty map.
-                if (eventMap == null)
-                    eventMap = new HashMap<>();
-                ArrayList<Event> events = new ArrayList<>(eventMap.values());
-                wrappedTask.wrapResult(events);
-                Log.d("getEventsFollowing", "Got events following successfully!");
+                GenericTypeIndicator<Map<String, RSVP>> genericTypeIndicator = new GenericTypeIndicator<Map<String, RSVP>>() {};
+                Map<String, RSVP> rsvps = dataSnapshot.getValue(genericTypeIndicator);
+                if (rsvps != null) {
+                    for (RSVP rsvp : rsvps.values()) {
+                        String eventId = rsvp.getEventid();
+                        String orgId = rsvp.getOrgid();
+                        RSVP.Status status = rsvp.rsvpStatus;
+                        if  (status != RSVP.Status.NOT_GOING) {
+                            if (eventId != null && orgId != null) {
+                                DatabaseReference eventRef = DatabaseUtils.getEventsDB().child(orgId).child(eventId);
+                                eventRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Event event = dataSnapshot.getValue(Event.class);
+                                        Log.w("Event", dataSnapshot.toString());
+                                        events.add(event);
+                                        adapter.notifyItemChanged(adapter.getItemCount() - 1);
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("getEventsFollowing", "Bad things @ " + currentUser.toString());
+
             }
         });
-        return wrappedTask.unwrap();
     }
 
     public static final void getEventsForOrgs(final CardFragment.MyAdapter adapter,

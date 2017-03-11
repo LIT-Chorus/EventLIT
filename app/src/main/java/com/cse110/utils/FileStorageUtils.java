@@ -27,17 +27,17 @@ public class FileStorageUtils {
 
     private static StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-    public static void uploadImageFromLocalFile(String id, String extension, Bitmap bitmap) throws FileNotFoundException{
+    public static void uploadImageFromLocalFile(String id, Bitmap bitmap) throws FileNotFoundException{
 
         Log.d(UPLOAD_IMAGE, "beginning of method");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
 
         byte[] data = baos.toByteArray();
 
         StorageReference imageFolderRef = storageRef.child("images");
-        StorageReference imageRef = imageFolderRef.child(id + extension);
+        StorageReference imageRef = imageFolderRef.child(id + ".jpeg");
 
         UploadTask uploadTask = imageRef.putBytes(data);
 
@@ -58,14 +58,20 @@ public class FileStorageUtils {
         });
     }
 
-    public static void getImageView(ImageView imageView, Context context, String id, String extension) {
-        StorageReference imageRef = storageRef.child("images/" + id + extension);
+    public static boolean getImageView(ImageView imageView, Context context, String id) {
+        StorageReference imageRef = storageRef.child("images");
+        imageRef = imageRef.child(id + ".jpeg");
 
-        // Load the image using Glide
-        Glide.with(context /* context */)
-                .using(new FirebaseImageLoader())
-                .load(imageRef)
-                .into(imageView);
+        if (imageRef.getDownloadUrl().isSuccessful()) {
+
+            // Load the image using Glide
+            Glide.with(context /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(imageRef)
+                    .into(imageView);
+            return true;
+        }
+        return false;
     }
 
 
