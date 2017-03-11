@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,6 +66,16 @@ public class OrganizerFeedActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Follow orgs you manage if you don't already
+        User currentUser = UserUtils.getCurrentUser();
+        for (String org: currentUser.getOrgsManaging() ) {
+            if (currentUser.isFollowingOrg(org)) {
+                Log.w("Org Created", org);
+                currentUser.addOrgFollowing(org);
+            }
+        }
+        UserUtils.updateOrgsFollowing((ArrayList<String>) currentUser.getOrgsFollowing());
 
         FragmentManager fm = getSupportFragmentManager();
         fragment = (CardFragment)fm.findFragmentById(R.id.fragmentContainer);
