@@ -131,7 +131,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
         String orgId = bundle.getString("org_id");
         String eventId = bundle.getString("event_id");
-        type = bundle.getString("organizer");
+        type = bundle.getString("type");
 
     }
 }
