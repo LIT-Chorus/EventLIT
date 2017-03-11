@@ -69,7 +69,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 extras.getString("orgid"),
                 extras.getString("eventid"),
                 Event.getEpochTime("LLL/nd", extras.getString("date")),
-                0,
+                Event.getEpochTime("LLL/nd", extras.getString("date")),
                 extras.getString("location"),
                 extras.getString("category"),
                 Integer.parseInt(extras.getString("maxCapacity"))
