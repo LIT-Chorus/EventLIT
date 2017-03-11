@@ -47,6 +47,7 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class CreateEventActivity extends AppCompatActivity implements IPickResult{
@@ -63,6 +64,8 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     // Orgs that the Organizer User manages
     private List<String> orgsManaging;
+
+    private HashMap<String, Calendar> calendars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,9 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Add edit_profilephoto xml
         final View profView = factory.inflate(R.layout.edit_profilephoto, null);
         dialog.setView(profView);
+
+        calendars = new HashMap<>();
+
 
         // Gets the Orgs that the Organization User is managing
         User user = UserUtils.getCurrentUser();
@@ -184,9 +190,11 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     /* Show the start time picker dialog */
     public void onStartTimeClicked(View v){
-        DialogFragment newFragment = new TimePickerFragment();
+        TimePickerFragment newFragment = new TimePickerFragment();
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
         startTimeText.setText("Start Time: ");
+
+        calendars.put("startTime", newFragment.getCalendar());
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -197,9 +205,11 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     /* Show the start date picker dialog */
     public void onStartDateClicked(View v){
-        DialogFragment newFragment = new DatePickerFragment();
+        DatePickerFragment newFragment = new DatePickerFragment();
         TextView startDateText = (TextView) findViewById(R.id.startdatetext);
         startDateText.setText("Start Date: ");
+
+        calendars.put("startDate", newFragment.getCalendar());
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -210,9 +220,11 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     /* Show the end time picker dialog */
     public void onEndTimeClicked(View v){
-        DialogFragment newFragment = new TimePickerFragment();
+        TimePickerFragment newFragment = new TimePickerFragment();
         TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
         endTimeText.setText("End Time: ");
+
+        calendars.put("endTime", newFragment.getCalendar());
 
         // Pass in the end time textview
         Bundle args = new Bundle();
@@ -223,9 +235,11 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     /* Show the end date picker dialog */
     public void onEndDateClicked(View v){
-        DialogFragment newFragment = new DatePickerFragment();
+        DatePickerFragment newFragment = new DatePickerFragment();
         TextView startDateText = (TextView) findViewById(R.id.enddatetext);
         startDateText.setText("End Date: ");
+
+        calendars.put("endDate", newFragment.getCalendar());
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -251,7 +265,40 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String description = mDescription.getEditText().getText().toString();
         String capacity = mCapacity.getEditText().getText().toString();
 
+        Calendar startTime = calendars.get("startTime");
+        Calendar startDate = calendars.get("startDate");
+        Calendar endTime = calendars.get("endTime");
+        Calendar endDate = calendars.get("endDate");
+
+        if (startTime == null) {
+            startTime = Calendar.getInstance();
+        }
+        if (startDate == null) {
+            startDate = Calendar.getInstance();
+        }
+        if (endTime == null) {
+            endTime = Calendar.getInstance();
+        }
+        if (endDate == null) {
+            endDate = Calendar.getInstance();
+        }
+
+        Log.w("Start Time", startTime.getTimeInMillis() + "");
+        Log.w("Start Date", startDate.getTimeInMillis() + "");
+        Log.w("End Time", endTime.getTimeInMillis() + "");
+        Log.w("End Date", endDate.getTimeInMillis() + "");
+
         Event event = new Event(title, description, "275", "0", location, "Uncateogorized", Integer.parseInt(capacity));
+        event.putStartTime(startDate.get(Calendar.YEAR),
+                           startDate.get(Calendar.MONTH),
+                           startDate.get(Calendar.DAY_OF_MONTH),
+                            startTime.get(Calendar.HOUR),
+                            startTime.get(Calendar.MINUTE));
+        event.putEndTime(endDate.get(Calendar.YEAR),
+                endDate.get(Calendar.MONTH),
+                endDate.get(Calendar.DAY_OF_MONTH),
+                endTime.get(Calendar.HOUR),
+                endTime.get(Calendar.MINUTE));
         EventUtils.createEvent(event, new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
