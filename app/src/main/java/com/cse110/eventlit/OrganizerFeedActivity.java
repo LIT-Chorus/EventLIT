@@ -202,9 +202,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
             startActivity(act);
             finish();
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(OrganizerFeedActivity.this, SettingsActivity.class));
-
-            Intent act = new Intent(OrganizerFeedActivity.this, ExploreActivity.class);
+            Intent act = new Intent(OrganizerFeedActivity.this, SettingsActivity.class);
             act.putExtra("organizer", true);
             startActivity(act);
             finish();
