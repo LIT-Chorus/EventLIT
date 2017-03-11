@@ -92,6 +92,19 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         if (user != null){
             updateHeader(user.getDisplayName(), user.getEmail());
         }
+
+        boolean requested = getIntent().getBooleanExtra("message", false);
+        if (requested) {
+            String orgName = getIntent().getStringExtra("orgName");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                    .setTitle("Organizer Request Submitted")
+                    .setMessage("You have successfully submitted a request to be an organizer " +
+                            "for: " + orgName + ". You will receive a response via a text " +
+                            "message regarding your request within 24 hours.")
+                    .setPositiveButton(android.R.string.ok, null);
+            builder.create().show();
+        }
+
     }
 
     // Updates the name/email/profile pic that is displayed in the hamburger menu
