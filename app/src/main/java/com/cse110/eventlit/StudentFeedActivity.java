@@ -1,6 +1,5 @@
 package com.cse110.eventlit;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,8 +25,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
 
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -125,7 +122,7 @@ public class StudentFeedActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_scrolling, menu);
+        getMenuInflater().inflate(R.menu.main_scrolling_no_filter, menu);
         return true;
     }
 
@@ -168,41 +165,6 @@ public class StudentFeedActivity extends AppCompatActivity
                         }
                     }).create();
             dialog.show();
-        }
-
-        if (id == R.id.action_filter ) {
-
-            final CharSequence[] items = {" Academics ", " Career ", " Social ", " Food ", " Faith "};
-            // arraylist to keep the selected items
-            final ArrayList seletedItems=new ArrayList();
-
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("Select categories to view")
-                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                            if (isChecked) {
-                                // If the user checked the item, add it to the selected items
-                                seletedItems.add(indexSelected);
-                            } else if (seletedItems.contains(indexSelected)) {
-                                // Else, if the item is already in the array, remove it
-                                seletedItems.remove(Integer.valueOf(indexSelected));
-                            }
-                        }
-                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            //  Your code when user clicked on OK
-                            //  You can write the code  to save the selected item here
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            //  Your code when user clicked on Cancel
-                        }
-                    }).create();
-            dialog.show();
-
         }
 
         return super.onOptionsItemSelected(item);

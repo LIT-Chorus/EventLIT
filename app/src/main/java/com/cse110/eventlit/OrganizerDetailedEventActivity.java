@@ -33,6 +33,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
     TextView description;
 
     Event event;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,13 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, OrganizerFeedActivity.class));
+        if (type.equals("feed")) {
+            Intent explore = new Intent(this, ExploreActivity.class);
+            explore.putExtra("organizer", true);
+            startActivity(explore);
+        } else {
+            startActivity(new Intent(this, OrganizerFeedActivity.class));
+        }
         finish();
 
     }
@@ -124,6 +131,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
         String orgId = bundle.getString("org_id");
         String eventId = bundle.getString("event_id");
+        type = bundle.getString("organizer");
 
     }
 }

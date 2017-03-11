@@ -54,6 +54,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     private boolean mOrganizerStatus = false;
 
+    private String type;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +75,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         events = UserUtils.getCurrentUser().getEventsFollowing();
 
         Bundle pageType = getArguments();
-        String type = pageType.getString("type");
+        type = pageType.getString("type");
 
         mOrganizerStatus = getArguments().getBoolean("organizer");
 
@@ -299,6 +301,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("org_name", orgNameTextView.getText().toString());
                     extras.putString("org_id", orgId);
                     extras.putString("event_id", eventid);
+                    extras.putString("type", type);
                     openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);
                     getActivity().finish();

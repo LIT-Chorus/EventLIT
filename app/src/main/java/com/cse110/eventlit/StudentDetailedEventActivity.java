@@ -24,6 +24,7 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
     private String eventId;
 
     private boolean mOrganizerStatus = false;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +96,17 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // TODO: Go back to organizer feed
-        if (mOrganizerStatus) {
-            startActivity(new Intent(this, OrganizerFeedActivity.class));
+        if (type.equals("feed")) {
+            Intent explore = new Intent(this, ExploreActivity.class);
+            explore.putExtra("organizer", mOrganizerStatus);
+            startActivity(explore);
+
         } else {
-            startActivity(new Intent(this, StudentFeedActivity.class));
+            if (mOrganizerStatus) {
+                startActivity(new Intent(this, OrganizerFeedActivity.class));
+            } else {
+                startActivity(new Intent(this, StudentFeedActivity.class));
+            }
         }
         finish();
     }
@@ -132,7 +140,7 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
         orgId = bundle.getString("org_id");
         eventId = bundle.getString("event_id");
         mOrganizerStatus = bundle.getBoolean("organizer");
-
+        type = bundle.getString("type");
     }
 
 }
