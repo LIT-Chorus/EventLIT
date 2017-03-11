@@ -36,6 +36,10 @@
                 android:textColorHint="@color/black" />
         </android.support.design.widget.TextInputLayout>
 
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <!--BUTTONS FOR START TIME/DATE -->
         <LinearLayout

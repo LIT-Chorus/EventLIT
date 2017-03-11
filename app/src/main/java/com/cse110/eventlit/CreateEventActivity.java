@@ -14,8 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -77,6 +79,16 @@ public class CreateEventActivity extends AppCompatActivity {
                 addEventToDB();
             }
         });
+
+        // Populate spinner for selecting org that the event is for
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+     /*   spinner.setPrompt("Organization holding event");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, android.R.id.text1);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+        spinnerAdapter.add("value");
+        spinnerAdapter.notifyDataSetChanged();*/
 
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
