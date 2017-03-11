@@ -25,7 +25,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:theme="@style/InputText"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/timetext" />
  <!--   <android.support.design.widget.TextInputLayout
         android:id="@+id/timetext"
-        android:layout_width="match_parent"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:theme="@style/InputTextBlack"
@@ -118,7 +118,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/locationtext"
-        android:layout_width="match_parent"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:theme="@style/InputTextBlack"
@@ -141,7 +141,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/descriptiontext"
-        android:layout_width="match_parent"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:theme="@style/InputTextBlack"
@@ -164,7 +164,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tagtext"
-        android:layout_width="match_parent"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:theme="@style/InputTextBlack"
@@ -187,7 +187,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/peopletext"
-        android:layout_width="match_parent"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:theme="@style/InputTextBlack"

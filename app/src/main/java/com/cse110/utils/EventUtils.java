@@ -34,7 +34,7 @@ public class EventUtils {
 
     private static DatabaseReference eventsDB = DatabaseUtils.getEventsDB();
 
-    private static Event getEventSnapshot(DataSnapshot eventSnapshot) {
+    public static Event getEventSnapshot(DataSnapshot eventSnapshot) {
         // Get all fields in an event object
         String orgId = eventSnapshot.child("orgid").getValue().toString();
 
@@ -87,6 +87,7 @@ public class EventUtils {
                                 String category = event.getCategory();
                                 if (categories.contains(category) &&
                                         event.getAttendees().size() >= popularity) {
+
                                     adapterArray.add(event);
                                 }
                             }
