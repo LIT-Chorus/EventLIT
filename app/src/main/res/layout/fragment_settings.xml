@@ -19,6 +19,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#E5E5E5"
                 android:orientation="vertical">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -61,31 +62,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="10dp"
             android:orientation="vertical">
-
-
-            <!--<FrameLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="4"-->
-            <!--android:layout_margin="@dimen/notification_text">-->
-
-            <!--<android.support.v7.widget.AppCompatTextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Notifications"-->
-            <!--android:fontFamily="sans-serif"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:textSize="18sp" />-->
-
-            <!--<android.support.v7.widget.SwitchCompat-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="right"-->
-            <!--style="@style/SwitchStyle"-->
-            <!--android:id="@+id/notifications" />-->
-
-            <!--</FrameLayout>-->
 
             <LinearLayout
                 android:id="@+id/changePass"

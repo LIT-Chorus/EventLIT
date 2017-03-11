@@ -118,7 +118,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
             @Override
             public void onClick(View view) {
                 PickImageDialog.build(new PickSetup()
-                        .setTitle("Select a new Profile Picture!")
+                        .setTitle("Select a new profile picture!")
                         .setPickTypes(EPickType.GALLERY))
                         .setOnPickResult(SettingsFragment.this)
                         .show(getFragmentManager());
