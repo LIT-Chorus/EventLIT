@@ -97,6 +97,11 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
             UserUtils.updateCurrentUser(user);
             Log.d("add org", orgs_to_follow.get(i));
         }
+
+        //return to the feed
+        Intent openFeed = new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class);
+        startActivity(openFeed);
+        finish();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
