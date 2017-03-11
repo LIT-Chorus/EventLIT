@@ -55,6 +55,15 @@ public class CreateEventActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // TODO: FAB for adding event picture
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+            }
+        });
+
         // Gets the Orgs that the Organization User is managing
         User user = UserUtils.getCurrentUser();
         orgsManaging = user.getOrgsManaging(); 
