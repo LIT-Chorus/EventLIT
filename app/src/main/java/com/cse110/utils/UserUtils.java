@@ -2,6 +2,7 @@ package com.cse110.utils;
 
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -25,8 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,31 @@ public class UserUtils {
      */
     private static User currentUser;
     private static UserDataListener userDataListener;
+
+    /**
+     * For keeping track of changes in user data, and updating the associated user with it.
+     * It's important that the initial User reference does not switch references,
+     * or this listener will be lost.
+     */
+    static class UserDataListener implements ValueEventListener {
+        // User that this listener will be updating
+        private User myUser;
+
+        public UserDataListener(User u) {
+            myUser = u;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            User tmpUser = dataSnapshot.getValue(User.class);
+            myUser.updateWith(tmpUser);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("UserDataListener", "Something went wrong while listening to " + myUser + "!");
+        }
+    }
 
     /**
      * Reset the user's password
@@ -113,116 +139,30 @@ public class UserUtils {
         user.updatePassword(newPassword).addOnCompleteListener(verifyOnComplete);
     }
 
-    /*
-    public static User getUserFromIdSynch(String uid) {
-
-        DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);
-
-        final User[] user = new User[1];
-
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user[0] = dataSnapshot.getValue(User.class);
-
-                latch.countDown();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                Log.d("getUserFromIdSynch", "user not read in correctly");
-                latch.countDown();
-            }
-        });
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return user[0];
-
-    }
-    */
-
-    // TODO create methods to modify the User database
-
-    public static final List<Organization> getOrgsFollowingSynch(User user) {
-
-        List<Organization> orgsFollowing = new ArrayList<>();
-
-        List<String> orgid_following = user.getOrgsFollowing();
-        CountDownLatch finished = new CountDownLatch(orgid_following.size());
+    public static ArrayList<Organization> getOrgsFollowing() {
+        ArrayList<Organization> orgsFollowing = new ArrayList<>();
+        List<String> orgid_following = currentUser.getOrgsFollowing();
 
         for (String orgid : orgid_following) {
-            OrganizationUtils.addOrgFromId(orgid, orgsFollowing, finished);
-        }
-
-        try {
-            finished.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            orgsFollowing.add(OrganizationUtils.orgFromId(orgid));
         }
 
         return orgsFollowing;
-
     }
 
-    // TODO create methods to modify the User database
-
-    public static final ArrayList<Organization> getOrgsManagingSynch(User user) {
-
+    /**
+     * Get organizations the current user is managing
+     */
+    public static ArrayList<Organization> getOrgsManaging() {
         ArrayList<Organization> orgsManaging = new ArrayList<>();
-
-        List<String> orgid_managing = user.getOrgsManaging();
-        CountDownLatch finished = new CountDownLatch(orgid_managing.size());
+        List<String> orgid_managing = currentUser.getOrgsManaging();
 
         for (String orgid : orgid_managing) {
-            OrganizationUtils.addOrgFromId(orgid, orgsManaging, finished);
-        }
-
-        try {
-            finished.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            orgsManaging.add(OrganizationUtils.orgFromId(orgid));
         }
 
         return orgsManaging;
-
     }
-
-    /*
-    public static final ArrayList<Event> getEventsFollowingSynch(User user) {
-
-        ArrayList<Event> eventsFollowing = new ArrayList<>();
-
-        Collection<RSVP> rsvps = user.getEventsFollowing().values();
-
-        if (rsvps.size() == 0) {
-            return eventsFollowing;
-        }
-
-        CountDownLatch finished = new CountDownLatch(rsvps.size());
-
-        for (RSVP rsvp: rsvps) {
-            Log.d("getEvents: rsvp object:", rsvp.toString());
-            EventUtils.addEventFromId(rsvp, eventsFollowing, finished);
-            Log.d("getEvents list size:", "" + eventsFollowing.size());
-        }
-
-        try {
-            finished.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return eventsFollowing;
-    }
-    */
 
     public static void getEventsFollowing(final CardFragment.MyAdapter adapter,
                                           final ArrayList<Event> events,
@@ -249,7 +189,7 @@ public class UserUtils {
                                         Event event = dataSnapshot.getValue(Event.class);
                                         Log.w("Event", dataSnapshot.toString());
 
-                                        if (!eventIdsAdded.contains(event.getEventid())) {
+                                        if (event != null && !eventIdsAdded.contains(event.getEventid())) {
 
                                             eventIdsAdded.add(event.getEventid());
 
@@ -285,37 +225,6 @@ public class UserUtils {
         List<String> orgIds = user.getOrgsFollowing();
         for (String orgId : orgIds) {
             EventUtils.getEventsByOrgId(adapter, events, eventIdsAdded, orgId, 0, null, true);
-        }
-    }
-
-
-    public static final void updateUserOnBackend(User user, String uid) {
-        DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);
-        userRef.setValue(user);
-    }
-
-    /**
-     * For keeping track of changes in user data, and updating the associated user with it.
-     * It's important that the initial User reference does not switch references,
-     * or this listener will be lost.
-     */
-    static class UserDataListener implements ValueEventListener {
-        // User that this listener will be updating
-        private User myUser;
-
-        public UserDataListener(User u) {
-            myUser = u;
-        }
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            User tmpUser = dataSnapshot.getValue(User.class);
-            myUser.updateWith(tmpUser);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            Log.e("UserDataListener", "Something went wrong while listening to " + myUser + "!");
         }
     }
 
@@ -473,6 +382,7 @@ public class UserUtils {
      * @return A *copy* of the user singleton, don't try to modify this object to modify the user,
      *         use other methods provided in the utils class (updateCurrentUser)
      */
+    @Nullable
     public static User getCurrentUser() {
         if (currentUser == null)
             return null;

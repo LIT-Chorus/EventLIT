@@ -247,6 +247,10 @@ public class SignUpActivity extends AppCompatActivity {
             passEditText.setError("Password must contain at least 6 characters");
         }
 
+        if (passwordText == null) {
+            passEditText.setError("Enter your current password");
+        }
+
         return true;
     }
 

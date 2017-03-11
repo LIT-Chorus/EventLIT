@@ -2,8 +2,12 @@ package com.cse110.eventlit;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by Michelle on 2/23/2017.
  */
@@ -21,9 +27,9 @@ import com.google.firebase.auth.FirebaseUser;
 public class ChangePasswordActivity  extends AppCompatActivity {
 
     private AppCompatButton mSubmitChangePass;
-    private EditText mOldPass;
-    private EditText mPass1;
-    private EditText mPass2;
+    private TextInputLayout mOldPass;
+    private TextInputLayout mPass1;
+    private TextInputLayout mPass2;
     private FirebaseUser mUser;
 
         @Override
@@ -33,23 +39,28 @@ public class ChangePasswordActivity  extends AppCompatActivity {
 
             // Initialize buttons and EditTexts
             mSubmitChangePass = (AppCompatButton) findViewById(R.id.submitNewPassButton);
-            mOldPass = (EditText)findViewById(R.id.oldPassword);
-            mPass1 = (EditText)findViewById(R.id.newPassword1);
-            mPass2 = (EditText)findViewById(R.id.newPassword2);
+            mOldPass = (TextInputLayout) findViewById(R.id.current_password);
+            mPass1 = (TextInputLayout) findViewById(R.id.new_pass);
+            mPass2 = (TextInputLayout)findViewById(R.id.confirm_pass);
 
             // Get the Firebase user instance
             mUser = FirebaseAuth.getInstance().getCurrentUser();
 
-
+            mOldPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    checkOldPass();
+                }
+            });
 
             // Handling Change Password Button Listener
             mSubmitChangePass.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Get TextValues
-                    String oldPass = mOldPass.getText() + "";
-                    String newPass1 = mPass1.getText() + "";
-                    String newPass2 = mPass2.getText() + "";
+                    String oldPass = mOldPass.getEditText().getText().toString();
+                    String newPass1 = mPass1.getEditText().getText().toString();
+                    String newPass2 = mPass2.getEditText().getText().toString();
 
                     // Do this when reset is done
                     OnCompleteListener<String> passwordResetListener = new OnCompleteListener<String>() {
@@ -61,20 +72,14 @@ public class ChangePasswordActivity  extends AppCompatActivity {
                         }
                     };
 
-                    // Checks for empty input
-                    if (oldPass.equals("") || newPass1.equals("") || newPass2.equals("")) {
-                        Toast toast = Toast.makeText(ChangePasswordActivity.this,
-                                "Please enter valid password", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
+
 
                     // Edge Case: new passwords do not match
-                    else if (!newPass1.equals(newPass2)){
-                        Toast error = Toast.makeText(ChangePasswordActivity.this,
-                                "Passwords do not match", Toast.LENGTH_SHORT);
-                        error.show();
-                    }
-                    else {
+
+                    boolean old = checkOldPass();
+                    boolean updated = checkPassMatch();
+
+                    if (old && updated) {
                         // PS: Backend handles case for incorrect old password
 
                         // Backend will take care of it from here
@@ -85,4 +90,77 @@ public class ChangePasswordActivity  extends AppCompatActivity {
             });
 
         }
+
+    protected boolean checkOldPass() {
+        EditText passEditText = mOldPass.getEditText();
+
+        if (passEditText != null && passEditText.getError() != null) return false;
+
+        String passwordText = null;
+        if (passEditText != null) {
+            passwordText = passEditText.getText().toString();
+        }
+
+        // Password Criteria
+        if (passwordText != null) {
+            if (passwordText.length() < 6) {
+                passEditText.setError("Password must contain at least 6 characters");
+                return false;
+            } else if (passwordText.length() == 0) {
+                passEditText.setError("Please enter your old password");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected boolean checkPassMatch() {
+
+        boolean fail = true;
+
+        EditText passEditText = mPass1.getEditText();
+
+        if (passEditText != null && passEditText.getError() != null) return false;
+
+        String passwordTextOne = null;
+
+        if (passEditText != null) {
+            passwordTextOne = passEditText.getText().toString();
+        }
+
+        EditText confirmPassEditText = mPass2.getEditText();
+        if (confirmPassEditText != null && confirmPassEditText.getError() != null) return false;
+
+
+        String confirmPasswordText = null;
+        if (confirmPassEditText != null) {
+            confirmPasswordText = confirmPassEditText.getText().toString();
+        }
+
+        if (passwordTextOne == null || passwordTextOne.length() == 0) {
+            passEditText.setError("Please Enter Your New Password");
+            fail = false;
+        } else if (passwordTextOne.length() < 6) {
+            passEditText.setError("Password must contain at least 6 characters");
+            fail = false;
+        }
+
+        if (confirmPasswordText == null || confirmPasswordText.length() == 0) {
+            confirmPassEditText.setError("Please Confirm your Password");
+            fail = false;
+        } else if (confirmPasswordText.length() < 6) {
+            confirmPassEditText.setError("Password must contain at least 6 characters");
+            fail = false;
+        }
+
+        // Password Criteria
+        if (passwordTextOne != null && confirmPasswordText != null &&
+                !confirmPasswordText.equals(passwordTextOne)) {
+            confirmPassEditText.setError("Passwords Don't Match");
+            fail = false;
+        }
+
+        return fail;
+    }
 }

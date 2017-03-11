@@ -119,14 +119,11 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
 
-            OrganizationUtils.getOrgFromIdAsync(e.getOrgid(), new OnCompleteListener<Organization>() {
+            OrganizationUtils.loadOrgs().addOnCompleteListener(new OnCompleteListener<ArrayList<Organization>>() {
                 @Override
-                public void onComplete(@NonNull Task<Organization> task) {
-                    if (task.isSuccessful()) {
-                        Organization org = task.getResult();
-                        holder.orgNameTextView.setText(org.getName());
-                    }
-
+                public void onComplete(@NonNull Task<ArrayList<Organization>> task) {
+                    Organization org = OrganizationUtils.orgFromId(e.getOrgid());
+                    holder.orgNameTextView.setText(org.getName());
                 }
             });
 
