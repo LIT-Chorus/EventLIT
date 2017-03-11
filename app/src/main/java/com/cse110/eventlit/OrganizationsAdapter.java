@@ -1,6 +1,7 @@
 package com.cse110.eventlit;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckedTextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +24,7 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
 
     // Member Variable ArrayList of Organizations
     private ArrayList<Organization> mOrganizations;
-
+    public static ArrayList<String> selectedOrganizationids = new ArrayList<String>();
     private Context mContext;
 
     public OrganizationsAdapter(Context context, ArrayList<Organization> organizations){
@@ -43,6 +44,10 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
         return mOrganizations;
     }
 
+    public static ArrayList<String> getSelectedOrganization(){return selectedOrganizationids;}
+
+    public static void clearSelectedOrganization(){selectedOrganizationids.clear();}
+
     public void setmOrganizations(ArrayList<Organization> filter){
         mOrganizations = filter;
     }
@@ -50,11 +55,12 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public AppCompatCheckedTextView mOrgName;
-
+        public AppCompatButton mbutton;
 
         public MyViewHolder(View view) {
             super(view);
             mOrgName = (AppCompatCheckedTextView) view.findViewById(R.id.org_name);
+            mbutton = (AppCompatButton) view.findViewById(R.id.save_button);
             mOrgName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -63,8 +69,11 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
                         User user = UserUtils.getCurrentUser();
                         int index = getAdapterPosition();
                         if (user != null && mOrganizations.size() != 0) {
+                            Log.d("removing ord", mOrganizations.get(index).getOrgId());
                             user.removeOrgFollowing(mOrganizations.get(index).getOrgId());
                             UserUtils.updateCurrentUser(user);
+                            String temp = mOrganizations.get(index).getOrgId();
+                            selectedOrganizationids.remove(temp);
                         }
                         mOrgName.setChecked(false);
                     }
@@ -76,9 +85,11 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
                         // Add it to the list of orgs the user is following
                         int index = getAdapterPosition();
                         if (user != null && mOrganizations.size() != 0) {
-                            Log.w("Added Org", mOrganizations.get(index).getOrgId());
-                            user.addOrgFollowing(mOrganizations.get(index).getOrgId());
-                            UserUtils.updateCurrentUser(user);
+                            //Log.w("Added Org", mOrganizations.get(index).getOrgId());
+                            String temp = mOrganizations.get(index).getOrgId();
+                            selectedOrganizationids.add(temp);
+                            //user.addOrgFollowing(mOrganizations.get(index).getOrgId());
+                            //UserUtils.updateCurrentUser(user);
                         }
                         mOrgName.setChecked(true);
                     }
