@@ -1,32 +1,23 @@
 package com.cse110.eventlit;
 
-import android.app.Activity;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
-import com.cse110.utils.DatabaseUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
 
@@ -58,36 +49,14 @@ public class UserUtilsTest {
 
     @Test
     public void getOrgsManaging() throws Exception {
-
-        List<Organization> orgsManaging = UserUtils.getOrgsManagingSynch(user);
-
-    }
-
-    @Test
-    public void getOrgsFollowing() throws Exception {
-        List<Organization> orgsFollowing = UserUtils.getOrgsFollowingSynch(user);
-    }
-
-    @Test
-    public void getEventsFollowing() throws Exception {
-
-        List<Event> eventsFollowing = UserUtils.getEventsFollowingSynch(user);
-
-        assertEquals(2, eventsFollowing.size());
-
-        for (Event event: eventsFollowing) {
-            Log.d("aaaz", event.toString());
-        }
-
-
+        List<Organization> orgsManaging = UserUtils.getOrgsManaging();
     }
 
     @Test
     public void testgetEventsFollowingAsync() throws Exception {
-        Task<ArrayList<Event>> eventsTask = UserUtils.getEventsFollowing();
+        ArrayList<Event> events = new ArrayList<>();
+        UserUtils.getEventsFollowing(null, events);
 
-        Tasks.await(eventsTask);
-        ArrayList<Event> events = (ArrayList<Event>) eventsTask.getResult();
         Log.wtf("yo", events.toString());
 
         ArrayList<String> descriptions = new ArrayList<>();
