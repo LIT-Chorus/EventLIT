@@ -27,6 +27,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 public class OrganizerFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -134,7 +136,43 @@ public class OrganizerFeedActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort) {
-            return true;
+            final CharSequence[] items = {" Time "," Popularity "};
+            // arraylist to keep the selected items
+            final ArrayList seletedItems=new ArrayList();
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Sort by")
+                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                seletedItems.add(indexSelected);
+                            }
+                            if (seletedItems.contains(indexSelected)) {
+                                // Else, if the item is already in the array, remove it
+                                seletedItems.remove(Integer.valueOf(indexSelected));
+                                if (indexSelected == 0) {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(1, false);
+                                }
+                                else {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(0, false);
+                                }
+                            }
+                        }
+                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on OK
+                            //  You can write the code  to save the selected item here
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on Cancel
+                        }
+                    }).create();
+            dialog.show();
         }
 
         else if (id == R.id.action_filter) {
