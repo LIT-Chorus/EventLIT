@@ -89,8 +89,11 @@ public class EventUtils {
                             // Create an event object and add it to the adapter
                             Event event = getEventSnapshot(eventSnapshot);
 
-                            Date eventDate = new Date(event.getEndDate());
+
+                            Date eventDate = new Date(event.getStartDate() + 86400);
                             Date today = new Date();
+
+                            Log.d("EventUtils end date", "" + event.getEndDate());
 
                             if (eventDate.before(today)) {
                                 EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);
