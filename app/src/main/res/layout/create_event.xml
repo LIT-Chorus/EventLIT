@@ -69,7 +69,22 @@
             android:textColorHint="@color/black" />
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <TextView
+        android:id="@+id/timetext"
+        android:layout_width="wrap_content"
+        android:textSize="15dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/datetext"
+        tools:layout_editor_absoluteX="8dp"
+        />
+    <Button
+        android:id="@+id/timebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onTimeButtonClicked"
+        android:text="Set Time"
+        app:layout_constraintTop_toBottomOf="@+id/timetext" />
+ <!--   <android.support.design.widget.TextInputLayout
         android:id="@+id/timetext"
         android:layout_width="395dp"
         android:layout_height="wrap_content"
@@ -91,7 +106,7 @@
             android:soundEffectsEnabled="true"
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
-    </android.support.design.widget.TextInputLayout>
+    </android.support.design.widget.TextInputLayout>-->
 
     <ImageView
         android:id="@+id/locationicon"
@@ -109,7 +124,7 @@
         android:theme="@style/InputTextBlack"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/timetext"
+        app:layout_constraintTop_toBottomOf="@+id/timebutton"
         tools:layout_editor_absoluteX="8dp">
         <EditText
             android:layout_width="match_parent"
