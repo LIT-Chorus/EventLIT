@@ -1,6 +1,7 @@
 package com.cse110.utils;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.cse110.eventlit.OrganizationsAdapter;
 import com.cse110.eventlit.db.Organization;
@@ -114,6 +115,23 @@ public class OrganizationUtils {
         }
 
         return wrappedOrgsTask.unwrap();
+    }
+
+    /**
+     * Fetch a list of student organizations at UCSD, save it off in an ArrayAdapter,
+     * Notify the ArrayAdapter of the change.
+     */
+    public static ArrayList<Organization> getAllStudentOrganizations() {
+        final ArrayList<Organization> orgs = new ArrayList<>();
+
+        // Just fill adapter with current list if not empty
+        if (!orgsList.isEmpty()) {
+            orgs.addAll(orgsList);
+        } else {
+            return orgs;
+        }
+
+        return orgs;
     }
 
     /**

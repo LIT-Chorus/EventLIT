@@ -43,9 +43,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
     private de.hdodenhof.circleimageview.CircleImageView mProfilePhoto;
     private AppCompatTextView mName;
     private AppCompatTextView mOrgStatus;
-    private static final int PERMISSION_SEND_SMS = 1;
-    private static final String phoneNumber = "+14088310782";
-    private static final String message = "hi";
     private boolean mOrganizerStatus;
 
     @Override
@@ -106,8 +103,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
             @Override
             public void onClick(View v) {
                 // TODO: KEVIN PUT YOUR LOGIC IN HERE FOR NOW
-                Log.wtf("SettingsFragment", "going to call checkPermission");
-                checkPermission();
+                startActivity(new Intent(getActivity(), OrganizerRequestActivity.class));
             }
         });
 
@@ -137,57 +133,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
 
         return view;
     }
-    void checkPermission() {
 
-        Log.wtf("SettingsFragment", "inside checkPrmission");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.wtf("SettingsFragment", "version is at least Lollipop");
-            if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.SEND_SMS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                Log.wtf("SettingsFragment", "permission still not accepted");
-                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS)) {
-                    Log.wtf("SettingsFragment", "show rationale");
-                } else {
-                    Log.wtf("SettingsFragment", "about to request permissions");
-                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SEND_SMS);
-                }
-            }
-        }
-        else {
-            Log.wtf("SettingsFragment", "no need to ask for permission");
-            sendSms(phoneNumber, message);
-        }
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.wtf("SettingsFragment", "inside onRequestPermissionResult");
-        Log.wtf("SettingsFragment", "size of grantResults" + Integer.toString(grantResults.length));
-        Log.wtf("SettingsFragment"," first value of grantResults " + Integer.toString(grantResults[0]));
-        Log.wtf("SettingsFragment", "value of Pack permission granted" + Integer.toString(PackageManager.PERMISSION_GRANTED));
-        switch (requestCode) {
-            case PERMISSION_SEND_SMS:
-                final int numOfRequest = grantResults.length;
-                final boolean isGranted = numOfRequest == 1
-                        && PackageManager.PERMISSION_GRANTED == grantResults[numOfRequest - 1];
-                if (isGranted) {
-                    // you have permission go ahead
-                    Log.wtf("SettingsFragment", "access permission");
-                    sendSms(phoneNumber, message);
-                } else {
-                    Log.wtf("SettingsFragment", "no permission");
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-
-    public void sendSms(String phoneNumber, String message) {
-        Log.wtf("SettingsFragment", "sendSMS is called");
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(this.phoneNumber, null, this.message, null, null);
-    }
     @Override
     public void onPickResult(PickResult r) {
         if (r.getError() == null) {
