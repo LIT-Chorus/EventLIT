@@ -56,6 +56,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     private String type;
 
+    private User user;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new MyAdapter(listEvents);
 
-        events = UserUtils.getCurrentUser().getEventsFollowing();
+        user = UserUtils.getCurrentUser();
+
+        events = user.getEventsFollowing();
 
         Bundle pageType = getArguments();
         type = pageType.getString("type");
@@ -183,6 +187,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees();
             mMaxCapacity = e.getMaxCapacity();
+
+            if(mOrganizerStatus && user.getOrgsManaging().contains(e.getOrgid())) {
+                holder.goingButton.setVisibility(View.INVISIBLE);
+                holder.interestedButton.setVisibility(View.INVISIBLE);
+                holder.notGoingButton.setVisibility(View.INVISIBLE);
+            }
 
             holder.goingButton.setOnClickListener(new View.OnClickListener() {
                 @Override
