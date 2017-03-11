@@ -107,6 +107,10 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             return true;
         }
 
+        else if (id == R.id.action_filter) {
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

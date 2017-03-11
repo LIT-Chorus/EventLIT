@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,7 +178,7 @@ public class UserUtils {
                 Map<String, RSVP> rsvps = dataSnapshot.getValue(genericTypeIndicator);
                 if (rsvps != null) {
                     for (RSVP rsvp : rsvps.values()) {
-                        String eventId = rsvp.getEventid();
+                        final String eventId = rsvp.getEventid();
                         String orgId = rsvp.getOrgid();
                         RSVP.Status status = rsvp.rsvpStatus;
                         if  (status != RSVP.Status.NOT_GOING) {
@@ -187,6 +188,7 @@ public class UserUtils {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Event event = dataSnapshot.getValue(Event.class);
+
                                         Log.w("Event", dataSnapshot.toString());
 
                                         if (event != null && !eventIdsAdded.contains(event.getEventid())) {
@@ -196,6 +198,10 @@ public class UserUtils {
                                             events.add(event);
                                             adapter.notifyItemChanged(adapter.getItemCount() - 1);
                                             adapter.notifyDataSetChanged();
+                                        }
+
+                                        else if (event == null){
+                                            UserUtils.removeEventsFollowing(eventId);
                                         }
 
                                     }
@@ -267,7 +273,12 @@ public class UserUtils {
         currentUserDB.child("orgsManaging").setValue(orgs);
     }
 
-    public static void updateEventsFollowing(String eventid, RSVP rsvp) {
+    public static void removeEventsFollowing(String eventid) {
+        currentUser.removeEventFollowing(eventid);
+        currentUserDB.child("eventsFollowing").setValue(currentUser.getEventsFollowing());
+    }
+
+    public static void addEventsFollowing(String eventid, RSVP rsvp) {
         currentUser.addEventFollowing(eventid, rsvp);
         currentUserDB.child("eventsFollowing").setValue(currentUser.getEventsFollowing());
     }
