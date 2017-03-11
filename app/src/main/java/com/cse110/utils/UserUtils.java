@@ -230,7 +230,9 @@ public class UserUtils {
                                               User user) {
         List<String> orgIds = user.getOrgsFollowing();
         for (String orgId : orgIds) {
-            EventUtils.getEventsByOrgId(adapter, events, eventIdsAdded, orgId, 0, null, true);
+            if (orgId != null) {
+                EventUtils.getEventsByOrgId(adapter, events, eventIdsAdded, orgId, 0, null, true);
+            }
         }
     }
 
