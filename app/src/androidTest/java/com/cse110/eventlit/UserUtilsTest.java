@@ -55,7 +55,7 @@ public class UserUtilsTest {
     @Test
     public void testgetEventsFollowingAsync() throws Exception {
         ArrayList<Event> events = new ArrayList<>();
-        UserUtils.getEventsFollowing(null, events);
+
 
         Log.wtf("yo", events.toString());
 
