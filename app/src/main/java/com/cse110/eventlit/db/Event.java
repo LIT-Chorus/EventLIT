@@ -256,4 +256,9 @@ public class Event {
         this.eventid = eventid;
     }
 
+
+    @Override
+    public boolean equals(Object event) {
+        return eventid.equals(((Event)event).getEventid());
+    }
 }
