@@ -136,6 +136,10 @@ public class OrganizerFeedActivity extends AppCompatActivity
             return true;
         }
 
+        else if (id == R.id.action_filter) {
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

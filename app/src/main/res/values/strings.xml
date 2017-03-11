@@ -89,4 +89,7 @@
     <string name="interested">Interested</string>
     <string name="cannotGo">Not Going</string>
     <string name="title_activity_create_event">CreateEventActivity</string>
+
+    <!-- Help and FAQ Strings -->
+    <string name="event_howto">How do I make an event?</string>
 </resources>
