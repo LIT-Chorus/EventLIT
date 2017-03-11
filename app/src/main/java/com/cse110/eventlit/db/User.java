@@ -69,7 +69,8 @@ public class User {
      * @param orgid Organization ID
      */
     public void addOrgFollowing(String orgid) {
-        orgsFollowing.add(orgid);
+        if (!orgsFollowing.contains(orgid))
+            orgsFollowing.add(orgid);
     }
 
     /**
@@ -77,7 +78,8 @@ public class User {
      * @param orgid Organization ID
      */
     public void addOrgManaging(String orgid) {
-        orgsManaging.add(orgid);
+        if (!orgsManaging.contains(orgid))
+            orgsManaging.add(orgid);
     }
 
     /**

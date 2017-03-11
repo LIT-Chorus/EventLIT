@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.User;
@@ -26,6 +25,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 public class OrganizationSelectionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -76,10 +77,6 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
         emailTextView.setText(email);
         // TODO update prof pic
     }
-    public void HandleClick(View v){
-        Button btn = (Button) v;
-        Log.d("click", btn.getText().toString());
-    }
 
     @Override
     public void onBackPressed() {
@@ -91,6 +88,16 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
         finish();
     }
 
+    public void HandleClick(View v){
+        Log.d("click", "save is clicked");
+        ArrayList<String> orgs_to_follow = OrganizationsAdapter.getSelectedOrganization();
+        User user = UserUtils.getCurrentUser();
+        for(int i = 0; i < orgs_to_follow.size(); i++){
+            user.addOrgFollowing(orgs_to_follow.get(i));
+            UserUtils.updateCurrentUser(user);
+            Log.d("add org", orgs_to_follow.get(i));
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

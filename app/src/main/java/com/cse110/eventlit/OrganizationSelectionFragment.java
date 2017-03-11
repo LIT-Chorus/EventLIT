@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.cse110.eventlit.db.Organization;
 
@@ -33,10 +32,6 @@ public class OrganizationSelectionFragment extends Fragment {
 
     }
 
-    public void onClick(View arg0){
-        Button btn = (Button) arg0;
-        Log.d("click", btn.getText().toString());
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
