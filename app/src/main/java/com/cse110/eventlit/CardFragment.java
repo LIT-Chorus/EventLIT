@@ -168,7 +168,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
             });
 
             mDescriptionText = e.getDescription();
-            mNumAttendees = e.getAttendees().size();
+            mNumAttendees = e.getAttendees();
             mMaxCapacity = e.getMaxCapacity();
 
             holder.goingButton.setOnClickListener(new View.OnClickListener() {

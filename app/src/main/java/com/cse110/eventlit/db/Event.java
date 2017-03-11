@@ -55,7 +55,7 @@ public class Event {
     /**
      * List of UIDs of attendees to the event.
      */
-    private List<String> attendees;
+    private int attendees;
 
 
     public static Comparator<Event> eventComparatorDate = new Comparator<Event>() {
@@ -88,7 +88,6 @@ public class Event {
         this.location = location;
         this.category = category;
         this.maxCapacity = maxCapacity;
-        this.attendees = new ArrayList<>();
     }
 
     /**
@@ -178,24 +177,26 @@ public class Event {
     /**
      * Adds attendee by UID to the Event's attendee list.
      */
-    public void addAttendee(String uid) {
-        attendees.add(uid);
+    public void addAttendee() {
+        attendees++;
     }
 
     /**
      * Removes an attendee by UID from the Event's attendee list.
      */
-    public void removeAttendee(String uid) {
-        attendees.remove(uid);
+    public void removeAttendee() {
+        attendees--;
     }
-
 
     /**
      * Returns a list of the Event's attendees.
      */
-    public ArrayList<String> getAttendees() {
-        ArrayList<String> copy = new ArrayList<>(attendees);
-        return copy;
+    public int getAttendees() {
+        return attendees;
+    }
+
+    public void setAttendees(int attendees) {
+        this.attendees = attendees;
     }
 
     /**
