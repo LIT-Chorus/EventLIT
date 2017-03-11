@@ -59,7 +59,6 @@ public class UserUtilsTest {
         ArrayList<Event> events = new ArrayList<>();
         Set<String> set = new HashSet<>();
         UserUtils.getEventsFollowing(null, events, set);
-
         Log.wtf("yo", events.toString());
 
         ArrayList<String> descriptions = new ArrayList<>();

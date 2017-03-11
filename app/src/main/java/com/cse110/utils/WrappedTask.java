@@ -27,9 +27,9 @@ public class WrappedTask<T> {
      * @param newTask
      */
     public void wrap(Task<T> newTask) {
-        source.setResult(newTask.getResult());
+        source.trySetResult(newTask.getResult());
         if (!newTask.isSuccessful()) {
-            source.setException(new Exception());
+            source.trySetException(new Exception());
         }
     }
 
@@ -39,7 +39,7 @@ public class WrappedTask<T> {
     }
 
     public void wrapResultFail(T result) {
-        source.setException(new Exception());
+        source.trySetException(new Exception());
         wrapResult(result);
     }
 
