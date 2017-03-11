@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
@@ -109,7 +110,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
             final Event e = list.get(position);
             String category = e.getCategory();
-            String eventName = e.getTitle();
+            final String eventName = e.getTitle();
 
             holder.timeTextView.setText(String.format("%s-%s",
                     e.formattedStartTime("hh:mma"), e.formattedEndTime("hh:mma")));
@@ -138,6 +139,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.GOING);
                     UserUtils.updateEventsFollowing(e.getEventid(), status);
+                    Toast going = Toast.makeText(getActivity(), "Going to: " + eventName, Toast.LENGTH_LONG);
+                    going.show();
                 }
             });
 
@@ -146,6 +149,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.INTERESTED);
                     UserUtils.updateEventsFollowing(e.getEventid(), status);
+                    Toast interested = Toast.makeText(getActivity(), "Interested In: " + eventName, Toast.LENGTH_LONG);
+                    interested.show();
                 }
             });
 
@@ -154,6 +159,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.NOT_GOING);
                     UserUtils.updateEventsFollowing(e.getEventid(), status);
+                    Toast notGoing = Toast.makeText(getActivity(), "Not going to: " + eventName, Toast.LENGTH_LONG);
+                    notGoing.show();
                 }
             });
 
