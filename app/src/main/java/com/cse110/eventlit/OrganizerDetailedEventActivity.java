@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import at.favre.lib.dali.Dali;
+import me.grantland.widget.AutofitHelper;
 
 public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
@@ -52,7 +53,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO: Go back to organizer feed
+        startActivity(new Intent(this, OrganizerFeedActivity.class));
         finish();
 
     }
@@ -61,6 +62,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(bundle.getString("eventName"));
+        AutofitHelper.create(title);
 
         TextView date = (TextView) findViewById(R.id.timetext);
         date.setText(bundle.getString("date").replaceAll("[\\t\\n\\r]+"," ")
@@ -71,6 +73,18 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
         TextView category = (TextView) findViewById(R.id.tagtext);
         category.setText(bundle.getString("category"));
+
+        TextView description = (TextView) findViewById(R.id.descriptiontext);
+        description.setText(bundle.getString("description"));
+
+        TextView numAttend = (TextView) findViewById(R.id.peopletext);
+        numAttend.setText("" + bundle.getInt("num_attending"));
+
+        TextView name = (TextView) findViewById(R.id.orgname);
+        name.setText("Hosted By " + bundle.getString("org_name"));
+
+        String orgId = bundle.getString("org_id");
+        String eventId = bundle.getString("event_id");
 
     }
 }
