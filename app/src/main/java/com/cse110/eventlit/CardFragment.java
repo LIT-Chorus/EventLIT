@@ -70,7 +70,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
             // TODO: Only get subscribed events instead of all events
             final User user = UserUtils.getCurrentUser();
 
-            // TODO: FIX EVENTS FOLLOWING AND UNCOMMENT CODE
             Task<ArrayList<Event>> events = UserUtils.getEventsFollowing().addOnCompleteListener(new OnCompleteListener<ArrayList<Event>>() {
                 @Override
                 public void onComplete(@NonNull Task<ArrayList<Event>> task) {

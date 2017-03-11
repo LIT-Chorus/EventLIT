@@ -228,9 +228,7 @@ public class UserUtils {
                 if (eventMap == null)
                     eventMap = new HashMap<>();
                 ArrayList<Event> events = new ArrayList<>(eventMap.values());
-                Task<ArrayList<Event>> eventsTask = Tasks.forResult(events);
-
-                wrappedTask.wrap(eventsTask);
+                wrappedTask.wrapResult(events);
                 Log.d("getEventsFollowing", "Got events following successfully!");
             }
 
@@ -360,7 +358,7 @@ public class UserUtils {
 
                             // Grab that data and pass to listener, wrap *copy* in task
                             User copy = new User(user);
-                            wrappedUserTask.setResult(copy);
+                            wrappedUserTask.wrapResult(copy);
                             completionListener.onComplete(wrappedUserTask.unwrap());
 
                             // Important: add listener to this endpoint so that we updateWith the currentUser
