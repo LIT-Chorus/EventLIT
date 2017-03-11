@@ -60,7 +60,7 @@ public class UserUtilsTest {
 
 
         Set<String> set = new HashSet<>();
-        UserUtils.getEventsFollowing(null, events, set);
+        //UserUtils.getEventsFollowing(null, events, set);
 
         Log.wtf("yo", events.toString());
 

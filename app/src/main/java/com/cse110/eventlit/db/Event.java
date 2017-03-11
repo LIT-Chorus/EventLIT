@@ -119,7 +119,6 @@ public class Event {
         this.location = location;
         this.category = category;
         this.maxCapacity = maxCapacity;
-        this.attendees = new ArrayList<>();
     }
 
     /**
