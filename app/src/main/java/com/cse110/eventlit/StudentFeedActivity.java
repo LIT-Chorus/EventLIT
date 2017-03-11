@@ -123,7 +123,7 @@ public class StudentFeedActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.student_activity_main_scrolling_drawer, menu);
+        getMenuInflater().inflate(R.menu.main_scrolling, menu);
         return true;
     }
 
