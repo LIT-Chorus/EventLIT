@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -74,9 +75,8 @@ public class EventUtils {
                                         final ArrayList<Event> adapterArray,
                                         final ArrayList<Event> copy,
                                         final Set<String> eventIdsAdded,
-                                        final String orgId, final int popularity,
-                                        final ArrayList<String> categories,
-                                        final boolean notifyComplete){
+                                        final String orgId,
+                                        final ArrayList<String> categories){
         final DatabaseReference events = eventsDB.child(orgId);
         ValueEventListener eventListener = new ValueEventListener() {
             // Get a snapshot of events db
@@ -98,17 +98,12 @@ public class EventUtils {
 
                             if (categories != null && categories.size() > 0) {
                                 String category = event.getCategory();
-
-
-                                if (categories.contains(category) &&
-                                        event.getAttendees() >= popularity) {
-
+                                if (categories.contains(category)) {
                                     if (!eventIdsAdded.contains(event.getEventid())) {
 
                                         eventIdsAdded.add(event.getEventid());
 
                                         adapterArray.add(event);
-                                        Collections.sort(copy, Event.eventComparatorDate);
                                         copy.add(event);
 
                                         Log.d("adding event", "" + copy.size());
@@ -119,30 +114,22 @@ public class EventUtils {
                                 }
                             }
                             else {
-                                if (event.getAttendees() >= popularity) {
                                     if (!eventIdsAdded.contains(event.getEventid())) {
 
                                         eventIdsAdded.add(event.getEventid());
 
                                         adapterArray.add(event);
-                                        Collections.sort(copy, Event.eventComparatorDate);
                                         copy.add(event);
 
                                         adapter.notifyItemChanged(adapter.getItemCount() - 1);
                                         adapter.notifyDataSetChanged();
                                     }
-                                }
                             }
-                            if (notifyComplete) {
-                                adapter.notifyItemChanged(adapter.getItemCount() - 1);
-                            }
+                            adapter.notifyItemChanged(adapter.getItemCount() - 1);
                         }
                     }
                 }
-                if (notifyComplete){
-                    adapter.notifyDataSetChanged();
-                }
-
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -151,44 +138,6 @@ public class EventUtils {
             }
         };
         events.addValueEventListener(eventListener);
-    }
-
-    /**
-     *
-     */
-
-    /**
-     * Given a lower bound on popularity, return the all events with these many
-     *
-     * @param adapter
-     * @param minPopularity -
-     * @param eventlist
-     */
-    public static void filterEvents(final CardFragment.MyAdapter adapter,
-                                                final int minPopularity,
-                                                final ArrayList<String> categories,
-                                                final ArrayList<Event> eventlist,
-                                                final ArrayList<Event> copy,
-                                                final Set<String> eventIdsAdded) {
-        ValueEventListener eventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Enumerate through all the organizations
-                for (DataSnapshot org : dataSnapshot.getChildren()){
-                    // Makes call to other method to get events for the org
-
-                    getEventsByOrgId(adapter, eventlist, copy, eventIdsAdded, org.getKey(), minPopularity, categories, true);
-                    adapter.notifyDataSetChanged();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("DatabaseUtils", "Could not retrieve events");
-            }
-        };
-        eventsDB.addValueEventListener(eventListener);
     }
 
 
@@ -210,7 +159,7 @@ public class EventUtils {
                 for (DataSnapshot org : dataSnapshot.getChildren()) {
                     // Makes call to other method to get events for the org
 
-                    getEventsByOrgId(adapter, eventlist, copy, eventIdsAdded, org.getKey(), 0, null, true);
+                    getEventsByOrgId(adapter, eventlist, copy, eventIdsAdded, org.getKey(), null);
                     Log.w("Event", "Event!");
 
                     adapter.notifyDataSetChanged();

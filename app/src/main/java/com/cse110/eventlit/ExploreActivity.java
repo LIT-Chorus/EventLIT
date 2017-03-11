@@ -13,11 +13,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,7 +41,9 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     private CardFragment fragment;
 
-    private ArrayList<String> categoriesCurrent;
+    private final ArrayList<String> categoriesCurrent = new ArrayList<>();
+
+    private boolean[] checked = {true, true, true, true, true};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +75,11 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
 
-        categoriesCurrent = new ArrayList<>();
+        categoriesCurrent.add("Academics");
+        categoriesCurrent.add("Career");
+        categoriesCurrent.add("Faith");
+        categoriesCurrent.add("Food");
+        categoriesCurrent.add("Social");
 
 
         // TODO Frontend use this ArrayAdapter to populate a ListView or something
@@ -115,26 +123,17 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.action_sort) {
             final CharSequence[] items = {" Time "," Popularity "};
             // arraylist to keep the selected items
-            final ArrayList seletedItems=new ArrayList();
-
+            int checkedItem = 0;
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Sort by")
-                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    .setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                            if (isChecked) {
-                                // If the user checked the item, add it to the selected items
-                                seletedItems.add(indexSelected);
+                        public void onClick(DialogInterface dialog, int indexSelected) {
+                            if (indexSelected == 0) {
+                                fragment.sortBy(Event.eventComparatorDate);
                             }
-                            if (seletedItems.contains(indexSelected)) {
-                                // Else, if the item is already in the array, remove it
-                                seletedItems.remove(Integer.valueOf(indexSelected));
-                                if (indexSelected == 0) {
-                                    ((AlertDialog) dialog).getListView().setItemChecked(1, false);
-                                }
-                                else {
-                                    ((AlertDialog) dialog).getListView().setItemChecked(0, false);
-                                }
+                            else {
+                                fragment.sortBy(Event.eventComparatorPopularity);
                             }
                         }
                     }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -153,16 +152,16 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         }
 
         else if (id == R.id.action_filter) {
-            final CharSequence[] items = {" Academics "," Career "," Faith "," Food "," Social "};
-            boolean[] checked = new boolean[5];
+            final CharSequence[] items = {"Academics","Career","Faith","Food","Social"};
+
+            final ArrayList<String> categoryChanges = new ArrayList<>();
+            categoryChanges.addAll(categoriesCurrent);
 
             for (int i = 0; i < items.length; i++) {
                 if (categoriesCurrent.contains(items[i].toString())) {
                     checked[i] = true;
                 }
             }
-
-            final ArrayList<String> categories = new ArrayList<>();
 
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Filter by")
@@ -171,29 +170,23 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                         public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
                             if (isChecked) {
                                 // If the user checked the item, add it to the selected items
-                                categories.add(items[indexSelected].toString());
-                                categoriesCurrent.add(items[indexSelected].toString());
-                            }
-                            if (categories.contains(items[indexSelected].toString())) {
-                                // Else, if the item is already in the array, remove it
-                                categories.remove(items[indexSelected].toString());
-                                if (indexSelected == 0) {
-                                    ((AlertDialog) dialog).getListView().setItemChecked(1, false);
-                                }
-                                else {
-                                    ((AlertDialog) dialog).getListView().setItemChecked(0, false);
-                                }
+                                categoryChanges.add(items[indexSelected].toString());
+                            } else {
+                                categoryChanges.remove(items[indexSelected].toString());
                             }
                         }
                     }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            fragment.filterBy(categories);
+                            categoriesCurrent.clear();
+                            categoriesCurrent.addAll(categoryChanges);
+                            fragment.filterBy(categoriesCurrent);
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            categoriesCurrent = new ArrayList<>();
+                            categoryChanges.clear();
+                            categoryChanges.addAll(categoriesCurrent);
                         }
                     }).create();
             dialog.show();
