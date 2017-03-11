@@ -131,6 +131,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             public void onClick(View view) {
                 // TODO Create event (Add event to database)
                 addEventToDB();
+
             }
         });
 
@@ -330,15 +331,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             }
         });
 
-        // Store event pic AFTER making event object
-    /*    try {
-            // TODO Store in db
-         //   FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }*/
-
-
     }
 
     /* Check validity of title */
@@ -365,6 +357,21 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         return true;
     }
     protected boolean checkDescription() {
+
+        EditText editText = mDescription.getEditText();
+
+        if (editText != null && editText.getError() != null) return false;
+
+        String text = null;
+        if (editText != null) {
+            text = editText.getText().toString();
+        }
+
+        // Criteria
+        if (text != null && text.length() > 100) {
+            editText.setError("Title can contain at most 100 characters");
+        }
+
         return true;
     }
     protected boolean checkCapacity() {
