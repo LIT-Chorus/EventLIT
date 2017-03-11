@@ -58,8 +58,5 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="SwitchStyle" parent="Base.Widget.AppCompat.CompoundButton.Switch">
-        <item name="android:colorAccent">@color/backgroundLoginPrimary</item>
-    </style>
 
 </resources>
