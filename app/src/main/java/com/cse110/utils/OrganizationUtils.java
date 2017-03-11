@@ -10,6 +10,7 @@ import com.cse110.eventlit.db.OrganizationList;
 import com.cse110.eventlit.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -120,7 +121,7 @@ public class OrganizationUtils {
                 }
 
                 WrappedTask<Organization> resultTask = new WrappedTask<Organization>();
-                resultTask.setResult(org[0]);
+                resultTask.wrapResult(org[0]);
                 onComplete.onComplete(resultTask.unwrap());
             }
 
