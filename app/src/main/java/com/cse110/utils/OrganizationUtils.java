@@ -70,29 +70,39 @@ public class OrganizationUtils {
     public static Task<ArrayList<Organization>> getAllStudentOrganizations(final OrganizationsAdapter adapter,
                                                                            final ArrayList<Organization> oldOrgs) {
         final WrappedTask<ArrayList<Organization>> wrappedOrgsTask = new WrappedTask<>();
-        final ArrayList<Organization> orgs = new ArrayList<>();
 
-        // Just fill adapter with current list if not empty
+        // Temp variable holding new organization list
+        final ArrayList<Organization> newOrgs = new ArrayList<>();
+
+        // If orgs loaded already, update the adapter and lists
         if (!orgsList.isEmpty()) {
-            orgs.addAll(orgsList);
-            if (adapter != null) adapter.setmOrganizations(orgs);
+            newOrgs.addAll(orgsList); // Add in all existing orgs
+
+            // Fill in adapter and list, if passed in
+            if (adapter != null) adapter.setmOrganizations(newOrgs);
             if (oldOrgs != null) {
                 oldOrgs.clear();
-                oldOrgs.addAll(orgs);
+                oldOrgs.addAll(newOrgs);
             }
+
+            // Set result and notify listeners of completion
+            wrappedOrgsTask.wrapResult(newOrgs);
+            if (adapter != null) adapter.notifyDataSetChanged();
+
         } else {
-            ValueEventListener postListener = new ValueEventListener() {
+            // If no orgs loaded yet, make a DB call
+            orgsDB.addListenerForSingleValueEvent(new ValueEventListener() {
                 // Get a snapshot of the database organizations document
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Reindex and add new organziations
-                    for (DataSnapshot shot : dataSnapshot.getChildren()) {
-                        String orgKey = shot.getKey();
-                        String orgName = shot.getValue().toString();
-                        Organization org = new Organization(orgKey, orgName);
+                    // Load in List
+                    GenericTypeIndicator<ArrayList<String>> listType = new GenericTypeIndicator<ArrayList<String>>(){};
+                    ArrayList<String> dbList = dataSnapshot.getValue(listType);
 
-                        // Add the new org to the list and notify the adapter.
-                        orgs.add(org);
+                    // Add the orgs to the lists and notify the adapter.
+                    for (int i = 0; i < dbList.size(); i++) {
+                        Organization org = new Organization(String.valueOf(i), dbList.get(i));
+                        newOrgs.add(new Organization(String.valueOf(i), dbList.get(i)));
                         if (oldOrgs != null) {
                             oldOrgs.clear();
                             oldOrgs.add(org);
@@ -100,9 +110,8 @@ public class OrganizationUtils {
                         if (adapter != null) adapter.notifyItemChanged(adapter.getItemCount() - 1);
                     }
 
-                    // Wrap the result to notify listeners of completion
-                    wrappedOrgsTask.wrapResult(orgs);
-
+                    // Wrap the result and notify listeners of completion
+                    wrappedOrgsTask.wrapResult(newOrgs);
                     if (adapter != null) adapter.notifyDataSetChanged();
                 }
 
@@ -111,7 +120,7 @@ public class OrganizationUtils {
                 public void onCancelled(DatabaseError databaseError) {
                     Log.d("OrganizerUtils", "Could not retrieve student organizations");
                 }
-            };
+            });
         }
 
         return wrappedOrgsTask.unwrap();
