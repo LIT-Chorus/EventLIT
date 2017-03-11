@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,6 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 /**
  * Created by rahulsabnis on 3/3/17.
  */
@@ -33,6 +36,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout mDrawerLayout;
 
     private boolean mOrganizerStatus = false;
+
+    private CardFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
 
         FragmentManager fm = getSupportFragmentManager();
-        android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        fragment = (CardFragment) fm.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null) {
             fragment = new CardFragment();
@@ -108,7 +113,9 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         }
 
         else if (id == R.id.action_filter) {
-            return true;
+            ArrayList<String> categories = new ArrayList<>();
+            categories.add("Film and Television");
+            fragment.filterBy(categories);
         }
 
         return super.onOptionsItemSelected(item);

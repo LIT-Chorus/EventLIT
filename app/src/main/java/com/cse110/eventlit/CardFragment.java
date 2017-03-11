@@ -35,10 +35,12 @@ import java.util.Set;
 
 public class CardFragment extends android.support.v4.app.Fragment {
 
+    ArrayList<Event> allEvents = new ArrayList<>();
     ArrayList<Event> listEvents = new ArrayList<>();
     Set<String> eventIdsAdded = new HashSet<>();
 
     RecyclerView MyRecyclerView;
+    MyAdapter adapter;
 
     private String mDescriptionText;
     private int mNumAttendees;
@@ -60,7 +62,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
         MyRecyclerView.setHasFixedSize(true);
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        final MyAdapter adapter = new MyAdapter(listEvents);
+        adapter = new MyAdapter(listEvents);
 
         Bundle pageType = getArguments();
         String type = pageType.getString("type");
@@ -72,10 +74,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
             // TODO: Only get subscribed events instead of all events
             final User user = UserUtils.getCurrentUser();
 
-            UserUtils.getEventsFollowing(adapter, listEvents, eventIdsAdded);
-            UserUtils.getEventsForOrgs(adapter, listEvents, eventIdsAdded, user);
+            UserUtils.getEventsFollowing(adapter, allEvents, eventIdsAdded);
+            UserUtils.getEventsForOrgs(adapter, allEvents, eventIdsAdded, user);
         } else {
-            EventUtils.getAllEvents(adapter, listEvents, eventIdsAdded);
+            EventUtils.getAllEvents(adapter, allEvents, eventIdsAdded);
         }
         
         MyRecyclerView.setAdapter(adapter);
@@ -88,6 +90,15 @@ public class CardFragment extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+    }
+
+    public void filterBy(ArrayList<String> categories) {
+        listEvents.clear();
+        for (Event e : allEvents) {
+            if (categories.contains(e.getCategory()))
+                listEvents.add(e);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
