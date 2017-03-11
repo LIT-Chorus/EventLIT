@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -165,6 +167,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
         @Override
         public int getItemCount() {
             return list.size();
+        }
+
+        public void sortChronologically() {
+            Collections.sort(listEvents, Event.eventComparatorDate);
+            Log.w("Sort Chrono Called", "Called");
+            this.notifyDataSetChanged();
         }
     }
 

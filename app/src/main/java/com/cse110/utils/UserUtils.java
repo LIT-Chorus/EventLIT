@@ -189,7 +189,7 @@ public class UserUtils {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Event event = dataSnapshot.getValue(Event.class);
 
-                                        Log.w("Event", dataSnapshot.toString());
+                                        //Log.w("Event", dataSnapshot.toString());
 
                                         if (event != null && !eventIdsAdded.contains(event.getEventid())) {
 

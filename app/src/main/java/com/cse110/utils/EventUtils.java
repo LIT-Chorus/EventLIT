@@ -198,6 +198,8 @@ public class EventUtils {
                     // Makes call to other method to get events for the org
 
                     getEventsByOrgId(adapter, eventlist, eventIdsAdded, org.getKey(), 0, null, true);
+                    Log.w("Event", "Event!");
+                    adapter.sortChronologically();
                     adapter.notifyDataSetChanged();
                 }
 
