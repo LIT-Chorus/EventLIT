@@ -62,10 +62,10 @@ public class Event {
         @Override
         public int compare(Event o1, Event o2) {
             if (o2.startDate > o1.startDate) {
-                return 1;
+                return -1;
             }
             else if (o2.startDate < o1.startDate) {
-                return -1;
+                return 1;
             }
             else {
                 return 0;

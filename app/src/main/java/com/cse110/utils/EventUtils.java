@@ -72,6 +72,7 @@ public class EventUtils {
      */
     public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
+                                        final ArrayList<Event> copy,
                                         final Set<String> eventIdsAdded,
                                         final String orgId, final int popularity,
                                         final ArrayList<String> categories,
@@ -107,7 +108,11 @@ public class EventUtils {
                                         eventIdsAdded.add(event.getEventid());
 
                                         adapterArray.add(event);
-                                        Collections.sort(adapterArray, Event.eventComparatorDate);
+                                        Collections.sort(copy, Event.eventComparatorDate);
+                                        copy.add(event);
+
+                                        Log.d("adding event", "" + copy.size());
+
                                         adapter.notifyItemChanged(adapter.getItemCount() - 1);
                                         adapter.notifyDataSetChanged();
                                     }
@@ -120,7 +125,9 @@ public class EventUtils {
                                         eventIdsAdded.add(event.getEventid());
 
                                         adapterArray.add(event);
-                                        Collections.sort(adapterArray, Event.eventComparatorDate);
+                                        Collections.sort(copy, Event.eventComparatorDate);
+                                        copy.add(event);
+
                                         adapter.notifyItemChanged(adapter.getItemCount() - 1);
                                         adapter.notifyDataSetChanged();
                                     }
@@ -161,6 +168,7 @@ public class EventUtils {
                                                 final int minPopularity,
                                                 final ArrayList<String> categories,
                                                 final ArrayList<Event> eventlist,
+                                                final ArrayList<Event> copy,
                                                 final Set<String> eventIdsAdded) {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
@@ -169,7 +177,7 @@ public class EventUtils {
                 for (DataSnapshot org : dataSnapshot.getChildren()){
                     // Makes call to other method to get events for the org
 
-                    getEventsByOrgId(adapter, eventlist, eventIdsAdded, org.getKey(), minPopularity, categories, true);
+                    getEventsByOrgId(adapter, eventlist, copy, eventIdsAdded, org.getKey(), minPopularity, categories, true);
                     adapter.notifyDataSetChanged();
                 }
 
@@ -182,6 +190,7 @@ public class EventUtils {
         };
         eventsDB.addValueEventListener(eventListener);
     }
+
 
 
     /**
@@ -192,6 +201,7 @@ public class EventUtils {
      */
     public static void getAllEvents(final CardFragment.MyAdapter adapter,
                                     final ArrayList<Event> eventlist,
+                                    final ArrayList<Event> copy,
                                     final Set<String> eventIdsAdded) {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
@@ -200,7 +210,9 @@ public class EventUtils {
                 for (DataSnapshot org : dataSnapshot.getChildren()) {
                     // Makes call to other method to get events for the org
 
-                    getEventsByOrgId(adapter, eventlist, eventIdsAdded, org.getKey(), 0, null, true);
+                    getEventsByOrgId(adapter, eventlist, copy, eventIdsAdded, org.getKey(), 0, null, true);
+                    Log.w("Event", "Event!");
+
                     adapter.notifyDataSetChanged();
                 }
 
@@ -214,6 +226,7 @@ public class EventUtils {
         eventsDB.addValueEventListener(eventListener);
     }
 
+
     /**
      * Create event. Sets onComplete with the event's key as the string.
      */
@@ -221,6 +234,7 @@ public class EventUtils {
         String orgId = event.getOrgid();
         DatabaseReference eventRef = eventsDB.child(orgId).push();
         final String eventKey = eventRef.getKey();
+        event.setEventid(eventKey);
         OnCompleteListener onEventCreated = new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {

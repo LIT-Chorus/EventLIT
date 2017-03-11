@@ -1,9 +1,11 @@
 package com.cse110.eventlit;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,10 +38,14 @@ import java.util.Set;
 
 public class CardFragment extends android.support.v4.app.Fragment {
 
+    ArrayList<Event> allEvents = new ArrayList<>();
     ArrayList<Event> listEvents = new ArrayList<>();
     Set<String> eventIdsAdded = new HashSet<>();
 
     RecyclerView MyRecyclerView;
+    MyAdapter adapter;
+
+    private HashMap<String, RSVP> events;
 
     private String mDescriptionText;
     private int mNumAttendees;
@@ -60,7 +67,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
         MyRecyclerView.setHasFixedSize(true);
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        final MyAdapter adapter = new MyAdapter(listEvents);
+        adapter = new MyAdapter(listEvents);
+
+        events = UserUtils.getCurrentUser().getEventsFollowing();
 
         Bundle pageType = getArguments();
         String type = pageType.getString("type");
@@ -72,12 +81,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
             // TODO: Only get subscribed events instead of all events
             final User user = UserUtils.getCurrentUser();
 
-            UserUtils.getEventsFollowing(adapter, listEvents, eventIdsAdded);
-            UserUtils.getEventsForOrgs(adapter, listEvents, eventIdsAdded, user);
+            UserUtils.getEventsFollowing(adapter, allEvents, listEvents, eventIdsAdded);
+            UserUtils.getEventsForOrgs(adapter, allEvents, listEvents, eventIdsAdded, user);
         } else {
-            EventUtils.getAllEvents(adapter, listEvents, eventIdsAdded);
+            EventUtils.getAllEvents(adapter, allEvents, listEvents, eventIdsAdded);
         }
-        
+
         MyRecyclerView.setAdapter(adapter);
         MyRecyclerView.setLayoutManager(MyLayoutManager);
 
@@ -88,6 +97,15 @@ public class CardFragment extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+    }
+
+    public void filterBy(ArrayList<String> categories) {
+        listEvents.clear();
+        for (Event e : allEvents) {
+            if (categories.contains(e.getCategory()))
+                listEvents.add(e);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -113,12 +131,33 @@ public class CardFragment extends android.support.v4.app.Fragment {
             String category = e.getCategory();
             final String eventName = e.getTitle();
 
+            if (events.containsKey(e.getEventid())) {
+                RSVP st = events.get(e.getEventid());
+                RSVP.Status statusOfRSVP = st.getRsvpStatus();
+                if (statusOfRSVP == RSVP.Status.GOING) {
+                    holder.goingButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.goingColor, null));
+                    holder.interestedButton.setBackgroundColor(Color.GRAY);
+                    holder.notGoingButton.setBackgroundColor(Color.GRAY);
+                } else if (statusOfRSVP == RSVP.Status.INTERESTED) {
+                    holder.interestedButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.interestedColor, null));
+                    holder.goingButton.setBackgroundColor(Color.GRAY);
+                    holder.notGoingButton.setBackgroundColor(Color.GRAY);
+                } else if (statusOfRSVP == RSVP.Status.NOT_GOING) {
+                    holder.notGoingButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
+                    holder.goingButton.setBackgroundColor(Color.GRAY);
+                    holder.interestedButton.setBackgroundColor(Color.GRAY);
+                }
+
+            }
+
             holder.timeTextView.setText(String.format("%s-%s",
                     e.formattedStartTime("hh:mma"), e.formattedEndTime("hh:mma")));
             holder.locationTextView.setText(list.get(position).getLocation());
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
             holder.dateTextView.setText(e.formattedStartTime("LLL\nd"));
+            holder.eventIdTextView.setText(e.getEventid());
+            holder.orgIdTextView.setText(e.getOrgid());
 
             OrganizationUtils.loadOrgs().addOnCompleteListener(new OnCompleteListener<ArrayList<Organization>>() {
                 @Override
@@ -137,8 +176,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.GOING);
                     UserUtils.addEventsFollowing(e.getEventid(), status);
-                    Toast going = Toast.makeText(getActivity(), "Going to: " + eventName, Toast.LENGTH_LONG);
-                    going.show();
+                    holder.goingButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.goingColor, null));
+                    holder.interestedButton.setBackgroundColor(Color.GRAY);
+                    holder.notGoingButton.setBackgroundColor(Color.GRAY);
                 }
             });
 
@@ -147,8 +187,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.INTERESTED);
                     UserUtils.addEventsFollowing(e.getEventid(), status);
-                    Toast interested = Toast.makeText(getActivity(), "Interested In: " + eventName, Toast.LENGTH_LONG);
-                    interested.show();
+                    holder.interestedButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.interestedColor, null));
+                    holder.goingButton.setBackgroundColor(Color.GRAY);
+                    holder.notGoingButton.setBackgroundColor(Color.GRAY);
                 }
             });
 
@@ -157,8 +198,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.NOT_GOING);
                     UserUtils.addEventsFollowing(e.getEventid(), status);
-                    Toast notGoing = Toast.makeText(getActivity(), "Not going to: " + eventName, Toast.LENGTH_LONG);
-                    notGoing.show();
+                    holder.notGoingButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
+                    holder.goingButton.setBackgroundColor(Color.GRAY);
+                    holder.interestedButton.setBackgroundColor(Color.GRAY);
                 }
             });
 
@@ -183,6 +225,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatButton interestedButton;
         public AppCompatButton notGoingButton;
 
+        public AppCompatTextView orgIdTextView;
+        public AppCompatTextView eventIdTextView;
+
         public MyViewHolder(View v) {
             super(v);
             timeTextView = (AppCompatTextView) v.findViewById(R.id.time);
@@ -196,6 +241,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
             interestedButton = (AppCompatButton) v.findViewById(R.id.interested);
             notGoingButton = (AppCompatButton) v.findViewById(R.id.notGoing);
 
+            orgIdTextView = (AppCompatTextView) v.findViewById(R.id.orgId);
+            eventIdTextView = (AppCompatTextView) v.findViewById(R.id.eventId);
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -204,6 +252,21 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     // TODO: ADD LOGIC TO CHECK IF EVENT IS RUN BY THIS USER
 
                     Bundle extras = new Bundle();
+
+                    String eventid = eventIdTextView.getText().toString();
+                    if (events.containsKey(eventid)) {
+                        RSVP.Status stat = events.get(eventid).getRsvpStatus();
+                        if (stat == RSVP.Status.GOING) {
+                            extras.putInt("RSVP", 1);
+                        } else if (stat == RSVP.Status.INTERESTED) {
+                            extras.putInt("RSVP", 2);
+                        } else if (stat == RSVP.Status.NOT_GOING) {
+                            extras.putInt("RSVP", 3);
+                        }
+                    } else {
+                        extras.putInt("RSVP", 0);
+                    }
+
                     extras.putString("time", timeTextView.getText().toString());
                     extras.putString("location", locationTextView.getText().toString());
                     extras.putString("category", categoriesTextView.getText().toString());
@@ -213,8 +276,11 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putInt("num_attending", mNumAttendees);
                     extras.putInt("max_capacity", mMaxCapacity);
                     extras.putString("org_name", orgNameTextView.getText().toString());
+                    extras.putString("org_id", orgIdTextView.getText().toString());
+                    extras.putString("event_id", eventid);
                     openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);
+                    getActivity().finish();
                 }
             });
         }

@@ -151,9 +151,16 @@ public class StudentFeedActivity extends AppCompatActivity
                             if (isChecked) {
                                 // If the user checked the item, add it to the selected items
                                 seletedItems.add(indexSelected);
-                            } else if (seletedItems.contains(indexSelected)) {
+                            }
+                            if (seletedItems.contains(indexSelected)) {
                                 // Else, if the item is already in the array, remove it
                                 seletedItems.remove(Integer.valueOf(indexSelected));
+                                if (indexSelected == 0) {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(1, false);
+                                }
+                                else {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(0, false);
+                                }
                             }
                         }
                     }).setPositiveButton("OK", new DialogInterface.OnClickListener() {

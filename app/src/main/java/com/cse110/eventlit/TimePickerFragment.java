@@ -15,11 +15,11 @@ import java.util.Calendar;
  */
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
-
+    final Calendar c = Calendar.getInstance();
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         //Use the current time as the default values for the time picker
-        final Calendar c = Calendar.getInstance();
+
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
@@ -53,8 +53,15 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         if (minute < 10) {
             minString = "0" + minute;
         }
+
+        Calendar today = Calendar.getInstance();
+        c.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),hourOfDay,minute);
         //Display the user changed time on TextView
         tv.setText(tv.getText() + String.valueOf(currentHour) + ":" + minString + " " +
                 aMpM);
+    }
+
+    public Calendar getCalendar() {
+        return c;
     }
 }

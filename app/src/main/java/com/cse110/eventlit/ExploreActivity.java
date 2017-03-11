@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,6 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 /**
  * Created by rahulsabnis on 3/3/17.
  */
@@ -33,6 +36,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout mDrawerLayout;
 
     private boolean mOrganizerStatus = false;
+
+    private CardFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
 
         FragmentManager fm = getSupportFragmentManager();
-        android.support.v4.app.Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        fragment = (CardFragment) fm.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null) {
             fragment = new CardFragment();
@@ -104,11 +109,49 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort) {
-            return true;
+            final CharSequence[] items = {" Time "," Popularity "};
+            // arraylist to keep the selected items
+            final ArrayList seletedItems=new ArrayList();
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Sort by")
+                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                seletedItems.add(indexSelected);
+                            }
+                            if (seletedItems.contains(indexSelected)) {
+                                // Else, if the item is already in the array, remove it
+                                seletedItems.remove(Integer.valueOf(indexSelected));
+                                if (indexSelected == 0) {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(1, false);
+                                }
+                                else {
+                                    ((AlertDialog) dialog).getListView().setItemChecked(0, false);
+                                }
+                            }
+                        }
+                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on OK
+                            //  You can write the code  to save the selected item here
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on Cancel
+                        }
+                    }).create();
+            dialog.show();
         }
 
         else if (id == R.id.action_filter) {
-            return true;
+            ArrayList<String> categories = new ArrayList<>();
+            categories.add("Film and Television");
+            fragment.filterBy(categories);
         }
 
         return super.onOptionsItemSelected(item);

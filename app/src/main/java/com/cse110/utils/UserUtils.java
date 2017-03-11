@@ -167,6 +167,7 @@ public class UserUtils {
 
     public static void getEventsFollowing(final CardFragment.MyAdapter adapter,
                                           final ArrayList<Event> events,
+                                          final ArrayList<Event> copy,
                                           final Set<String> eventIdsAdded)
     {
 //        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
@@ -196,6 +197,8 @@ public class UserUtils {
                                             eventIdsAdded.add(event.getEventid());
 
                                             events.add(event);
+                                            copy.add(event);
+
                                             adapter.notifyItemChanged(adapter.getItemCount() - 1);
                                             adapter.notifyDataSetChanged();
                                         }
@@ -226,11 +229,15 @@ public class UserUtils {
 
     public static final void getEventsForOrgs(final CardFragment.MyAdapter adapter,
                                               final ArrayList<Event> events,
+                                              final ArrayList<Event> copy,
                                               final Set<String> eventIdsAdded,
                                               User user) {
         List<String> orgIds = user.getOrgsFollowing();
         for (String orgId : orgIds) {
-            EventUtils.getEventsByOrgId(adapter, events, eventIdsAdded, orgId, 0, null, true);
+            if (orgId != null) {
+                EventUtils.getEventsByOrgId(adapter, events, copy, eventIdsAdded, orgId, 0, null, true);
+            }
+
         }
     }
 
