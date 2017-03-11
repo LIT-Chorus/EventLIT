@@ -1,10 +1,12 @@
 package com.cse110.eventlit;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,15 +14,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+
+import java.util.Calendar;
 
 public class CreateEventActivity extends AppCompatActivity {
 
     private TextInputLayout mTitle;
-    private TextInputLayout mDate;
-    private TextInputLayout mTime;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
     private TextInputLayout mTag;
@@ -55,8 +59,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
-        mDate = (TextInputLayout) findViewById(R.id.datetext);
-        mTime = (TextInputLayout) findViewById(R.id.timetext);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
         mTag = (TextInputLayout) findViewById(R.id.tagtext);
@@ -68,22 +70,6 @@ public class CreateEventActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     checkTitle();
-                }
-            }
-        });
-        mDate.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkDate();
-                }
-            }
-        });
-        mTime.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkTime();
                 }
             }
         });
@@ -119,6 +105,13 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    /* Show the time picker dialog */
+    public void onTimeButtonClicked(View v){
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getSupportFragmentManager(),"TimePicker");
     }
 
     @Override
@@ -153,12 +146,6 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     // TODO write validity checks
-    protected boolean checkDate() {
-        return true;
-    }
-    protected boolean checkTime() {
-        return true;
-    }
     protected boolean checkLocation() {
         return true;
     }
