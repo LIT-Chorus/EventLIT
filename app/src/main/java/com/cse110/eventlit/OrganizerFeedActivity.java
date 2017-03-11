@@ -49,6 +49,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(OrganizerFeedActivity.this, CreateEventActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

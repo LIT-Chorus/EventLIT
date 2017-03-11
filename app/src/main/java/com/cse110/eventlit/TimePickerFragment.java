@@ -35,9 +35,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         TextView tv = (TextView) getActivity().findViewById(getArguments().getInt("timetext"));
 
         //Get the AM or PM for current time
-        String aMpM = "AM";
+        String aMpM = "am";
         if (hourOfDay >11) {
-            aMpM = "PM";
+            aMpM = "pm";
         }
 
         //Make the 24 hour time format to 12 hour time format
@@ -55,6 +55,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         }
         //Display the user changed time on TextView
         tv.setText(tv.getText() + String.valueOf(currentHour) + ":" + minString + " " +
-                aMpM + "\n");
+                aMpM);
     }
 }

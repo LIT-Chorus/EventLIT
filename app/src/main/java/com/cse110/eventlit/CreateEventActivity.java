@@ -2,6 +2,7 @@ package com.cse110.eventlit;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,12 +36,14 @@ import java.util.List;
 
 public class CreateEventActivity extends AppCompatActivity {
 
+    // Fields for Organizer User to fill in
     private TextInputLayout mTitle;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
     private TextInputLayout mTag;
     private TextInputLayout mCapacity;
 
+    // Orgs that the Organizer User manages
     private List<String> orgsManaging;
 
     @Override
@@ -49,6 +53,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Gets the Orgs that the Organization User is managing
         User user = UserUtils.getCurrentUser();
         orgsManaging = user.getOrgsManaging(); 
 
@@ -60,6 +65,7 @@ public class CreateEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO Go back to organizer feed
+                startActivity(new Intent(CreateEventActivity.this, OrganizerFeedActivity.class));
                 finish();
             }
         });
@@ -120,14 +126,13 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     /* Show the start time picker dialog */
-    public void onStartTimeButtonClicked(View v){
+    public void onStartTimeClicked(View v){
         DialogFragment newFragment = new TimePickerFragment();
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
-        startTimeText.setText("Start: ");
+        startTimeText.setText("Start Time: ");
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -136,17 +141,43 @@ public class CreateEventActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(),"TimePicker");
     }
 
+    /* Show the start date picker dialog */
+    public void onStartDateClicked(View v){
+        DialogFragment newFragment = new DatePickerFragment();
+        TextView startDateText = (TextView) findViewById(R.id.startdatetext);
+        startDateText.setText("Start Date: ");
+
+        // Pass in start time textview
+        Bundle args = new Bundle();
+        args.putInt("datetext", R.id.startdatetext);
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(),"DatePicker");
+    }
+
     /* Show the end time picker dialog */
-    public void onEndTimeButtonClicked(View v){
+    public void onEndTimeClicked(View v){
         DialogFragment newFragment = new TimePickerFragment();
         TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
-        endTimeText.setText("End: ");
+        endTimeText.setText("End Time: ");
 
         // Pass in the end time textview
         Bundle args = new Bundle();
         args.putInt("timetext", R.id.endtimetext);
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
+    }
+
+    /* Show the end date picker dialog */
+    public void onEndDateClicked(View v){
+        DialogFragment newFragment = new DatePickerFragment();
+        TextView startDateText = (TextView) findViewById(R.id.enddatetext);
+        startDateText.setText("End Date: ");
+
+        // Pass in start time textview
+        Bundle args = new Bundle();
+        args.putInt("datetext", R.id.enddatetext);
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(),"DatePicker");
     }
 
     @Override
@@ -165,7 +196,6 @@ public class CreateEventActivity extends AppCompatActivity {
         String description = mDescription.getEditText().getText().toString();
         String capacity = mCapacity.getEditText().getText().toString();
 
-
         Event event = new Event(title, description, "275", "0", location, "Uncateogorized", Integer.parseInt(capacity));
         EventUtils.createEvent(event, new OnCompleteListener<String>() {
             @Override
@@ -175,10 +205,9 @@ public class CreateEventActivity extends AppCompatActivity {
         });
 
 
-
-
     }
 
+    /* Check validity of title */
     protected boolean checkTitle() {
         EditText titleEditText = mTitle.getEditText();
 
