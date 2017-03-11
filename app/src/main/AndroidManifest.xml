@@ -80,6 +80,8 @@
         <activity
             android:name=".OrganizationSelectionActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".OrganizationSelection_registrationActivity"
+            android:screenOrientation="portrait"    />
         <activity
             android:name=".ChangePasswordActivity"
             android:exported="true"
