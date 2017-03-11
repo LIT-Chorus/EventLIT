@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 
 public class FileStorageUtils {
     private static final String UPLOAD_IMAGE = "uploadImage";
+    public static final String FILE_STORAGE_UTILS = "File Storage Utils";
 
 
     private static StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -59,19 +60,25 @@ public class FileStorageUtils {
     }
 
     public static boolean getImageView(ImageView imageView, Context context, String id) {
-        StorageReference imageRef = storageRef.child("images");
-        imageRef = imageRef.child(id + ".jpeg");
 
-        if (imageRef.getDownloadUrl().isSuccessful()) {
+        Log.d(FILE_STORAGE_UTILS, "before StorageReference stuff");
 
-            // Load the image using Glide
-            Glide.with(context /* context */)
-                    .using(new FirebaseImageLoader())
-                    .load(imageRef)
-                    .into(imageView);
+        StorageReference imageRef = storageRef.child("images/" + id + ".jpeg");
+        Log.d(FILE_STORAGE_UTILS, imageRef.getPath());
+
+        Log.d(FILE_STORAGE_UTILS, "before getDownloadUrl Check");
+
+        Log.d(FILE_STORAGE_UTILS, "after getDownloadUrl Check");
+        // Load the image using Glide
+        Glide.with(context /* context */)
+                .using(new FirebaseImageLoader())
+                .load(imageRef)
+                .into(imageView);
+
+        Log.d(FILE_STORAGE_UTILS, "after Glide Check");
+
             return true;
-        }
-        return false;
+
     }
 
 
