@@ -37,7 +37,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/orgspinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -227,14 +227,14 @@
             </View>
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/createButton"
+                android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 style="@style/EventButton"
                 android:background="@color/goingColor"
                 android:layout_weight="1"
-                android:text="CREATE" />
+                android:text="EDIT" />
 
 
         </LinearLayout>

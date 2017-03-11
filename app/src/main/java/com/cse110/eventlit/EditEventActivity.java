@@ -49,13 +49,10 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     private TextInputLayout mDescription;
     private TextInputLayout mTag;
     private TextInputLayout mCapacity;
+    private ImageView mEventPic;    // Event Pic
 
-    // Event Pic
-    private ImageView mEventPic;
-
-    // Orgs that the Organizer User manages
-    private List<String> orgsManaging;
-
+    private List<String> orgsManaging;     // Orgs that the Organizer User manages
+    private Spinner orgspinner;
     private HashMap<String, Calendar> calendars;
 
     @Override
@@ -64,6 +61,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         setContentView(R.layout.create_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         // TODO: FAB for adding event picture
         mEventPic = (ImageView) findViewById(R.id.event);
@@ -102,7 +100,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
 
         // Cancel and Create button functionality
         Button cancelBut = (Button) findViewById(R.id.cancelButton);
-        Button createBut = (Button) findViewById(R.id.createButton);
+        Button editBut = (Button) findViewById(R.id.editButton);
 
         cancelBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +111,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
             }
         });
 
-        createBut.setOnClickListener(new View.OnClickListener() {
+        editBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO Create event (Add event to database)
@@ -123,12 +121,12 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         });
 
         // Populate spinner for selecting org that the event is for
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
-        spinner.setPrompt("Organization holding event");
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+        orgspinner = (Spinner)findViewById(R.id.orgspinner);
+        orgspinner.setPrompt("Organization holding event");
+        ArrayAdapter<String> orgSpinnerAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, android.R.id.text1, orgsManaging);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
+        orgSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orgspinner.setAdapter(orgSpinnerAdapter);
 
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
@@ -178,6 +176,38 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
                 }
             }
         });
+
+
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+
+        populateFields(extras);
+    }
+
+    /* Populate the fields with the event data */
+    private void populateFields(Bundle extras) {
+
+        /* Fill fields */
+        mTitle.getEditText().setText(extras.getString("eventName"));
+        mLocation.getEditText().setText(extras.getString("location"));
+        mDescription.getEditText().setText(extras.getString("description"));
+        mTag.getEditText().setText(extras.getString("category"));
+        mCapacity.getEditText().setText(extras.getString("max_capacity"));
+
+        /* Fill time field */
+        TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
+        startTimeText.setText(extras.getString("time"));
+
+        /* Fill date field */
+        TextView startDateText = (TextView) findViewById(R.id.startdatetext);
+        startDateText.setText(extras.getString("date"));
+
+        /* Fill in default value for spinner (org hosting event) */
+        ArrayAdapter myAdap = (ArrayAdapter) orgspinner.getAdapter(); //cast to an ArrayAdapter
+        int orgSpinnerPosition = myAdap.getPosition(extras.getString("org_name"));
+        //set the default according to value
+        orgspinner.setSelection(orgSpinnerPosition);
+
     }
 
     /* Show the start time picker dialog */
@@ -256,8 +286,8 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         String capacity = mCapacity.getEditText().getText().toString();
 
         // Get the organization name
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
-        String orgName = spinner.getSelectedItem().toString();
+        Spinner orgSpinner = (Spinner)findViewById(R.id.orgspinner);
+        String orgName = orgSpinner.getSelectedItem().toString();
         String orgId = OrganizationUtils.getOrgId(orgName);
 
 
@@ -288,6 +318,8 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
             capacity = "0";
         }
 
+        //    EventUtils.updateEvent(event);
+        // TODO
         Event event = new Event(title, description, orgId, "0", location, "Uncateogorized", Integer.parseInt(capacity));
         event.putStartTime(startDate.get(Calendar.YEAR),
                            startDate.get(Calendar.MONTH),

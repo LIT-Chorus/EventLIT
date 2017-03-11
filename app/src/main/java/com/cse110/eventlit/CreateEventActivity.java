@@ -1,20 +1,14 @@
 package com.cse110.eventlit;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.Event;
@@ -36,23 +29,16 @@ import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
-import com.vansuita.pickimage.dialog.PickImageBaseDialog;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.enums.EPickType;
 import com.vansuita.pickimage.listeners.IPickResult;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-
-import static com.cse110.eventlit.R.id.fab;
 
 public class CreateEventActivity extends AppCompatActivity implements IPickResult{
 
@@ -139,7 +125,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         });
 
         // Populate spinner for selecting org that the event is for
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        Spinner spinner = (Spinner)findViewById(R.id.orgspinner);
         spinner.setPrompt("Organization holding event");
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, android.R.id.text1, orgsManaging);
@@ -272,7 +258,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String capacity = mCapacity.getEditText().getText().toString();
 
         // Get the organization name
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        Spinner spinner = (Spinner)findViewById(R.id.orgspinner);
         String orgName = spinner.getSelectedItem().toString();
         String orgId = OrganizationUtils.getOrgId(orgName);
 

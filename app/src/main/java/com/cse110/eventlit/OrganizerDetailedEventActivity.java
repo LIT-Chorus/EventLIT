@@ -16,7 +16,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.RSVP;
+import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.UserUtils;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -33,6 +36,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
     TextView description;
 
     Event event;
+    Bundle extras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
         // Fill in the detailed events info with bundle passed in
         Intent i = getIntent();
-        Bundle extras = i.getExtras();
+        extras = i.getExtras();
 
         // TODO: Set database going/interested/not going entry
         Button editBut = (Button) findViewById(R.id.editButton);
@@ -60,33 +64,38 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.descriptiontext);
 
 
-
         fillFields(extras);
-
-        event = new Event(
-                extras.getString("title"),
-                extras.getString("description"),
-                extras.getString("orgid"),
-                extras.getString("eventid"),
-                Event.getEpochTime("LLL/nd", extras.getString("date")),
-                Event.getEpochTime("LLL/nd", extras.getString("date")),
-                extras.getString("location"),
-                extras.getString("category"),
-                Integer.parseInt(extras.getString("maxCapacity"))
-        );
 
         editBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO Open intent to edit event (send bundle of event info as well)
+                Intent openEditView = new Intent(OrganizerDetailedEventActivity.this,
+                        EditEventActivity.class);
 
-                EventUtils.updateEvent(event);
+                openEditView.putExtras(extras);
+                startActivity(openEditView);
+                finish();
+
             }
         });
 
         deleteBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                event = new Event(
+                        extras.getString("title"),
+                        extras.getString("description"),
+                        extras.getString("orgid"),
+                        extras.getString("eventid"),
+                        Event.getEpochTime("LLL/nd", extras.getString("date")),
+                        Event.getEpochTime("LLL/nd", extras.getString("date")),
+                        extras.getString("location"),
+                        extras.getString("category"),
+                        Integer.parseInt(extras.getString("maxCapacity"))
+                );
+
                 EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);
 
                 // TODO Delete event
