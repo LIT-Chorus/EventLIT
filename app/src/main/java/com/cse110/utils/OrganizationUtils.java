@@ -99,14 +99,15 @@ public class OrganizationUtils {
                     GenericTypeIndicator<ArrayList<String>> listType = new GenericTypeIndicator<ArrayList<String>>(){};
                     ArrayList<String> dbList = dataSnapshot.getValue(listType);
 
+                    // Clear old orgs before updating
+                    if (oldOrgs != null) oldOrgs.clear();
+
                     // Add the orgs to the lists and notify the adapter.
                     for (int i = 0; i < dbList.size(); i++) {
                         Organization org = new Organization(String.valueOf(i), dbList.get(i));
                         newOrgs.add(new Organization(String.valueOf(i), dbList.get(i)));
-                        if (oldOrgs != null) {
-                            oldOrgs.clear();
-                            oldOrgs.add(org);
-                        }
+
+                        if (oldOrgs != null) oldOrgs.add(org);
                         if (adapter != null) adapter.notifyItemChanged(adapter.getItemCount() - 1);
                     }
 
