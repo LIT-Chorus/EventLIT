@@ -69,11 +69,11 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 extras.getString("description"),
                 extras.getString("orgid"),
                 extras.getString("eventid"),
-                Event.getEpochTime("LLL/nd", extras.getString("date")),
-                Event.getEpochTime("LLL/nd", extras.getString("date")),
+                Event.getEpochTime(extras.getString("date"), "LLL\nd"),
+                Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                 extras.getString("location"),
                 extras.getString("category"),
-                Integer.parseInt(extras.getString("maxCapacity"))
+                extras.getInt("max_capacity")
         );
 
         editBut.setOnClickListener(new View.OnClickListener() {
