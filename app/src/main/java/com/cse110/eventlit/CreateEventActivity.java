@@ -2,6 +2,7 @@ package com.cse110.eventlit;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,34 +10,46 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageBaseDialog;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.enums.EPickType;
+import com.vansuita.pickimage.listeners.IPickResult;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class CreateEventActivity extends AppCompatActivity {
+public class CreateEventActivity extends AppCompatActivity implements IPickResult{
 
     // Fields for Organizer User to fill in
     private TextInputLayout mTitle;
@@ -44,6 +57,9 @@ public class CreateEventActivity extends AppCompatActivity {
     private TextInputLayout mDescription;
     private TextInputLayout mTag;
     private TextInputLayout mCapacity;
+
+    // Event Pic
+    private ImageView mEventPic;
 
     // Orgs that the Organizer User manages
     private List<String> orgsManaging;
@@ -60,9 +76,24 @@ public class CreateEventActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
+               PickImageDialog.build(new PickSetup()
+                .setTitle("Please select a photo for the event")
+                .setPickTypes(EPickType.GALLERY))
+                .setOnPickResult(CreateEventActivity.this)
+                .show(getSupportFragmentManager());
+
             }
         });
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater factory = LayoutInflater.from(this);
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+
+        // Add edit_profilephoto xml
+        final View profView = factory.inflate(R.layout.edit_profilephoto, null);
+        dialog.setView(profView);
 
         // Gets the Orgs that the Organization User is managing
         User user = UserUtils.getCurrentUser();
@@ -91,13 +122,12 @@ public class CreateEventActivity extends AppCompatActivity {
 
         // Populate spinner for selecting org that the event is for
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
-     /*   spinner.setPrompt("Organization holding event");
+        spinner.setPrompt("Organization holding event");
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, android.R.id.text1);
+                android.R.layout.simple_spinner_item, orgsManaging);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-        spinnerAdapter.add("value");
-        spinnerAdapter.notifyDataSetChanged();*/
+        spinnerAdapter.notifyDataSetChanged();
 
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
@@ -261,4 +291,26 @@ public class CreateEventActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onPickResult(PickResult r) {
+        if (r.getError() == null) {
+
+            //If you want the Bitmap.
+            Bitmap imageSelected = r.getBitmap();
+
+            mEventPic.setImageBitmap(imageSelected);
+
+            try {
+                // TODO Store in db
+                FileStorageUtils.uploadImageFromLocalFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), imageSelected);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            //Handle possible errors
+            //TODO: do what you have to do with r.getError();
+            Toast.makeText(this, r.getError().getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 }
