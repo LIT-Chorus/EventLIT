@@ -65,10 +65,10 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         fillFields(extras);
 
         event = new Event(
-                extras.getString("title"),
+                extras.getString("eventName"),
                 extras.getString("description"),
-                extras.getString("orgid"),
-                extras.getString("eventid"),
+                extras.getString("org_id"),
+                extras.getString("event_id"),
                 Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                 Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                 extras.getString("location"),
