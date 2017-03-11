@@ -74,12 +74,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
             // TODO: Only get subscribed events instead of all events
             final User user = UserUtils.getCurrentUser();
 
-            UserUtils.getEventsFollowing(adapter, allEvents, eventIdsAdded);
-            UserUtils.getEventsForOrgs(adapter, allEvents, eventIdsAdded, user);
+            UserUtils.getEventsFollowing(adapter, allEvents, listEvents, eventIdsAdded);
+            UserUtils.getEventsForOrgs(adapter, allEvents, listEvents, eventIdsAdded, user);
         } else {
-            EventUtils.getAllEvents(adapter, allEvents, eventIdsAdded);
+            EventUtils.getAllEvents(adapter, allEvents, listEvents, eventIdsAdded);
         }
-        
+
         MyRecyclerView.setAdapter(adapter);
         MyRecyclerView.setLayoutManager(MyLayoutManager);
 
