@@ -39,7 +39,7 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organization_selection);
 
-        mOrganizerStatus = getIntent().getExtras().getBoolean("organizer");
+        mOrganizerStatus = UserUtils.isOrganizer();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

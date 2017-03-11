@@ -80,23 +80,24 @@
         <activity
             android:name=".OrganizationSelectionActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".OrganizationSelection_registrationActivity"
-            android:screenOrientation="portrait"    />
+        <activity
+            android:name=".OrganizationSelection_registrationActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ChangePasswordActivity"
             android:exported="true"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CreateEventActivity"
-            android:label="@string/title_activity_create_event"
             android:exported="true"
+            android:label="@string/title_activity_create_event"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".OrganizerRequestActivity"
-            android:label="@string/title_activity_request_organizer_status"
             android:exported="true"
+            android:label="@string/title_activity_request_organizer_status"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

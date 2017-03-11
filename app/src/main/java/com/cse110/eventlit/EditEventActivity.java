@@ -331,7 +331,8 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
                 endDate.get(Calendar.DAY_OF_MONTH),
                 endTime.get(Calendar.HOUR),
                 endTime.get(Calendar.MINUTE));
-        EventUtils.createEvent(event, new OnCompleteListener<String>() {
+        
+        EventUtils.updateEvent(event, new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 if (task.isSuccessful()) {
@@ -342,6 +343,8 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
                         // Store in db
                         FileStorageUtils.uploadImageFromLocalFile(eventId,
                                 ((BitmapDrawable)mEventPic.getDrawable()).getBitmap());
+                        Log.w("Updated Event", task.getResult());
+
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }

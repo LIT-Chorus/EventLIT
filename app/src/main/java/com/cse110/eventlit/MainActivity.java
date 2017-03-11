@@ -41,6 +41,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //OrganizationUtils.loadOrgs();
+        OrganizationUtils.loadOrgs();
     }
 }

@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         // setupActionBar();
         setContentView(R.layout.activity_settings);
 
-        mOrganizerStatus = getIntent().getExtras().getBoolean("organizer");
+        mOrganizerStatus = UserUtils.isOrganizer();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -54,6 +54,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     private boolean mOrganizerStatus = false;
 
+    private String type;
+
+    private User user;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +74,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new MyAdapter(listEvents);
 
-        events = UserUtils.getCurrentUser().getEventsFollowing();
+        user = UserUtils.getCurrentUser();
+
+        events = user.getEventsFollowing();
 
         Bundle pageType = getArguments();
-        String type = pageType.getString("type");
+        type = pageType.getString("type");
 
         mOrganizerStatus = getArguments().getBoolean("organizer");
 
@@ -181,6 +187,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
             mDescriptionText = e.getDescription();
             mNumAttendees = e.getAttendees();
             mMaxCapacity = e.getMaxCapacity();
+
+            if(mOrganizerStatus && user.getOrgsManaging().contains(e.getOrgid())) {
+                holder.goingButton.setVisibility(View.INVISIBLE);
+                holder.interestedButton.setVisibility(View.INVISIBLE);
+                holder.notGoingButton.setVisibility(View.INVISIBLE);
+            }
 
             holder.goingButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -299,6 +311,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("org_name", orgNameTextView.getText().toString());
                     extras.putString("org_id", orgId);
                     extras.putString("event_id", eventid);
+                    extras.putString("type", type);
                     openDetailedView.putExtras(extras);
                     startActivity(openDetailedView);
                     getActivity().finish();
