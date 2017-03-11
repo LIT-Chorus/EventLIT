@@ -3,6 +3,7 @@ package com.cse110.eventlit;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -16,11 +17,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.Organization;
+import com.cse110.eventlit.db.User;
+import com.cse110.utils.EventUtils;
+import com.cse110.utils.UserUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -30,12 +40,17 @@ public class CreateEventActivity extends AppCompatActivity {
     private TextInputLayout mTag;
     private TextInputLayout mCapacity;
 
+    private List<String> orgsManaging;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        User user = UserUtils.getCurrentUser();
+        orgsManaging = user.getOrgsManaging(); 
 
         // Cancel and Create button functionality
         Button cancelBut = (Button) findViewById(R.id.cancelButton);
@@ -53,7 +68,7 @@ public class CreateEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO Create event (Add event to database)
-                getFields();
+                addEventToDB();
             }
         });
 
@@ -142,8 +157,25 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     /* Gets the text fields to make event in database */
-    private void getFields() {
+    private void addEventToDB() {
         // TODO Get inputs and make event
+
+        String title = mTitle.getEditText().getText().toString();
+        String location = mLocation.getEditText().getText().toString();
+        String description = mDescription.getEditText().getText().toString();
+        String capacity = mCapacity.getEditText().getText().toString();
+
+
+        Event event = new Event(title, description, "275", "0", location, "Uncateogorized", Integer.parseInt(capacity));
+        EventUtils.createEvent(event, new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                Log.w("Added event with id", task.getResult());
+            }
+        });
+
+
+
 
     }
 
