@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
@@ -69,6 +70,7 @@ public class EventUtils {
      */
     public static void getEventsByOrgId(final CardFragment.MyAdapter adapter,
                                         final ArrayList<Event> adapterArray,
+                                        final Set<String> eventIdsAdded,
                                         final String orgId, final int popularity,
                                         final ArrayList<String> categories,
                                         final boolean notifyComplete){
@@ -85,15 +87,31 @@ public class EventUtils {
                             Event event = getEventSnapshot(eventSnapshot);
                             if (categories != null && categories.size() > 0) {
                                 String category = event.getCategory();
+
+
                                 if (categories.contains(category) &&
                                         event.getAttendees().size() >= popularity) {
 
-                                    adapterArray.add(event);
+                                    if (!eventIdsAdded.contains(event.getEventid())) {
+
+                                        eventIdsAdded.add(event.getEventid());
+
+                                        adapterArray.add(event);
+                                        adapter.notifyItemChanged(adapter.getItemCount() - 1);
+                                        adapter.notifyDataSetChanged();
+                                    }
                                 }
                             }
                             else {
                                 if (event.getAttendees().size() >= popularity) {
-                                    adapterArray.add(event);
+                                    if (!eventIdsAdded.contains(event.getEventid())) {
+
+                                        eventIdsAdded.add(event.getEventid());
+
+                                        adapterArray.add(event);
+                                        adapter.notifyItemChanged(adapter.getItemCount() - 1);
+                                        adapter.notifyDataSetChanged();
+                                    }
                                 }
                             }
                             if (notifyComplete) {
@@ -125,19 +143,21 @@ public class EventUtils {
      *
      * @param adapter
      * @param minPopularity -
-     * @param eventList
+     * @param eventlist
      */
     public static void filterEvents(final CardFragment.MyAdapter adapter,
                                                 final int minPopularity,
                                                 final ArrayList<String> categories,
-                                                final ArrayList<Event> eventList) {
+                                                final ArrayList<Event> eventlist,
+                                                final Set<String> eventIdsAdded) {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Enumerate through all the organizations
                 for (DataSnapshot org : dataSnapshot.getChildren()){
                     // Makes call to other method to get events for the org
-                    getEventsByOrgId(adapter, eventList, org.getKey(), minPopularity, categories, true);
+
+                    getEventsByOrgId(adapter, eventlist, eventIdsAdded, org.getKey(), minPopularity, categories, true);
                     adapter.notifyDataSetChanged();
                 }
 
@@ -156,17 +176,19 @@ public class EventUtils {
      * Fetch a list of all events regardless of organization.
      *
      * @param adapter - the adapter to notify once the ArrayList has been populated
-     * @param eventList - an ArrayList of events to be populated
+     * @param eventlist - an ArrayList of events to be populated
      */
     public static void getAllEvents(final CardFragment.MyAdapter adapter,
-                                    final ArrayList<Event> eventList) {
+                                    final ArrayList<Event> eventlist,
+                                    final Set<String> eventIdsAdded) {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Enumerate through all the organizations
-                for (DataSnapshot org : dataSnapshot.getChildren()){
+                for (DataSnapshot org : dataSnapshot.getChildren()) {
                     // Makes call to other method to get events for the org
-                    getEventsByOrgId(adapter, eventList, org.getKey(), 0, null, true);
+
+                    getEventsByOrgId(adapter, eventlist, eventIdsAdded, org.getKey(), 0, null, true);
                     adapter.notifyDataSetChanged();
                 }
 

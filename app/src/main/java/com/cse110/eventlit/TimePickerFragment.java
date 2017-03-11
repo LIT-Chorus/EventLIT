@@ -32,23 +32,29 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     public void onTimeSet(TimePicker view, int hourOfDay, int minute){
 
         //Get reference of host activity (XML Layout File) TextView widget
-        TextView tv = (TextView) getActivity().findViewById(R.id.timetext);
+        TextView tv = (TextView) getActivity().findViewById(getArguments().getInt("timetext"));
 
         //Get the AM or PM for current time
         String aMpM = "AM";
-        if(hourOfDay >11) {
+        if (hourOfDay >11) {
             aMpM = "PM";
         }
 
         //Make the 24 hour time format to 12 hour time format
         int currentHour = hourOfDay;
-        if(hourOfDay>11)
-        {
+        if (currentHour == 0) {
+            currentHour = 12;
+        }
+        if (hourOfDay>12) {
             currentHour = hourOfDay - 12;
         }
 
+        String minString = "" + minute;
+        if (minute < 10) {
+            minString = "0" + minute;
+        }
         //Display the user changed time on TextView
-        tv.setText("Start: " + String.valueOf(currentHour) + ":" + String.valueOf(minute) + " " +
+        tv.setText(tv.getText() + String.valueOf(currentHour) + ":" + minString + " " +
                 aMpM + "\n");
     }
 }

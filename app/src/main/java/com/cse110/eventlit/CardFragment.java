@@ -8,7 +8,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,11 @@ import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rahulsabnis on 2/22/17.
@@ -37,6 +35,8 @@ import java.util.concurrent.ExecutionException;
 public class CardFragment extends android.support.v4.app.Fragment {
 
     ArrayList<Event> listEvents = new ArrayList<>();
+    Set<String> eventIdsAdded = new HashSet<>();
+
     RecyclerView MyRecyclerView;
 
     private String mDescriptionText;
@@ -71,10 +71,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
             // TODO: Only get subscribed events instead of all events
             final User user = UserUtils.getCurrentUser();
 
-            UserUtils.getEventsFollowing(adapter, listEvents);
-            UserUtils.getEventsForOrgs(adapter, listEvents, user);
+            UserUtils.getEventsFollowing(adapter, listEvents, eventIdsAdded);
+            UserUtils.getEventsForOrgs(adapter, listEvents, eventIdsAdded, user);
         } else {
-            EventUtils.getAllEvents(adapter, listEvents);
+            EventUtils.getAllEvents(adapter, listEvents, eventIdsAdded);
         }
         
         MyRecyclerView.setAdapter(adapter);

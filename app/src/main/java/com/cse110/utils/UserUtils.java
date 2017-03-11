@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -112,6 +113,7 @@ public class UserUtils {
         user.updatePassword(newPassword).addOnCompleteListener(verifyOnComplete);
     }
 
+    /*
     public static User getUserFromIdSynch(String uid) {
 
         DatabaseReference userRef = DatabaseUtils.getUsersDB().child(uid);
@@ -145,6 +147,7 @@ public class UserUtils {
         return user[0];
 
     }
+    */
 
     // TODO create methods to modify the User database
 
@@ -192,6 +195,7 @@ public class UserUtils {
 
     }
 
+    /*
     public static final ArrayList<Event> getEventsFollowingSynch(User user) {
 
         ArrayList<Event> eventsFollowing = new ArrayList<>();
@@ -218,9 +222,12 @@ public class UserUtils {
 
         return eventsFollowing;
     }
+    */
 
     public static void getEventsFollowing(final CardFragment.MyAdapter adapter,
-                                                            final ArrayList<Event> events) {
+                                          final ArrayList<Event> events,
+                                          final Set<String> eventIdsAdded)
+    {
 //        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
         DatabaseReference userEvents = currentUserDB.child("eventsFollowing");
         userEvents.addValueEventListener(new ValueEventListener() {
@@ -241,9 +248,16 @@ public class UserUtils {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Event event = dataSnapshot.getValue(Event.class);
                                         Log.w("Event", dataSnapshot.toString());
-                                        events.add(event);
-                                        adapter.notifyItemChanged(adapter.getItemCount() - 1);
-                                        adapter.notifyDataSetChanged();
+
+                                        if (!eventIdsAdded.contains(event.getEventid())) {
+
+                                            eventIdsAdded.add(event.getEventid());
+
+                                            events.add(event);
+                                            adapter.notifyItemChanged(adapter.getItemCount() - 1);
+                                            adapter.notifyDataSetChanged();
+                                        }
+
                                     }
 
                                     @Override
@@ -266,10 +280,11 @@ public class UserUtils {
 
     public static final void getEventsForOrgs(final CardFragment.MyAdapter adapter,
                                               final ArrayList<Event> events,
+                                              final Set<String> eventIdsAdded,
                                               User user) {
         List<String> orgIds = user.getOrgsFollowing();
         for (String orgId : orgIds) {
-            EventUtils.getEventsByOrgId(adapter, events, orgId, 0, null, true);
+            EventUtils.getEventsByOrgId(adapter, events, eventIdsAdded, orgId, 0, null, true);
         }
     }
 

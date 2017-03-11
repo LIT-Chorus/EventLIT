@@ -77,7 +77,7 @@ public class FileStorageUtils {
 
         Log.d(FILE_STORAGE_UTILS, "after Glide Check");
 
-            return true;
+        return true;
 
     }
 
