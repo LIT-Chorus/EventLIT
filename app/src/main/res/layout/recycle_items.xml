@@ -50,6 +50,18 @@
                     android:maxLines="1"
                     android:ellipsize="end" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/orgId"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:textSize="0sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/eventId"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:textSize="0sp" />
+
             </LinearLayout>
 
             <FrameLayout

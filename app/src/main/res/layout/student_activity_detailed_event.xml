@@ -35,7 +35,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
-        android:text="Held By:"
         android:textSize="16sp"
         android:gravity="center"
         android:paddingBottom="8dp"
