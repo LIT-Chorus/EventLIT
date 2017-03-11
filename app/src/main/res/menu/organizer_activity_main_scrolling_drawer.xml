@@ -16,10 +16,7 @@
             android:id="@+id/nav_follow_orgs"
             android:icon="@drawable/ic_menu_follow_orgs"
             android:title="Follow Orgs" />
-        <item
-            android:id="@+id/nav_your_events"
-            android:icon="@drawable/ic_menu_event"
-            android:title="Your events" />
+
     </group>
 
 
