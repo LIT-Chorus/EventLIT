@@ -221,6 +221,7 @@ public class EventUtils {
         String orgId = event.getOrgid();
         DatabaseReference eventRef = eventsDB.child(orgId).push();
         final String eventKey = eventRef.getKey();
+        event.setEventid(eventKey);
         OnCompleteListener onEventCreated = new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {

@@ -153,4 +153,13 @@ public class OrganizationUtils {
         int index = Integer.parseInt(orgid);
         return orgsList.get(index);
     }
+
+    public static String getOrgId(String orgName) {
+        for (Organization org: orgsList) {
+            if (orgName.equals(org.getName())) {
+                return org.getOrgId();
+            }
+        }
+        return "-1";
+    }
 }

@@ -31,6 +31,7 @@ import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.FileStorageUtils;
+import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -265,6 +266,12 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String description = mDescription.getEditText().getText().toString();
         String capacity = mCapacity.getEditText().getText().toString();
 
+        // Get the organization name
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        String orgName = spinner.getSelectedItem().toString();
+        String orgId = OrganizationUtils.getOrgId(orgName);
+
+
         Calendar startTime = calendars.get("startTime");
         Calendar startDate = calendars.get("startDate");
         Calendar endTime = calendars.get("endTime");
@@ -288,7 +295,9 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         Log.w("End Time", endTime.getTimeInMillis() + "");
         Log.w("End Date", endDate.getTimeInMillis() + "");
 
-        Event event = new Event(title, description, "275", "0", location, "Uncateogorized", Integer.parseInt(capacity));
+        Log.w("Capacity", capacity);
+
+        Event event = new Event(title, description, orgId, "0", location, "Uncateogorized", Integer.parseInt(capacity));
         event.putStartTime(startDate.get(Calendar.YEAR),
                            startDate.get(Calendar.MONTH),
                            startDate.get(Calendar.DAY_OF_MONTH),
@@ -302,7 +311,12 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         EventUtils.createEvent(event, new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
-                Log.w("Added event with id", task.getResult());
+                if (task.isSuccessful()) {
+                    Log.w("Added event with id", task.getResult());
+                    String eventId = task.getResult();
+
+                }
+
             }
         });
 

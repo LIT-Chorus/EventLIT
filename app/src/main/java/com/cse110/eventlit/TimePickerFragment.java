@@ -53,6 +53,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         if (minute < 10) {
             minString = "0" + minute;
         }
+
+        Calendar today = Calendar.getInstance();
+        c.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),hourOfDay,minute);
         //Display the user changed time on TextView
         tv.setText(tv.getText() + String.valueOf(currentHour) + ":" + minString + " " +
                 aMpM);
