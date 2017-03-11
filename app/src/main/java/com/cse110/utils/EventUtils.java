@@ -38,35 +38,6 @@ public class EventUtils {
 
     private static DatabaseReference eventsDB = DatabaseUtils.getEventsDB();
 
-    public static Event getEventSnapshot(DataSnapshot eventSnapshot) {
-        // Get all fields in an event object
-        String orgId = eventSnapshot.child("orgid").getValue().toString();
-
-        String title = eventSnapshot.child("title").getValue()
-                .toString();
-        String category = eventSnapshot.child("category").getValue().toString();
-        String description = eventSnapshot.child("description").getValue()
-                .toString();
-
-        Calendar startDate = new GregorianCalendar();
-        String startMilli = eventSnapshot.child("startDate").getValue()
-                .toString();
-        startDate.setTimeInMillis(Long.parseLong(startMilli));
-
-        Calendar endDate = new GregorianCalendar();
-        String endMilli = eventSnapshot.child("endDate").getValue().toString();
-        endDate.setTimeInMillis(Long.parseLong(endMilli));
-
-        String location = eventSnapshot.child("location").getValue().toString();
-        int maxCapacity = Integer
-                .parseInt(eventSnapshot.child("maxCapacity")
-                        .getValue().toString());
-        Event event = new Event(title, description, orgId, eventSnapshot.getKey(), startDate,
-                endDate,location, category, maxCapacity);
-        return event;
-
-    }
-
     /**
      * Fetch a list of events and save it off in an ArrayAdapter. Notify the ArrayAdapter of the
      * change.
@@ -87,7 +58,7 @@ public class EventUtils {
                         String eventOrgId = eventSnapshot.child("orgid").getValue().toString();
                         if (eventOrgId.equals(orgId)){
                             // Create an event object and add it to the adapter
-                            Event event = getEventSnapshot(eventSnapshot);
+                            Event event = eventSnapshot.getValue(Event.class);
 
 
                             Date eventDate = new Date(event.getStartDate() + 86400);
