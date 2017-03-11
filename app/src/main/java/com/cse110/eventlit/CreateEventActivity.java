@@ -108,9 +108,29 @@ public class CreateEventActivity extends AppCompatActivity {
 
     }
 
-    /* Show the time picker dialog */
-    public void onTimeButtonClicked(View v){
+    /* Show the start time picker dialog */
+    public void onStartTimeButtonClicked(View v){
         DialogFragment newFragment = new TimePickerFragment();
+        TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
+        startTimeText.setText("Start: ");
+
+        // Pass in start time textview
+        Bundle args = new Bundle();
+        args.putInt("timetext", R.id.starttimetext);
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(),"TimePicker");
+    }
+
+    /* Show the end time picker dialog */
+    public void onEndTimeButtonClicked(View v){
+        DialogFragment newFragment = new TimePickerFragment();
+        TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
+        endTimeText.setText("End: ");
+
+        // Pass in the end time textview
+        Bundle args = new Bundle();
+        args.putInt("timetext", R.id.endtimetext);
+        newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
     }
 
