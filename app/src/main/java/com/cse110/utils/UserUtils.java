@@ -200,7 +200,7 @@ public class UserUtils {
                                             adapter.notifyDataSetChanged();
                                         }
 
-                                        else {
+                                        else if (event == null){
                                             UserUtils.removeEventsFollowing(eventId);
                                         }
 
