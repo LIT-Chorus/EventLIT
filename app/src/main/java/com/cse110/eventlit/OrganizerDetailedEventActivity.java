@@ -49,15 +49,15 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         Button editBut = (Button) findViewById(R.id.editButton);
         Button deleteBut = (Button) findViewById(R.id.deleteButton);
 
-        TextView title = (TextView) findViewById(R.id.title);
+        title = (TextView) findViewById(R.id.title);
 
-        TextView date = (TextView) findViewById(R.id.timetext);
+        date = (TextView) findViewById(R.id.timetext);
 
-        TextView location = (TextView) findViewById(R.id.locationtext);
+        location = (TextView) findViewById(R.id.locationtext);
 
-        TextView category = (TextView) findViewById(R.id.tagtext);
+        category = (TextView) findViewById(R.id.tagtext);
 
-        TextView description = (TextView) findViewById(R.id.descriptiontext);
+        description = (TextView) findViewById(R.id.descriptiontext);
 
 
 
