@@ -7,6 +7,8 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.cse110.utils.OrganizationUtils;
+
 import at.favre.lib.dali.Dali;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,5 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startSignUpAct);
             }
         });
+
+        OrganizationUtils.loadOrgs();
     }
 }

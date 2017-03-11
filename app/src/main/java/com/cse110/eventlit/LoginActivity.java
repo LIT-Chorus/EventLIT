@@ -126,14 +126,45 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
 
                             if (curr.getOrgsManaging().size() == 0) {
+                                 if(curr.getOrgsFollowing().size() == 0)
+                                 {
+                                     Log.d("problem", "yash problem");
+                                     Intent orgselection = new Intent(LoginActivity.this, OrganizationSelection_registrationActivity.class);
+                                     mEmailEntry.getEditText().setText("");
+                                     mPasswordEntry.getEditText().setText("");
+                                     mPasswordEntry.clearFocus();
+                                     mEmailEntry.clearFocus();
+                                     startActivity(orgselection);
+                                     finish();
 
-                                Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
-                                mEmailEntry.getEditText().setText("");
-                                mPasswordEntry.getEditText().setText("");
-                                mPasswordEntry.clearFocus();
-                                mEmailEntry.clearFocus();
-                                startActivity(openFeed);
-                                finish();
+                                     /*Log.d("problem", "Rahul problem");
+                                     Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                                     mEmailEntry.getEditText().setText("");
+                                     mPasswordEntry.getEditText().setText("");
+                                     mPasswordEntry.clearFocus();
+                                     mEmailEntry.clearFocus();
+                                     startActivity(openFeed);*/
+
+                                 }
+                                else {
+                                     Log.d("problem", "Rahul problem");
+                                     Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                                     mEmailEntry.getEditText().setText("");
+                                     mPasswordEntry.getEditText().setText("");
+                                     mPasswordEntry.clearFocus();
+                                     mEmailEntry.clearFocus();
+                                     startActivity(openFeed);
+                                     finish();
+                                     /*Log.d("problem", "yash problem");
+                                     Intent orgselection = new Intent(LoginActivity.this, OrganizationSelection_registrationActivity.class);
+                                     mEmailEntry.getEditText().setText("");
+                                     mPasswordEntry.getEditText().setText("");
+                                     mPasswordEntry.clearFocus();
+                                     mEmailEntry.clearFocus();
+                                     startActivity(orgselection);
+                                     finish();*/
+
+                                 }
                             } else {
                                 Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
                                 mEmailEntry.getEditText().setText("");

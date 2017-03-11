@@ -75,6 +75,23 @@ public class Event {
     };
 
 
+    public static Comparator<Event> eventComparatorPopularity = new Comparator<Event>() {
+        @Override
+        public int compare(Event o1, Event o2) {
+            long attendees1 = o1.getAttendees();
+            long attendees2 = o2.getAttendees();
+            if (attendees2 > attendees1) {
+                return -1;
+            }
+            else if (attendees2 < attendees1) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+    };
+
     /**
      * Full constructor containing all event information.
      */
