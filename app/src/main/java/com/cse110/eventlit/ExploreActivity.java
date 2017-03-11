@@ -50,7 +50,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_activity_main_scrolling);
 
-        mOrganizerStatus = getIntent().getExtras().getBoolean("organizer");
+        mOrganizerStatus = UserUtils.isOrganizer();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

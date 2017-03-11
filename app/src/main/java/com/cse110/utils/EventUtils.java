@@ -179,5 +179,7 @@ public class EventUtils {
 
     public static final void updateEvent(Event event) {
         eventsDB.child(event.getOrgid()).child(event.getEventid()).setValue(event);
+
+        Log.d("EventUtils updateEvent:", event.toString());
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -81,6 +82,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO Open intent to edit event (send bundle of event info as well)
 
+                Log.d("Event is currently", event.toString());
                 EventUtils.updateEvent(event);
             }
         });

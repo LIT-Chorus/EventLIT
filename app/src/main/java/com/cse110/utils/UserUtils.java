@@ -77,6 +77,10 @@ public class UserUtils {
         }
     }
 
+    public static boolean isOrganizer() {
+        return currentUser.getOrgsManaging().size() > 0;
+    }
+
     /**
      * Reset the user's password
      *
