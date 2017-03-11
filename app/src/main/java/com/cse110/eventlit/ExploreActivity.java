@@ -71,6 +71,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             fragment = new CardFragment();
             Bundle pageType = new Bundle();
             pageType.putString("type", "explore");
+            pageType.putBoolean("organizer", mOrganizerStatus);
             fragment.setArguments(pageType);
             fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }

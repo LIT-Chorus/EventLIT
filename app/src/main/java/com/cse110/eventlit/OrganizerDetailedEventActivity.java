@@ -98,11 +98,11 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (type.equals("feed")) {
+            startActivity(new Intent(this, OrganizerFeedActivity.class));
+        } else {
             Intent explore = new Intent(this, ExploreActivity.class);
             explore.putExtra("organizer", true);
             startActivity(explore);
-        } else {
-            startActivity(new Intent(this, OrganizerFeedActivity.class));
         }
         finish();
 

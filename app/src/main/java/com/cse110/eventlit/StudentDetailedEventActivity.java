@@ -97,16 +97,16 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
     public void onBackPressed() {
         // TODO: Go back to organizer feed
         if (type.equals("feed")) {
-            Intent explore = new Intent(this, ExploreActivity.class);
-            explore.putExtra("organizer", mOrganizerStatus);
-            startActivity(explore);
-
-        } else {
             if (mOrganizerStatus) {
                 startActivity(new Intent(this, OrganizerFeedActivity.class));
             } else {
                 startActivity(new Intent(this, StudentFeedActivity.class));
             }
+
+        } else {
+            Intent explore = new Intent(this, ExploreActivity.class);
+            explore.putExtra("organizer", mOrganizerStatus);
+            startActivity(explore);
         }
         finish();
     }
