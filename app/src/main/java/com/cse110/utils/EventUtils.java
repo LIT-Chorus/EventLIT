@@ -252,4 +252,8 @@ public class EventUtils {
                                          OnCompleteListener<Void> onDelete) {
         eventsDB.child(orgId).child(eventId).removeValue().addOnCompleteListener(onDelete);
     }
+
+    public static final void updateEvent(Event event) {
+        eventsDB.child(event.getOrgid()).child(event.getEventid()).setValue(event);
+    }
 }

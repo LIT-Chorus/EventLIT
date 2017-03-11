@@ -2,6 +2,7 @@ package com.cse110.eventlit.db;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,6 +92,20 @@ public class Event {
         this.attendees = new ArrayList<>();
     }
 
+    public Event(String title, String description, String orgid, String eventid, long startDate,
+                 long endDate, String location, String category, int maxCapacity) {
+        this.title = title;
+        this.description = description;
+        this.orgid = orgid;
+        this.eventid = eventid;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.category = category;
+        this.maxCapacity = maxCapacity;
+        this.attendees = new ArrayList<>();
+    }
+
     /**
      * Constructor less the start and end dates. The dates are automatically initialized to the
      * current date and time.
@@ -147,6 +162,15 @@ public class Event {
      */
     public String formattedStartTime(String fmt) {
         return new SimpleDateFormat(fmt).format(startTimeAsCalendar().getTime());
+    }
+
+    public static long getEpochTime(String date, String fmt) {
+        try {
+            return new SimpleDateFormat(fmt).parse(date).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     /**
