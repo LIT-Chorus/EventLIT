@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         mSignInListener = new OnCompleteListener<User>(){
             @Override
             public void onComplete(@NonNull Task<User> task){
-                mSignInProgress.hide();
+                mSignInProgress.dismiss();
                 // Firebase reported error on the server side displayed here
                 if (!task.isSuccessful()) {
 
