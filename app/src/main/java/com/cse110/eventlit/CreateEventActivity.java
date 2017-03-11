@@ -69,7 +69,8 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
     // Orgs that the Organizer User manages
     private List<String> orgsManaging;
 
-    private HashMap<String, Calendar> calendars;
+    private Calendar startDatetime;
+    private Calendar endDatetime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,9 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         final View profView = factory.inflate(R.layout.edit_profilephoto, null);
         dialog.setView(profView);
 
-        calendars = new HashMap<>();
+        startDatetime = Calendar.getInstance();
+        endDatetime = Calendar.getInstance();
+        endDatetime.add(Calendar.HOUR, 1);
 
 
         // Gets the Orgs that the Organization User is managing
@@ -199,7 +202,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
         startTimeText.setText("Start Time: ");
 
-        calendars.put("startTime", newFragment.getCalendar());
+        newFragment.setCalendar(startDatetime);
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -214,7 +217,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         TextView startDateText = (TextView) findViewById(R.id.startdatetext);
         startDateText.setText("Start Date: ");
 
-        calendars.put("startDate", newFragment.getCalendar());
+        newFragment.setCalendar(startDatetime);
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -229,7 +232,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
         endTimeText.setText("End Time: ");
 
-        calendars.put("endTime", newFragment.getCalendar());
+        newFragment.setCalendar(endDatetime);
 
         // Pass in the end time textview
         Bundle args = new Bundle();
@@ -244,7 +247,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         TextView startDateText = (TextView) findViewById(R.id.enddatetext);
         startDateText.setText("End Date: ");
 
-        calendars.put("endDate", newFragment.getCalendar());
+        newFragment.setCalendar(endDatetime);
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -273,45 +276,15 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String orgName = spinner.getSelectedItem().toString();
         String orgId = OrganizationUtils.getOrgId(orgName);
 
-
-        Calendar startTime = calendars.get("startTime");
-        Calendar startDate = calendars.get("startDate");
-        Calendar endTime = calendars.get("endTime");
-        Calendar endDate = calendars.get("endDate");
-
-        if (startTime == null) {
-            startTime = Calendar.getInstance();
-        }
-        if (startDate == null) {
-            startDate = Calendar.getInstance();
-        }
-        if (endTime == null) {
-            endTime = Calendar.getInstance();
-        }
-        if (endDate == null) {
-            endDate = Calendar.getInstance();
-        }
-
-        Log.w("Start Time", startTime.getTimeInMillis() + "");
-        Log.w("Start Date", startDate.getTimeInMillis() + "");
-        Log.w("End Time", endTime.getTimeInMillis() + "");
-        Log.w("End Date", endDate.getTimeInMillis() + "");
+        Log.w("Start", startDatetime.getTimeInMillis() + "");
+        Log.w("End", endDatetime.getTimeInMillis() + "");
 
         if (capacity.equals("")) {
             capacity = "0";
         }
 
-        Event event = new Event(title, description, orgId, "0", location, "Uncateogorized", Integer.parseInt(capacity));
-        event.putStartTime(startDate.get(Calendar.YEAR),
-                           startDate.get(Calendar.MONTH),
-                           startDate.get(Calendar.DAY_OF_MONTH),
-                            startTime.get(Calendar.HOUR),
-                            startTime.get(Calendar.MINUTE));
-        event.putEndTime(endDate.get(Calendar.YEAR),
-                endDate.get(Calendar.MONTH),
-                endDate.get(Calendar.DAY_OF_MONTH),
-                endTime.get(Calendar.HOUR),
-                endTime.get(Calendar.MINUTE));
+        Event event = new Event(title, description, orgId, "0", startDatetime,
+                endDatetime ,location, "Uncateogorized", Integer.parseInt(capacity));
         EventUtils.createEvent(event, new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {

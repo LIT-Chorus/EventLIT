@@ -42,4 +42,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public Calendar getCalendar() {
         return c;
     }
+
+    public void setCalendar(Calendar c) {this.c = c; }
 }

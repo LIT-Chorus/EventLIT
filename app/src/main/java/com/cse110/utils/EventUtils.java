@@ -61,12 +61,13 @@ public class EventUtils {
                             Event event = eventSnapshot.getValue(Event.class);
 
 
-                            Date eventDate = new Date(event.getStartDate() + 86400);
+                            Date eventDate = new Date(event.getEndDate());
                             Date today = new Date();
 
                             Log.d("EventUtils end date", "" + event.getEndDate());
 
                             if (eventDate.before(today)) {
+                                Log.w("Deleted", event.toString());
                                 EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);
                             }
 
