@@ -2,6 +2,7 @@ package com.cse110.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ImageView;
@@ -59,7 +60,8 @@ public class FileStorageUtils {
         });
     }
 
-    public static boolean getImageView(ImageView imageView, Context context, String id) {
+    /*
+    public static void getImageView(ImageView imageView, Context context, String id) {
 
         Log.d(FILE_STORAGE_UTILS, "before StorageReference stuff");
 
@@ -70,16 +72,32 @@ public class FileStorageUtils {
 
         Log.d(FILE_STORAGE_UTILS, "after getDownloadUrl Check");
         // Load the image using Glide
-        Glide.with(context /* context */)
+        Glide.with(context  )
                 .using(new FirebaseImageLoader())
                 .load(imageRef)
                 .into(imageView);
 
         Log.d(FILE_STORAGE_UTILS, "after Glide Check");
 
-        return true;
+    }
+    */
+
+    public static void getImageView(final ImageView imageView, final Context context, String id) {
+
+        final StorageReference imageRef = storageRef.child("images/" + id + ".jpeg");
+
+        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context /* context */)
+                        .using(new FirebaseImageLoader())
+                        .load(imageRef)
+                        .into(imageView);
+            }
+        });
 
     }
+
 
 
     /*
