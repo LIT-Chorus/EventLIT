@@ -20,9 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="4dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:layout_marginTop="4dp"
             android:theme="@style/InputTextBlack">
 
             <EditText
@@ -30,11 +30,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:textSize="15dp"
                 android:hint="Event Title"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
-                android:textColorHint="@color/mdtp_light_gray" />
+                android:textColorHint="@color/mdtp_light_gray"
+                android:textSize="15dp" />
         </android.support.design.widget.TextInputLayout>
 
         <Spinner
@@ -60,8 +60,8 @@
                 android:id="@+id/startdatetext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:onClick="onStartDateClicked"
+                android:padding="2dp"
                 android:text="Today"
                 android:textSize="15dp" />
 
@@ -69,8 +69,8 @@
                 android:id="@+id/starttimetext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:onClick="onStartTimeClicked"
+                android:padding="2dp"
                 android:text="12:00 pm"
                 android:textSize="15dp" />
 
@@ -95,8 +95,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onEndDateClicked"
-                android:text="End Date"
                 android:padding="2dp"
+                android:text="End Date"
                 android:textSize="15dp" />
 
             <TextView
@@ -126,11 +126,11 @@
                 android:drawablePadding="15dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:textSize="15dp"
                 android:hint="Location"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:textColorHint="@color/black"
+                android:textSize="15dp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -150,10 +150,10 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="Description"
-                android:textSize="15dp"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:textColorHint="@color/black"
+                android:textSize="15dp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -174,73 +174,69 @@
                 android:focusableInTouchMode="true"
                 android:hint="Maximum Capacity"
                 android:inputType="number"
-                android:textSize="15dp"
                 android:soundEffectsEnabled="true"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:textColorHint="@color/black"
+                android:textSize="15dp" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tagtext"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:theme="@style/InputTextBlack">
+            android:orientation="horizontal"
+            android:paddingLeft="16dp">
 
-            <EditText
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_label_black_24dp"
-                android:drawablePadding="15dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="Tag"
-                android:textSize="15dp"
-                android:soundEffectsEnabled="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
-        </android.support.design.widget.TextInputLayout>
+                android:padding="3dp"
+                android:src="@drawable/ic_label_black_24dp" />
 
+            <Spinner
+                android:id="@+id/tagspinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/activity_left_margin" />
+
+        </LinearLayout>
 
         <!-- CANCEL/CREATE BUTTONS -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="0.6"
-            android:weightSum="3.4"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:weightSum="3.4">
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/cancelButton"
+                style="@style/EventButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                style="@style/EventButton"
-                android:background="@color/notGoingColor"
                 android:layout_weight="1"
-                android:text="CANCEL"/>
+                android:background="@color/notGoingColor"
+                android:text="CANCEL"
+                android:textStyle="bold" />
 
             <View
+                android:id="@+id/line2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="#FFFFFF"
                 android:layout_weight="0.2"
-                android:id="@+id/line2">
+                android:background="#FFFFFF">
 
             </View>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/createButton"
+                style="@style/EventButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                style="@style/EventButton"
-                android:background="@color/goingColor"
                 android:layout_weight="1"
-                android:text="CREATE" />
+                android:background="@color/goingColor"
+                android:text="CREATE"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
