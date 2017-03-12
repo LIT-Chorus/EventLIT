@@ -256,6 +256,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String location = mLocation.getEditText().getText().toString();
         String description = mDescription.getEditText().getText().toString();
         String capacity = mCapacity.getEditText().getText().toString();
+        String category = mTag.getEditText().getText().toString();
 
         // Get the organization name
         Spinner spinner = (Spinner)findViewById(R.id.orgspinner);
@@ -270,7 +271,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         }
 
         Event event = new Event(title, description, orgId, "0", startDatetime,
-                endDatetime ,location, "Uncateogorized", Integer.parseInt(capacity));
+                endDatetime ,location, category, Integer.parseInt(capacity));
         EventUtils.createEvent(event, new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {

@@ -245,6 +245,7 @@ public class Event {
     @Override
     public String toString() {
         Map<String, Object> map = new HashMap<>();
+        map.put("eventid", eventid);
         map.put("title", title);
         map.put("description", description);
         map.put("orgid", orgid);
