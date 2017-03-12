@@ -45,6 +45,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
     private AppCompatTextView mName;
     private AppCompatTextView mOrgStatus;
     private boolean mOrganizerStatus;
+    private static final int PERMISSION_CAMERA = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,11 +115,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
         mProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PickImageDialog.build(new PickSetup()
-                        .setTitle("Select a new profile picture!")
-                        .setPickTypes(EPickType.GALLERY))
-                        .setOnPickResult(SettingsFragment.this)
-                        .show(getFragmentManager());
+                checkPermission();
             }
         });
 
@@ -135,6 +132,62 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
 
         return view;
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case PERMISSION_CAMERA:
+                final int numOfRequest = grantResults.length;
+                final boolean isGranted = numOfRequest == 1
+                        && PackageManager.PERMISSION_GRANTED == grantResults[numOfRequest - 1];
+                if (isGranted) {
+                    // you have permission go ahead
+                    Log.wtf("SettingsFragment", "access permission");
+                    browseCamera();
+                } else {
+                    Log.wtf("SettingsFragment", "no permission");
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    void checkPermission() {
+
+        Log.wtf("SettingsFragment", "inside checkPrmission");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.wtf("SettingsFragment", "version is at least Lollipop");
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.wtf("SettingsFragment", "permission still not accepted");
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    Log.wtf("SettingsFragment", "show rationale");
+                } else {
+                    Log.wtf("SettingsFragment", "about to request permissions");
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_CAMERA);
+                }
+            } else {
+                Log.wtf("SettingsFragment", "no need to ask for permission");
+                browseCamera();
+            }
+        } else {
+            Log.wtf("SettingsFragment", "no need to ask for permission");
+            browseCamera();
+        }
+    }
+
+    public void browseCamera() {
+        PickImageDialog.build(new PickSetup()
+               .setTitle("Select a new profile picture!")
+              .setPickTypes(EPickType.GALLERY))
+             .setOnPickResult(SettingsFragment.this)
+            .show(getFragmentManager());
+    };
+
 
     @Override
     public void onPickResult(PickResult r) {
