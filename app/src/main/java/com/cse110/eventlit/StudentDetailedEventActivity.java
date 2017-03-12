@@ -8,11 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.RSVP;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 
 import org.w3c.dom.Text;
@@ -43,6 +45,7 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
         final Button goingBut = (Button) findViewById(R.id.goingButton);
         final Button interestedBut = (Button) findViewById(R.id.interestedButton);
         final Button notGoingBut = (Button) findViewById(R.id.notGoingButton);
+        final ImageView eventPic = (ImageView) findViewById(R.id.event);
 
         int rsvp = extras.getInt("RSVP");
         if (rsvp == 1) {
@@ -58,6 +61,8 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
             goingBut.setBackgroundColor(Color.GRAY);
             interestedBut.setBackgroundColor(Color.GRAY);
         }
+
+        FileStorageUtils.getImageView(eventPic, this, eventId);
 
 
         goingBut.setOnClickListener(new View.OnClickListener() {
