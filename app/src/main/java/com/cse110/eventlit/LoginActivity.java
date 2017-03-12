@@ -67,8 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         // Tracks whether a user is signed in or not
         try {
             fbAuth = FirebaseAuth.getInstance();
-        }
-        catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             Toast.makeText(LoginActivity.this, "Firebase App failed to initialize",
                     Toast.LENGTH_SHORT);
             // Elegantly handle this later...
@@ -92,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // TODO #Frontend change this to go to new activity with intent
-        mSignInListener = new OnCompleteListener<User>(){
+        mSignInListener = new OnCompleteListener<User>() {
             @Override
-            public void onComplete(@NonNull Task<User> task){
+            public void onComplete(@NonNull Task<User> task) {
                 mSignInProgress.dismiss();
                 // Firebase reported error on the server side displayed here
                 if (!task.isSuccessful()) {
@@ -126,16 +125,15 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
 
                             if (curr.getOrgsManaging().size() == 0) {
-                                 if(curr.getOrgsFollowing().size() == 0)
-                                 {
-                                     Log.d("problem", "yash problem");
-                                     Intent orgselection = new Intent(LoginActivity.this, OrganizationSelection_registrationActivity.class);
-                                     mEmailEntry.getEditText().setText("");
-                                     mPasswordEntry.getEditText().setText("");
-                                     mPasswordEntry.clearFocus();
-                                     mEmailEntry.clearFocus();
-                                     startActivity(orgselection);
-                                     finish();
+                                if (curr.getOrgsFollowing().size() == 0) {
+                                    Log.d("problem", "yash problem");
+                                    Intent orgselection = new Intent(LoginActivity.this, OrganizationSelection_registrationActivity.class);
+                                    mEmailEntry.getEditText().setText("");
+                                    mPasswordEntry.getEditText().setText("");
+                                    mPasswordEntry.clearFocus();
+                                    mEmailEntry.clearFocus();
+                                    startActivity(orgselection);
+                                    finish();
 
                                      /*Log.d("problem", "Rahul problem");
                                      Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
@@ -145,16 +143,15 @@ public class LoginActivity extends AppCompatActivity {
                                      mEmailEntry.clearFocus();
                                      startActivity(openFeed);*/
 
-                                 }
-                                else {
-                                     Log.d("problem", "Rahul problem");
-                                     Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
-                                     mEmailEntry.getEditText().setText("");
-                                     mPasswordEntry.getEditText().setText("");
-                                     mPasswordEntry.clearFocus();
-                                     mEmailEntry.clearFocus();
-                                     startActivity(openFeed);
-                                     finish();
+                                } else {
+                                    Log.d("problem", "Rahul problem");
+                                    Intent openFeed = new Intent(LoginActivity.this, StudentFeedActivity.class);
+                                    mEmailEntry.getEditText().setText("");
+                                    mPasswordEntry.getEditText().setText("");
+                                    mPasswordEntry.clearFocus();
+                                    mEmailEntry.clearFocus();
+                                    startActivity(openFeed);
+                                    finish();
                                      /*Log.d("problem", "yash problem");
                                      Intent orgselection = new Intent(LoginActivity.this, OrganizationSelection_registrationActivity.class);
                                      mEmailEntry.getEditText().setText("");
@@ -164,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                                      startActivity(orgselection);
                                      finish();*/
 
-                                 }
+                                }
                             } else {
                                 Intent openFeed = new Intent(LoginActivity.this, OrganizerFeedActivity.class);
                                 mEmailEntry.getEditText().setText("");
@@ -180,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogCustom);
                         builder.setTitle("Email Not Verified")
                                 .setMessage("Please Verify your Email before using EventLIT")
-                        .setPositiveButton(android.R.string.ok, null).create().show();
+                                .setPositiveButton(android.R.string.ok, null).create().show();
                     }
                 }
             }
@@ -193,7 +190,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (mEmailEntry.getEditText() != null && mPasswordEntry.getEditText() != null) {
                     checkEmail();
 
-                    if (mEmailEntry.getEditText().getError() == null) {
+                    if (mPasswordEntry.getEditText().getText().length() == 0) {
+                        mPasswordEntry.getEditText().setError("Please enter your password");
+                    } else if (mEmailEntry.getEditText().getError() == null) {
 
 
                         String emailText = mEmailEntry.getEditText().getText().toString();
@@ -209,18 +208,20 @@ public class LoginActivity extends AppCompatActivity {
                     mLoginBut.setClickable(true);
                 }
             }
-        });
+    });
 
-        mForgot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent forgotPage = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                startActivity(forgotPage);
-                finish();
-            }
-        });
+        mForgot.setOnClickListener(new View.OnClickListener()
 
+    {
+        @Override
+        public void onClick (View view){
+        Intent forgotPage = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+        startActivity(forgotPage);
+        finish();
     }
+    });
+
+}
 
     /**
      * Performs sign-in validation and logs the user in.
@@ -229,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param passwordText
      */
     protected void signIn(final String emailText, final String passwordText) {
-            UserUtils.logIn(emailText, passwordText, mSignInListener);
+        UserUtils.logIn(emailText, passwordText, mSignInListener);
     }
 
     protected void checkEmail() {

@@ -20,11 +20,14 @@ import android.widget.TextView;
 
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.User;
+import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StudentFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +37,7 @@ public class StudentFeedActivity extends AppCompatActivity
     private OnCompleteListener<User> mCompleteListener;
 
     CardFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +72,7 @@ public class StudentFeedActivity extends AppCompatActivity
 
         // TODO call updateHeader with user's name/email/pic
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){
+        if (user != null) {
             updateHeader(user.getDisplayName(), user.getEmail());
         }
 
@@ -84,13 +88,14 @@ public class StudentFeedActivity extends AppCompatActivity
 
     // Updates the name/email/profile pic that is displayed in the hamburger menu
     public void updateHeader(String name, String email) {
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            View profileView = navigationView.getHeaderView(0);
-            TextView nameTextView = (TextView) profileView.findViewById(R.id.nameTextView);
-            TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
-            nameTextView.setText(name);
-            emailTextView.setText(email);
-            // TODO update prof pic
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View profileView = navigationView.getHeaderView(0);
+        TextView nameTextView = (TextView) profileView.findViewById(R.id.nameTextView);
+        TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
+        nameTextView.setText(name);
+        emailTextView.setText(email);
+        CircleImageView profPic = (CircleImageView) profileView.findViewById(R.id.profile_image);
+        FileStorageUtils.getImageView(profPic, this, FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
 
@@ -137,7 +142,7 @@ public class StudentFeedActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort) {
-            final CharSequence[] items = {" Time "," Popularity "};
+            final CharSequence[] items = {" Time ", " Popularity "};
             // arraylist to keep the selected items
             int checkedItem = 0;
             AlertDialog dialog = new AlertDialog.Builder(this)
@@ -147,8 +152,7 @@ public class StudentFeedActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int indexSelected) {
                             if (indexSelected == 0) {
                                 fragment.sortBy(Event.eventComparatorDate);
-                            }
-                            else {
+                            } else {
                                 fragment.sortBy(Event.eventComparatorPopularity);
                             }
                         }
@@ -194,8 +198,6 @@ public class StudentFeedActivity extends AppCompatActivity
             act.putExtra("organizer", false);
             startActivity(act);
             finish();
-        } else if (id == R.id.nav_help) {
-
         } else if (id == R.id.nav_logout) {
             UserUtils.logOut(mCompleteListener);
         }

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.User;
+import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrganizationSelectionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,6 +78,8 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
         TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
         nameTextView.setText(name);
         emailTextView.setText(email);
+        CircleImageView profPic = (CircleImageView) profileView.findViewById(R.id.profile_image);
+        FileStorageUtils.getImageView(profPic, this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         // TODO update prof pic
     }
 
@@ -154,8 +159,6 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
             act.putExtra("organizer", mOrganizerStatus);
             startActivity(act);
             finish();
-        } else if (id == R.id.nav_help) {
-
         } else if (id == R.id.nav_logout) {
             UserUtils.logOut(new OnCompleteListener<User>() {
                 @Override

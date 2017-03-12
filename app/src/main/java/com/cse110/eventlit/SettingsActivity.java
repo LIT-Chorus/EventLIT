@@ -31,6 +31,7 @@ import android.widget.Toast;
 //import com.cse110.chrous.R;
 
 import com.cse110.eventlit.db.User;
+import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +42,8 @@ import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.enums.EPickType;
 import com.vansuita.pickimage.listeners.IPickResult;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application activity_settings. On
@@ -115,6 +118,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
         nameTextView.setText(name);
         emailTextView.setText(email);
+        CircleImageView profPic = (CircleImageView) profileView.findViewById(R.id.profile_image);
+        FileStorageUtils.getImageView(profPic, this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         // TODO update prof pic
     }
 
@@ -178,8 +183,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             finish();
         } else if (id == R.id.nav_settings) {
             //
-        } else if (id == R.id.nav_help) {
-
         } else if (id == R.id.nav_logout) {
             UserUtils.logOut(new OnCompleteListener<User>() {
                 @Override

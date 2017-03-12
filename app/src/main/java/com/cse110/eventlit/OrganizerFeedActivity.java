@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
+import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +31,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrganizerFeedActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -104,7 +107,8 @@ public class OrganizerFeedActivity extends AppCompatActivity
         TextView nameTextView = (TextView) profileView.findViewById(R.id.nameTextView);
         TextView emailTextView = (TextView) profileView.findViewById(R.id.emailTextView);
         nameTextView.setText(name);
-        emailTextView.setText(email);
+        emailTextView.setText(email);CircleImageView profPic = (CircleImageView) profileView.findViewById(R.id.profile_image);
+        FileStorageUtils.getImageView(profPic, this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         // TODO update prof pic
     }
 
@@ -136,7 +140,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_scrolling, menu);
+        getMenuInflater().inflate(R.menu.main_scrolling_no_filter, menu);
         return true;
     }
 
@@ -181,10 +185,6 @@ public class OrganizerFeedActivity extends AppCompatActivity
             dialog.show();
         }
 
-        else if (id == R.id.action_filter) {
-
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -214,8 +214,6 @@ public class OrganizerFeedActivity extends AppCompatActivity
             finish();
 
             finish();
-        } else if (id == R.id.nav_help) {
-
         } else if (id == R.id.nav_logout) {
             UserUtils.logOut(new OnCompleteListener<User>() {
                 @Override
