@@ -18,6 +18,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -136,26 +137,25 @@ public class EventUtils {
 
     /**
      * Fetch a list of all events regardless of organization.
-     *
-     * @param adapter - the adapter to notify once the ArrayList has been populated
-     * @param eventlist - an ArrayList of events to be populated
      */
-    public static void getAllEvents(final CardFragment.MyAdapter adapter,
-                                    final ArrayList<Event> eventlist,
-                                    final ArrayList<Event> copy,
-                                    final Set<String> eventIdsAdded) {
+    public static Task<ArrayList<Event>> getAllEvents() {
+        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
+        final ArrayList<Event> allEventsArray = new ArrayList<Event>();
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Enumerate through all the organizations
-                for (DataSnapshot org : dataSnapshot.getChildren()) {
                     // Makes call to other method to get events for the org
+                    GenericTypeIndicator<Map<String, HashMap<String, Event>>> typeIndicator = new GenericTypeIndicator<Map<String, HashMap<String, Event>>>() {};
+                    Map<String, HashMap<String, Event>> stringEventMap = dataSnapshot.getValue(typeIndicator);
 
-                    getEventsByOrgId(adapter, eventlist, copy, eventIdsAdded, org.getKey(), null);
-                    Log.w("Event", "Event!");
+                    for (HashMap<String, Event> events: stringEventMap.values()) {
+                        for (Event event: events.values()) {
+                            allEventsArray.add(event);
+                        }
+                    }
 
-                    adapter.notifyDataSetChanged();
-                }
+                    wrappedTask.wrapResult(allEventsArray);
 
             }
 
@@ -165,6 +165,7 @@ public class EventUtils {
             }
         };
         eventsDB.addValueEventListener(eventListener);
+        return wrappedTask.unwrap();
     }
 
 

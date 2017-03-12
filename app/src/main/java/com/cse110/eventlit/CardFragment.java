@@ -107,11 +107,26 @@ public class CardFragment extends android.support.v4.app.Fragment {
                         }
 
                         adapter.notifyDataSetChanged();
+                        sortBy(Event.eventComparatorDate);
                     }
                 }
             });
         } else {
-            EventUtils.getAllEvents(adapter, allEvents, listEvents, eventIdsAdded);
+            final Task<ArrayList<Event>> allEventsTask;
+            Tasks.whenAll(allEventsTask = EventUtils.getAllEvents()).addOnCompleteListener(
+                    new OnCompleteListener<Void>() {
+                        @Override public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                allEvents.clear();
+                                allEvents.addAll(allEventsTask.getResult());
+                                listEvents.addAll(allEvents);
+                                adapter.notifyDataSetChanged();
+                                sortBy(Event.eventComparatorDate);
+
+                            }
+                        }
+                    }
+            );
         }
 
         MyRecyclerView.setAdapter(adapter);
