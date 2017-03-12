@@ -25,6 +25,7 @@ import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +33,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by rahulsabnis on 2/22/17.
@@ -87,9 +89,22 @@ public class CardFragment extends android.support.v4.app.Fragment {
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
             final User user = UserUtils.getCurrentUser();
-
-            UserUtils.getEventsFollowing(adapter, allEvents, listEvents, eventIdsAdded);
-            UserUtils.getEventsForOrgs(adapter, allEvents, listEvents, eventIdsAdded, user);
+            Tasks.whenAll(UserUtils.getEventsFollowing(adapter, allEvents, listEvents, eventIdsAdded),
+            UserUtils.getEventsForOrgs(listEvents, eventIdsAdded, user)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.w("Event for Orgs Loaded", "Success");
+//                        Set<Event> noDuplicates = new TreeSet<Event>(listEvents);
+//                        for (Event event: listEvents) {
+//                            Log.w("EventLoaded", event.toString());
+//                        }
+//                        listEvents.clear();
+//                        listEvents.addAll(noDuplicates);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            });
         } else {
             EventUtils.getAllEvents(adapter, allEvents, listEvents, eventIdsAdded);
         }
@@ -116,11 +131,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
     }
 
     public void sortBy(Comparator<Event> eventComparator) {
-        listEvents.clear();
-        Collections.sort(allEvents, eventComparator);
-        for (Event e: allEvents) {
-            listEvents.add(e);
-        }
+        Collections.sort(listEvents, eventComparator);
         adapter.notifyDataSetChanged();
     }
 

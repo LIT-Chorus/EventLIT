@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -27,6 +28,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
@@ -116,6 +118,33 @@ public class EventUtils {
         events.addValueEventListener(eventListener);
     }
 
+    public static Task<ArrayList<Event>> getEventsByOrgIdCont(final ArrayList<Event> list,
+                                            final String orgId) {
+        final DatabaseReference events = eventsDB.child(orgId);
+        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
+        events.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<Map<String, Event>> eventMapInd = new GenericTypeIndicator<Map<String, Event>>() {};
+                Map<String, Event> eventMap = dataSnapshot.getValue(eventMapInd);
+                if (eventMap == null) {
+                    wrappedTask.wrapResult(new ArrayList<Event>());
+                }
+                else {
+                    ArrayList<Event> eventArrayList = new ArrayList<Event>(eventMap.values());
+                    wrappedTask.wrapResult(eventArrayList);
+                    list.addAll(eventArrayList);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return wrappedTask.unwrap();
+    }
 
 
     /**

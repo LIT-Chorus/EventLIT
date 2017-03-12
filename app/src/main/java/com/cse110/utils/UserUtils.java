@@ -11,6 +11,7 @@ import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -169,26 +170,33 @@ public class UserUtils {
         return orgsManaging;
     }
 
-    public static void getEventsFollowing(final CardFragment.MyAdapter adapter,
+    public static Task<ArrayList<Event>> getEventsFollowing(final CardFragment.MyAdapter adapter,
                                           final ArrayList<Event> events,
                                           final ArrayList<Event> copy,
                                           final Set<String> eventIdsAdded)
     {
-//        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
+        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
         DatabaseReference userEvents = currentUserDB.child("eventsFollowing");
+
         userEvents.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<Map<String, RSVP>> genericTypeIndicator = new GenericTypeIndicator<Map<String, RSVP>>() {};
                 Map<String, RSVP> rsvps = dataSnapshot.getValue(genericTypeIndicator);
-                if (rsvps != null) {
+                final ArrayList<Event> events = new ArrayList<Event>();
+                if (rsvps !=  null) {
+
+                    final ArrayList<Task<Event>> eventTasks = new ArrayList<>();
                     for (RSVP rsvp : rsvps.values()) {
                         final String eventId = rsvp.getEventid();
                         String orgId = rsvp.getOrgid();
                         RSVP.Status status = rsvp.rsvpStatus;
+
+                        // If not not going, we put on to the feed
                         if  (status != RSVP.Status.NOT_GOING) {
                             if (eventId != null && orgId != null) {
                                 DatabaseReference eventRef = DatabaseUtils.getEventsDB().child(orgId).child(eventId);
+                                final WrappedTask<Event> eventWrappedTask = new WrappedTask<Event>();
                                 eventRef.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -196,17 +204,13 @@ public class UserUtils {
 
                                         //Log.w("Event", dataSnapshot.toString());
 
-                                        if (event != null && !eventIdsAdded.contains(event.getEventid())) {
-
-                                            eventIdsAdded.add(event.getEventid());
-
+                                        if (event != null) {
                                             events.add(event);
                                             copy.add(event);
-
-                                            adapter.notifyItemChanged(adapter.getItemCount() - 1);
-                                            adapter.notifyDataSetChanged();
+                                            eventWrappedTask.wrapResult(event);
                                         }
 
+                                        // Clean up refs to events that don't exist anymore
                                         else if (event == null){
                                             UserUtils.removeEventsFollowing(eventId);
                                         }
@@ -218,9 +222,24 @@ public class UserUtils {
 
                                     }
                                 });
+                                // Add event tasks to queue
+                                eventTasks.add(eventWrappedTask.unwrap());
                             }
                         }
                     }
+
+                    Tasks.whenAll(eventTasks).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            ArrayList<Event> returnEvents = new ArrayList<Event>();
+                            for (Task<Event> et : eventTasks) {
+                                Event e = et.getResult();
+                                returnEvents.add(e);
+                            }
+
+                            wrappedTask.wrapResult(returnEvents);
+                        }
+                    });
                 }
             }
 
@@ -229,20 +248,19 @@ public class UserUtils {
 
             }
         });
+
+        return wrappedTask.unwrap();
     }
 
-    public static final void getEventsForOrgs(final CardFragment.MyAdapter adapter,
-                                              final ArrayList<Event> events,
-                                              final ArrayList<Event> copy,
+    public static final Task<Void> getEventsForOrgs(final ArrayList<Event> events,
                                               final Set<String> eventIdsAdded,
                                               User user) {
         List<String> orgIds = user.getOrgsFollowing();
-        for (String orgId : orgIds) {
-            if (orgId != null) {
-                EventUtils.getEventsByOrgId(adapter, events, copy, eventIdsAdded, orgId, null);
-            }
-
+        ArrayList<Task<ArrayList<Event>>> eventTasks = new ArrayList<>();
+        for (String orgId: orgIds) {
+            eventTasks.add(EventUtils.getEventsByOrgIdCont(events, orgId));
         }
+        return Tasks.whenAll(eventTasks);
     }
 
     /**
