@@ -1,35 +1,21 @@
 package com.cse110.utils;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cse110.eventlit.CardFragment;
 import com.cse110.eventlit.db.Event;
-import com.cse110.eventlit.db.RSVP;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 
 /**
  * Created by sandeep on 2/23/17.
@@ -195,5 +181,41 @@ public class EventUtils {
             }
         };
         eventsDB.child(orgId).child(eventId).setValue(event);
+    }
+
+    public static void modAttendees(String orgId, String eventId, final int modBy) {
+
+        final DatabaseReference eventRef = eventsDB.child(orgId).child(eventId);
+
+        final WrappedTask<Event> wrappedTask = new WrappedTask<>();
+
+        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Event event = dataSnapshot.getValue(Event.class);
+
+                wrappedTask.wrapResult(event);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        final Task<Event> t_attendance = wrappedTask.unwrap();
+
+        t_attendance.addOnCompleteListener(new OnCompleteListener<Event>() {
+            @Override
+            public void onComplete(@NonNull Task<Event> task) {
+                Event event = t_attendance.getResult();
+
+                event.setAttendees(event.getAttendees() + modBy);
+
+                eventRef.setValue(event);
+
+            }
+        });
+
     }
 }
