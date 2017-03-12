@@ -37,6 +37,7 @@ import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -46,7 +47,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
     private TextInputLayout mTitle;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
-    private TextInputLayout mTag;
     private TextInputLayout mCapacity;
 
     // Event Pic
@@ -54,6 +54,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
 
     // Orgs that the Organizer User manages
     private List<String> orgsManaging;
+    private List<String> eventCategories;
 
     private Calendar startDatetime;
     private Calendar endDatetime;
@@ -120,7 +121,10 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             public void onClick(View view) {
                 // TODO Create event (Add event to database)
                 addEventToDB();
-
+                startActivity(new Intent(CreateEventActivity.this, OrganizerFeedActivity.class));
+                finish();
+                Toast.makeText(CreateEventActivity.this, "Event created.",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -132,11 +136,12 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        createTagSpinner();
+
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
-        mTag = (TextInputLayout) findViewById(R.id.tagtext);
         mCapacity = (TextInputLayout) findViewById(R.id.peopletext);
 
         // Check for validity of input
@@ -164,14 +169,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
                 }
             }
         });
-        mTag.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkTag();
-                }
-            }
-        });
+
         mCapacity.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -180,6 +178,18 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
                 }
             }
         });
+    }
+
+    private void createTagSpinner() {
+
+        // Populate spinner for selecting the category of the event
+        eventCategories = Arrays.asList("Academics","Career","Faith","Food","Social");
+        Spinner spinner = (Spinner)findViewById(R.id.tagspinner);
+        spinner.setPrompt("Event Category");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, android.R.id.text1, eventCategories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
     }
 
     /* Show the start time picker dialog */
@@ -256,12 +266,15 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String location = mLocation.getEditText().getText().toString();
         String description = mDescription.getEditText().getText().toString();
         String capacity = mCapacity.getEditText().getText().toString();
-        String category = mTag.getEditText().getText().toString();
 
         // Get the organization name
         Spinner spinner = (Spinner)findViewById(R.id.orgspinner);
         String orgName = spinner.getSelectedItem().toString();
         String orgId = OrganizationUtils.getOrgId(orgName);
+
+        // Get Category
+        spinner = (Spinner) findViewById(R.id.tagspinner);
+        String category = spinner.getSelectedItem().toString();
 
         Log.w("Start", startDatetime.getTimeInMillis() + "");
         Log.w("End", endDatetime.getTimeInMillis() + "");
@@ -335,9 +348,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         return true;
     }
     protected boolean checkCapacity() {
-        return true;
-    }
-    protected boolean checkTag() {
         return true;
     }
 
