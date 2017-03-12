@@ -170,11 +170,7 @@ public class UserUtils {
         return orgsManaging;
     }
 
-    public static Task<ArrayList<Event>> getEventsFollowing(final CardFragment.MyAdapter adapter,
-                                          final ArrayList<Event> events,
-                                          final ArrayList<Event> copy,
-                                          final Set<String> eventIdsAdded)
-    {
+    public static Task<ArrayList<Event>> getEventsFollowing() {
         final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
         DatabaseReference userEvents = currentUserDB.child("eventsFollowing");
 
@@ -206,7 +202,6 @@ public class UserUtils {
 
                                         if (event != null) {
                                             events.add(event);
-                                            copy.add(event);
                                             eventWrappedTask.wrapResult(event);
                                         }
 
@@ -252,15 +247,28 @@ public class UserUtils {
         return wrappedTask.unwrap();
     }
 
-    public static final Task<Void> getEventsForOrgs(final ArrayList<Event> events,
-                                              final Set<String> eventIdsAdded,
-                                              User user) {
-        List<String> orgIds = user.getOrgsFollowing();
-        ArrayList<Task<ArrayList<Event>>> eventTasks = new ArrayList<>();
+    public static final Task<ArrayList<Event>> getEventsForOrgs() {
+        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
+
+        List<String> orgIds = currentUser.getOrgsFollowing();
+        final ArrayList<Task<ArrayList<Event>>> eventTasks = new ArrayList<>();
         for (String orgId: orgIds) {
-            eventTasks.add(EventUtils.getEventsByOrgIdCont(events, orgId));
+            eventTasks.add(EventUtils.getEventsByOrgIdCont(orgId));
         }
-        return Tasks.whenAll(eventTasks);
+
+        Tasks.whenAll(eventTasks).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                ArrayList<Event> result = new ArrayList<Event>();
+                for (Task<ArrayList<Event>> et : eventTasks) {
+                    ArrayList<Event> el = et.getResult();
+                    result.addAll(el);
+                }
+                wrappedTask.wrapResult(result);
+            }
+        });
+
+        return wrappedTask.unwrap();
     }
 
     /**

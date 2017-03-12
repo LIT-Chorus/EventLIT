@@ -118,8 +118,7 @@ public class EventUtils {
         events.addValueEventListener(eventListener);
     }
 
-    public static Task<ArrayList<Event>> getEventsByOrgIdCont(final ArrayList<Event> list,
-                                            final String orgId) {
+    public static Task<ArrayList<Event>> getEventsByOrgIdCont(final String orgId) {
         final DatabaseReference events = eventsDB.child(orgId);
         final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
         events.addValueEventListener(new ValueEventListener() {
@@ -133,7 +132,6 @@ public class EventUtils {
                 else {
                     ArrayList<Event> eventArrayList = new ArrayList<Event>(eventMap.values());
                     wrappedTask.wrapResult(eventArrayList);
-                    list.addAll(eventArrayList);
                 }
 
             }

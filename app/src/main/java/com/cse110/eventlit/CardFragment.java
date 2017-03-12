@@ -50,10 +50,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     private HashMap<String, RSVP> events;
 
-    private String mDescriptionText;
-    private int mNumAttendees;
-    private int mMaxCapacity;
-
     private boolean mOrganizerStatus = false;
 
     private String type;
@@ -88,19 +84,28 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
-            final User user = UserUtils.getCurrentUser();
-            Tasks.whenAll(UserUtils.getEventsFollowing(adapter, allEvents, listEvents, eventIdsAdded),
-            UserUtils.getEventsForOrgs(listEvents, eventIdsAdded, user)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            final Task<ArrayList<Event>> eventsFollowingTask;
+            final Task<ArrayList<Event>> eventsFromOrgsTask;
+
+            Tasks.whenAll(
+                    eventsFollowingTask = UserUtils.getEventsFollowing(),
+                    eventsFromOrgsTask = UserUtils.getEventsForOrgs()
+            ).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
+                        allEvents.clear();
+                        allEvents.addAll(eventsFollowingTask.getResult());
+                        allEvents.addAll(eventsFromOrgsTask.getResult());
+
+                        // Default add everything
+                        listEvents.addAll(allEvents);
+
                         Log.w("Event for Orgs Loaded", "Success");
-//                        Set<Event> noDuplicates = new TreeSet<Event>(listEvents);
-//                        for (Event event: listEvents) {
-//                            Log.w("EventLoaded", event.toString());
-//                        }
-//                        listEvents.clear();
-//                        listEvents.addAll(noDuplicates);
+                        for (Event event: listEvents) {
+                            Log.w("EventLoaded", event.getTitle() + " : " + event.getDescription());
+                        }
+
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -138,6 +143,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         private ArrayList<Event> list;
+        private int numAttendees;
 
         public MyAdapter(ArrayList<Event> Data) {
             list = Data;
@@ -187,6 +193,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.eventIdTextView.setText(e.getEventid());
             holder.orgIdTextView.setText(e.getOrgid());
 
+            holder.setDescription(e.getDescription());
+            holder.setNumAttendees(e.getAttendees());
+            holder.setMaxCapacity(e.getMaxCapacity());
+
             OrganizationUtils.loadOrgs().addOnCompleteListener(new OnCompleteListener<ArrayList<Organization>>() {
                 @Override
                 public void onComplete(@NonNull Task<ArrayList<Organization>> task) {
@@ -195,11 +205,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 }
             });
 
-            mDescriptionText = e.getDescription();
-            mNumAttendees = e.getAttendees();
-            mMaxCapacity = e.getMaxCapacity();
-
-            if(mOrganizerStatus && user.getOrgsManaging().contains(e.getOrgid())) {
+            if (mOrganizerStatus && user.getOrgsManaging().contains(e.getOrgid())) {
                 holder.goingButton.setVisibility(View.INVISIBLE);
                 holder.interestedButton.setVisibility(View.INVISIBLE);
                 holder.notGoingButton.setVisibility(View.INVISIBLE);
@@ -264,6 +270,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatTextView orgIdTextView;
         public AppCompatTextView eventIdTextView;
 
+        private String description;
+        private int numAttendees;
+        private int maxCapacity;
+
         public MyViewHolder(View v) {
             super(v);
             timeTextView = (AppCompatTextView) v.findViewById(R.id.time);
@@ -316,9 +326,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("category", categoriesTextView.getText().toString());
                     extras.putString("eventName", eventNameTextView.getText().toString());
                     extras.putString("date", dateTextView.getText().toString());
-                    extras.putString("description", mDescriptionText);
-                    extras.putInt("num_attending", mNumAttendees);
-                    extras.putInt("max_capacity", mMaxCapacity);
+                    extras.putString("description", description);
+                    extras.putInt("num_attending", numAttendees);
+                    extras.putInt("max_capacity", maxCapacity);
                     extras.putString("org_name", orgNameTextView.getText().toString());
                     extras.putString("org_id", orgId);
                     extras.putString("event_id", eventid);
@@ -328,6 +338,18 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     getActivity().finish();
                 }
             });
+        }
+
+        public void setNumAttendees(int numAttendees) {
+            this.numAttendees = numAttendees;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public void setMaxCapacity(int maxCapacity) {
+            this.maxCapacity = maxCapacity;
         }
     }
 }
