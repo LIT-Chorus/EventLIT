@@ -37,6 +37,7 @@ import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +48,12 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     private TextInputLayout mTitle;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
-    private TextInputLayout mTag;
     private TextInputLayout mCapacity;
     private ImageView mEventPic;    // Event Pic
 
     private List<String> orgsManaging;     // Orgs that the Organizer User manages
     private Spinner orgspinner;
+    private Spinner tagspinner;
 
     private Calendar startDatetime;
     private Calendar endDatetime;
@@ -126,19 +127,12 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
             }
         });
 
-        // Populate spinner for selecting org that the event is for
-        orgspinner = (Spinner)findViewById(R.id.orgspinner);
-        orgspinner.setPrompt("Organization holding event");
-        ArrayAdapter<String> orgSpinnerAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, android.R.id.text1, orgsManaging);
-        orgSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        orgspinner.setAdapter(orgSpinnerAdapter);
+        populateSpinners();
 
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
-        mTag = (TextInputLayout) findViewById(R.id.tagtext);
         mCapacity = (TextInputLayout) findViewById(R.id.peopletext);
 
         // Check for validity of input
@@ -166,14 +160,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
                 }
             }
         });
-        mTag.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkTag();
-                }
-            }
-        });
+
         mCapacity.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -190,6 +177,26 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         populateFields(extras);
     }
 
+    private void populateSpinners() {
+
+        // Populate spinner for selecting org that the event is for
+        orgspinner = (Spinner)findViewById(R.id.orgspinner);
+        orgspinner.setPrompt("Organization holding event");
+        ArrayAdapter<String> orgSpinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, android.R.id.text1, orgsManaging);
+        orgSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orgspinner.setAdapter(orgSpinnerAdapter);
+
+        // Populate spinner for selecting categories
+        List<String> eventCategories = Arrays.asList("Academics","Career","Faith","Food","Social");
+        tagspinner = (Spinner)findViewById(R.id.tagspinner);
+        tagspinner.setPrompt("Category for Event");
+        ArrayAdapter<String> tagSpinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, android.R.id.text1, eventCategories);
+        tagSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tagspinner.setAdapter(tagSpinnerAdapter);
+    }
+
     /* Populate the fields with the event data */
     private void populateFields(Bundle extras) {
 
@@ -197,7 +204,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         mTitle.getEditText().setText(extras.getString("eventName"));
         mLocation.getEditText().setText(extras.getString("location"));
         mDescription.getEditText().setText(extras.getString("description"));
-        mTag.getEditText().setText(extras.getString("category"));
         mCapacity.getEditText().setText(extras.getString("max_capacity"));
 
         /* Fill time field */
@@ -213,9 +219,14 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         int orgSpinnerPosition = myAdap.getPosition(extras.getString("org_name"));
         //set the default according to value
         orgspinner.setSelection(orgSpinnerPosition);
-        eventId = extras.getString("event_id");
-        category = extras.getString("category");
 
+        /* Fill in default value for spinner (org hosting event) */
+        myAdap = (ArrayAdapter) tagspinner.getAdapter(); //cast to an ArrayAdapter
+        int tagSpinnerPosition = myAdap.getPosition(extras.getString("category"));
+        //set the default according to value
+        tagspinner.setSelection(orgSpinnerPosition);
+
+        eventId = extras.getString("event_id");
     }
 
     /* Show the start time picker dialog */
@@ -367,9 +378,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         return true;
     }
     protected boolean checkCapacity() {
-        return true;
-    }
-    protected boolean checkTag() {
         return true;
     }
 
