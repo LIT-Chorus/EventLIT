@@ -122,8 +122,28 @@ public class User {
         eventsFollowing.put(eventid, new RSVP(orgid, eventid, status));
     }
 
-    public void addEventFollowing(String eventid, RSVP rsvp) {
+    public int addEventFollowing(String eventid, RSVP rsvp) {
+
+        RSVP previousStatus = eventsFollowing.get(eventid);
+
+        int prev = 0;
+
+        if (previousStatus == null) {
+            prev = 0;
+        }
+        else if (previousStatus.getRsvpStatus() == RSVP.Status.GOING){
+            prev = 1;
+        }
+
+        int cur = 0;
+        if (rsvp.getRsvpStatus() == RSVP.Status.GOING) {
+            cur = 1;
+        }
+
+
         eventsFollowing.put(eventid, rsvp);
+
+        return cur - prev;
     }
 
     public void removeEventFollowing(String eventid) {eventsFollowing.remove(eventid);}
