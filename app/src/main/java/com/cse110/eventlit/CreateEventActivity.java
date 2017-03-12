@@ -35,9 +35,13 @@ import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.enums.EPickType;
 import com.vansuita.pickimage.listeners.IPickResult;
 
+import org.w3c.dom.Text;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class CreateEventActivity extends AppCompatActivity implements IPickResult{
@@ -46,17 +50,25 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
     private TextInputLayout mTitle;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
-    private TextInputLayout mTag;
     private TextInputLayout mCapacity;
+
+    private TextView mStartTime;
+    private TextView mEndTime;
 
     // Event Pic
     private ImageView mEventPic;
 
     // Orgs that the Organizer User manages
     private List<String> orgsManaging;
+    private List<String> eventCategories;
 
     private Calendar startDatetime;
     private Calendar endDatetime;
+    private TextView mStartDate;
+    private TextView mEndDate;
+
+    private String openDate;
+    private String openTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +132,10 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             public void onClick(View view) {
                 // TODO Create event (Add event to database)
                 addEventToDB();
-
+                startActivity(new Intent(CreateEventActivity.this, OrganizerFeedActivity.class));
+                finish();
+                Toast.makeText(CreateEventActivity.this, "Event created.",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -132,12 +147,20 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        createTagSpinner();
+
         // Input Fields
         mTitle = (TextInputLayout) findViewById(R.id.title);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
-        mTag = (TextInputLayout) findViewById(R.id.tagtext);
         mCapacity = (TextInputLayout) findViewById(R.id.peopletext);
+
+        mStartDate = (TextView) findViewById(R.id.startdatetext);
+        mEndDate = (TextView) findViewById(R.id.enddatetext);
+        mStartTime = (TextView) findViewById(R.id.starttimetext);
+        mEndTime = (TextView) findViewById(R.id.endtimetext);
+
+        setCurrentTime();
 
         // Check for validity of input
         mTitle.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -164,14 +187,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
                 }
             }
         });
-        mTag.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkTag();
-                }
-            }
-        });
+
         mCapacity.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -180,6 +196,64 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
                 }
             }
         });
+    }
+
+    private void setCurrentTime() {
+        Calendar now = Calendar.getInstance();
+
+        int month = now.get(Calendar.MONTH) + 1;
+        int day = now.get(Calendar.DAY_OF_MONTH);
+        int year = now.get(Calendar.YEAR);
+        int minute = now.get(Calendar.MINUTE);
+
+        String date = month + "/" + day + "/" + year;
+
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        String time = String.format("%s:%s", hour % 12, minute);
+
+        if (hour > 12) {
+            hour %= 12;
+            time += "PM";
+        } else {
+            time += "AM";
+        }
+
+        openDate = date;
+        openTime = time;
+
+        defaultStartDate();
+        defaultStartTime();
+        defaultEndDate();
+        defaultEndTime();
+
+    }
+
+    private void defaultEndTime() {
+        mEndTime.setText("End Time: " + openTime);
+    }
+
+    private void defaultEndDate() {
+        mEndDate.setText("End Date: " + openDate);
+    }
+
+    private void defaultStartTime() {
+        mStartTime.setText("Start Time: " + openTime);
+    }
+
+    private void defaultStartDate() {
+        mStartDate.setText("Start Date: " + openDate);
+    }
+
+    private void createTagSpinner() {
+
+        // Populate spinner for selecting the category of the event
+        eventCategories = Arrays.asList("Academics","Career","Faith","Food","Social");
+        Spinner spinner = (Spinner)findViewById(R.id.tagspinner);
+        spinner.setPrompt("Event Category");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, android.R.id.text1, eventCategories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
     }
 
     /* Show the start time picker dialog */
@@ -195,6 +269,10 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         args.putInt("timetext", R.id.starttimetext);
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
+
+        if (startTimeText.getText().toString().equals("Start Time: ")) {
+            defaultStartTime();
+        }
     }
 
     /* Show the start date picker dialog */
@@ -210,6 +288,10 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         args.putInt("datetext", R.id.startdatetext);
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"DatePicker");
+
+        if (startDateText.getText().toString().equals("Start Date: ")) {
+            defaultStartDate();
+        }
     }
 
     /* Show the end time picker dialog */
@@ -225,13 +307,17 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         args.putInt("timetext", R.id.endtimetext);
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
+
+        if (endTimeText.getText().toString().equals("End Time: ")) {
+            defaultEndTime();
+        }
     }
 
     /* Show the end date picker dialog */
     public void onEndDateClicked(View v){
         DatePickerFragment newFragment = new DatePickerFragment();
-        TextView startDateText = (TextView) findViewById(R.id.enddatetext);
-        startDateText.setText("End Date: ");
+        TextView endDateText = (TextView) findViewById(R.id.enddatetext);
+        endDateText.setText("End Date: ");
 
         newFragment.setCalendar(endDatetime);
 
@@ -240,6 +326,10 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         args.putInt("datetext", R.id.enddatetext);
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"DatePicker");
+
+        if (endDateText.getText().toString().equals("End Date: ")) {
+            defaultEndDate();
+        }
     }
 
     @Override
@@ -256,12 +346,15 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String location = mLocation.getEditText().getText().toString();
         String description = mDescription.getEditText().getText().toString();
         String capacity = mCapacity.getEditText().getText().toString();
-        String category = mTag.getEditText().getText().toString();
 
         // Get the organization name
         Spinner spinner = (Spinner)findViewById(R.id.orgspinner);
         String orgName = spinner.getSelectedItem().toString();
         String orgId = OrganizationUtils.getOrgId(orgName);
+
+        // Get Category
+        spinner = (Spinner) findViewById(R.id.tagspinner);
+        String category = spinner.getSelectedItem().toString();
 
         Log.w("Start", startDatetime.getTimeInMillis() + "");
         Log.w("End", endDatetime.getTimeInMillis() + "");
@@ -280,9 +373,11 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
                     String eventId = task.getResult();
 
                     try {
-                        // Store in db
-                        FileStorageUtils.uploadImageFromLocalFile(eventId,
-                                ((BitmapDrawable)mEventPic.getDrawable()).getBitmap());
+                        if (!mEventPic.getDrawable().equals(getDrawable(R.drawable.event_pic))) {
+                            // Store in db
+                            FileStorageUtils.uploadImageFromLocalFile(eventId,
+                                    ((BitmapDrawable)mEventPic.getDrawable()).getBitmap());
+                        }
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -335,9 +430,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         return true;
     }
     protected boolean checkCapacity() {
-        return true;
-    }
-    protected boolean checkTag() {
         return true;
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cse110.eventlit.db.User;
@@ -27,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -104,8 +107,11 @@ public class OrganizationSelectionActivity extends AppCompatActivity implements 
         }
 
         //return to the feed
-        Intent openFeed = new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class);
-        startActivity(openFeed);
+        if (mOrganizerStatus) {
+            startActivity(new Intent(OrganizationSelectionActivity.this, OrganizerFeedActivity.class));
+        } else {
+            startActivity(new Intent(OrganizationSelectionActivity.this, StudentFeedActivity.class));
+        }
         finish();
     }
     @Override

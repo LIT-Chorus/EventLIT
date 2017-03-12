@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.RSVP;
+import com.cse110.utils.EventUtils;
 import com.cse110.utils.UserUtils;
 
 import org.w3c.dom.Text;
@@ -63,10 +64,12 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 RSVP status = new RSVP(orgId, eventId, RSVP.Status.GOING);
-                UserUtils.addEventsFollowing(eventId, status);
+                int modBy = UserUtils.addEventsFollowing(eventId, status);
                 goingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.goingColor, null));
                 interestedBut.setBackgroundColor(Color.GRAY);
                 notGoingBut.setBackgroundColor(Color.GRAY);
+
+                EventUtils.modAttendees(orgId, eventId, modBy);
             }
         });
 
@@ -74,10 +77,12 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 RSVP status = new RSVP(orgId, eventId, RSVP.Status.INTERESTED);
-                UserUtils.addEventsFollowing(eventId, status);
+                int modBy = UserUtils.addEventsFollowing(eventId, status);
                 interestedBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.interestedColor, null));
                 goingBut.setBackgroundColor(Color.GRAY);
                 notGoingBut.setBackgroundColor(Color.GRAY);
+
+                EventUtils.modAttendees(orgId, eventId, modBy);
             }
         });
 
@@ -85,12 +90,16 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 RSVP status = new RSVP(orgId, eventId, RSVP.Status.NOT_GOING);
-                UserUtils.addEventsFollowing(eventId, status);
+                int modBy = UserUtils.addEventsFollowing(eventId, status);
                 notGoingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
                 goingBut.setBackgroundColor(Color.GRAY);
                 interestedBut.setBackgroundColor(Color.GRAY);
+
+                EventUtils.modAttendees(orgId, eventId, modBy);
             }
         });
+
+
     }
 
     @Override

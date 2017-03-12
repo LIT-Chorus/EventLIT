@@ -215,10 +215,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.GOING);
-                    UserUtils.addEventsFollowing(e.getEventid(), status);
+                    int modBy = UserUtils.addEventsFollowing(e.getEventid(), status);
                     holder.goingButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.goingColor, null));
                     holder.interestedButton.setBackgroundColor(Color.GRAY);
                     holder.notGoingButton.setBackgroundColor(Color.GRAY);
+
+                    EventUtils.modAttendees(e.getOrgid(), e.getEventid(), modBy);
                 }
             });
 
@@ -226,10 +228,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.INTERESTED);
-                    UserUtils.addEventsFollowing(e.getEventid(), status);
+                    int modBy = UserUtils.addEventsFollowing(e.getEventid(), status);
                     holder.interestedButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.interestedColor, null));
                     holder.goingButton.setBackgroundColor(Color.GRAY);
                     holder.notGoingButton.setBackgroundColor(Color.GRAY);
+
+                    EventUtils.modAttendees(e.getOrgid(), e.getEventid(), modBy);
                 }
             });
 
@@ -237,10 +241,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View view) {
                     RSVP status = new RSVP(e.getOrgid(), e.getEventid(), RSVP.Status.NOT_GOING);
-                    UserUtils.addEventsFollowing(e.getEventid(), status);
+                    int modBy = UserUtils.addEventsFollowing(e.getEventid(), status);
                     holder.notGoingButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
                     holder.goingButton.setBackgroundColor(Color.GRAY);
                     holder.interestedButton.setBackgroundColor(Color.GRAY);
+
+                    EventUtils.modAttendees(e.getOrgid(), e.getEventid(), modBy);
                 }
             });
         }

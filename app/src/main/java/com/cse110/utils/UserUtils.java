@@ -315,9 +315,11 @@ public class UserUtils {
         currentUserDB.child("eventsFollowing").setValue(currentUser.getEventsFollowing());
     }
 
-    public static void addEventsFollowing(String eventid, RSVP rsvp) {
-        currentUser.addEventFollowing(eventid, rsvp);
+    public static int addEventsFollowing(String eventid, RSVP rsvp) {
+        int store = currentUser.addEventFollowing(eventid, rsvp);
         currentUserDB.child("eventsFollowing").setValue(currentUser.getEventsFollowing());
+
+        return store;
     }
 
     /**
