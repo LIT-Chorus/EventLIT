@@ -19,7 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.Event;
+import com.cse110.eventlit.db.RSVP;
+import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -38,6 +41,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
     TextView description;
 
     Event event;
+    Bundle extras;
     private String type;
 
     @Override
@@ -49,7 +53,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
         // Fill in the detailed events info with bundle passed in
         Intent i = getIntent();
-        Bundle extras = i.getExtras();
+        extras = i.getExtras();
 
         // TODO: Set database going/interested/not going entry
         Button editBut = (Button) findViewById(R.id.editButton);
@@ -64,7 +68,6 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         category = (TextView) findViewById(R.id.tagtext);
 
         description = (TextView) findViewById(R.id.descriptiontext);
-
 
 
         fillFields(extras);
@@ -85,12 +88,14 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO Open intent to edit event (send bundle of event info as well)
-                EventUtils.updateEvent(event, new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        Log.w("Updated Event", task.getResult());
-                    }
-                });
+                Intent openEditView = new Intent(OrganizerDetailedEventActivity.this,
+                        EditEventActivity.class);
+
+                openEditView.putExtras(extras);
+                startActivity(openEditView);
+                finish();
+
+
                 //EventUtils.updateEvent(event);
             }
         });
@@ -98,6 +103,19 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         deleteBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                event = new Event(
+                        extras.getString("title"),
+                        extras.getString("description"),
+                        extras.getString("orgid"),
+                        extras.getString("eventid"),
+                        Event.getEpochTime("LLL/nd", extras.getString("date")),
+                        Event.getEpochTime("LLL/nd", extras.getString("date")),
+                        extras.getString("location"),
+                        extras.getString("category"),
+                        Integer.parseInt(extras.getString("maxCapacity"))
+                );
+
                 EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);
 
                 // TODO Delete event
