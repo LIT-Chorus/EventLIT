@@ -121,7 +121,10 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             public void onClick(View view) {
                 // TODO Create event (Add event to database)
                 addEventToDB();
-
+                startActivity(new Intent(CreateEventActivity.this, OrganizerFeedActivity.class));
+                finish();
+                Toast.makeText(CreateEventActivity.this, "Event created.",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
