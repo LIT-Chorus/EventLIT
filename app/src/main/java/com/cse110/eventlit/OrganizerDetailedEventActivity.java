@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -154,9 +156,12 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         TextView name = (TextView) findViewById(R.id.orgname);
         name.setText("Hosted By " + bundle.getString("org_name"));
 
+        ImageView eventPic = (ImageView) findViewById(R.id.event);
+
         String orgId = bundle.getString("org_id");
         String eventId = bundle.getString("event_id");
         type = bundle.getString("type");
 
+        FileStorageUtils.getImageView(eventPic, this, eventId);
     }
 }

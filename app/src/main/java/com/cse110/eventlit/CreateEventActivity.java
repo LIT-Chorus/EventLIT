@@ -209,10 +209,27 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String date = month + "/" + day + "/" + year;
 
         int hour = now.get(Calendar.HOUR_OF_DAY);
-        String time = String.format("%s:%s", hour % 12, minute);
 
-        if (hour > 12) {
-            hour %= 12;
+        boolean PM = false;
+
+        //Make the 24 hour time format to 12 hour time format
+        if (hour == 0) {
+            hour = 12;
+        }
+        if (hour >12) {
+            PM = true;
+            hour -= 12;
+        }
+
+        String time = hour + ":";
+
+        if (minute < 10) {
+            time += "0" + minute;
+        } else {
+            time += minute;
+        }
+
+        if (PM) {
             time += "PM";
         } else {
             time += "AM";
@@ -267,6 +284,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in start time textview
         Bundle args = new Bundle();
         args.putInt("timetext", R.id.starttimetext);
+        args.putString("prefix", "Start Time: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
 
@@ -286,6 +304,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in start time textview
         Bundle args = new Bundle();
         args.putInt("datetext", R.id.startdatetext);
+        args.putString("prefix", "Start Date: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"DatePicker");
 
@@ -305,6 +324,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in the end time textview
         Bundle args = new Bundle();
         args.putInt("timetext", R.id.endtimetext);
+        args.putString("prefix", "End Time: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
 
@@ -324,6 +344,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in start time textview
         Bundle args = new Bundle();
         args.putInt("datetext", R.id.enddatetext);
+        args.putString("prefix", "End Date: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"DatePicker");
 
