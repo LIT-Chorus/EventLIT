@@ -58,6 +58,8 @@ public class OrganizerFeedActivity extends AppCompatActivity
             }
         });
 
+
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

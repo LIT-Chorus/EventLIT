@@ -53,15 +53,19 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
 
     private List<String> orgsManaging;     // Orgs that the Organizer User manages
     private Spinner orgspinner;
-    private HashMap<String, Calendar> calendars;
+
+    private Calendar startDatetime;
+    private Calendar endDatetime;
+    private String eventId;
+    private String category;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_event);
+        setContentView(R.layout.edit_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         // TODO: FAB for adding event picture
         mEventPic = (ImageView) findViewById(R.id.event);
@@ -87,8 +91,10 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         final View profView = factory.inflate(R.layout.edit_profilephoto, null);
         dialog.setView(profView);
 
-        calendars = new HashMap<>();
-
+        // Adjust default time to prevent automatic deletions
+        startDatetime = Calendar.getInstance();
+        endDatetime = Calendar.getInstance();
+        endDatetime.add(Calendar.HOUR, 1);
 
         // Gets the Orgs that the Organization User is managing
         User user = UserUtils.getCurrentUser();
@@ -207,6 +213,8 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         int orgSpinnerPosition = myAdap.getPosition(extras.getString("org_name"));
         //set the default according to value
         orgspinner.setSelection(orgSpinnerPosition);
+        eventId = extras.getString("event_id");
+        category = extras.getString("category");
 
     }
 
@@ -216,7 +224,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
         startTimeText.setText("Start Time: ");
 
-        calendars.put("startTime", newFragment.getCalendar());
+        newFragment.setCalendar(startDatetime);
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -231,7 +239,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         TextView startDateText = (TextView) findViewById(R.id.startdatetext);
         startDateText.setText("Start Date: ");
 
-        calendars.put("startDate", newFragment.getCalendar());
+        newFragment.setCalendar(startDatetime);
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -246,7 +254,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
         endTimeText.setText("End Time: ");
 
-        calendars.put("endTime", newFragment.getCalendar());
+        newFragment.setCalendar(endDatetime);
 
         // Pass in the end time textview
         Bundle args = new Bundle();
@@ -261,7 +269,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         TextView startDateText = (TextView) findViewById(R.id.enddatetext);
         startDateText.setText("End Date: ");
 
-        calendars.put("endDate", newFragment.getCalendar());
+        newFragment.setCalendar(endDatetime);
 
         // Pass in start time textview
         Bundle args = new Bundle();
@@ -291,46 +299,8 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         String orgId = OrganizationUtils.getOrgId(orgName);
 
 
-        Calendar startTime = calendars.get("startTime");
-        Calendar startDate = calendars.get("startDate");
-        Calendar endTime = calendars.get("endTime");
-        Calendar endDate = calendars.get("endDate");
-
-        if (startTime == null) {
-            startTime = Calendar.getInstance();
-        }
-        if (startDate == null) {
-            startDate = Calendar.getInstance();
-        }
-        if (endTime == null) {
-            endTime = Calendar.getInstance();
-        }
-        if (endDate == null) {
-            endDate = Calendar.getInstance();
-        }
-
-        Log.w("Start Time", startTime.getTimeInMillis() + "");
-        Log.w("Start Date", startDate.getTimeInMillis() + "");
-        Log.w("End Time", endTime.getTimeInMillis() + "");
-        Log.w("End Date", endDate.getTimeInMillis() + "");
-
-        if (capacity.equals("")) {
-            capacity = "0";
-        }
-
-        //    EventUtils.updateEvent(event);
-        // TODO
-        Event event = new Event(title, description, orgId, "0", location, "Uncateogorized", Integer.parseInt(capacity));
-        event.putStartTime(startDate.get(Calendar.YEAR),
-                           startDate.get(Calendar.MONTH),
-                           startDate.get(Calendar.DAY_OF_MONTH),
-                            startTime.get(Calendar.HOUR),
-                            startTime.get(Calendar.MINUTE));
-        event.putEndTime(endDate.get(Calendar.YEAR),
-                endDate.get(Calendar.MONTH),
-                endDate.get(Calendar.DAY_OF_MONTH),
-                endTime.get(Calendar.HOUR),
-                endTime.get(Calendar.MINUTE));
+        Event event = new Event(title, description, orgId, eventId, startDatetime,
+                endDatetime ,location, category, Integer.parseInt(capacity));
         
         EventUtils.updateEvent(event, new OnCompleteListener<String>() {
             @Override

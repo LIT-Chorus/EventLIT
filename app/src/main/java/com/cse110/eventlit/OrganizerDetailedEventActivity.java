@@ -87,16 +87,13 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         editBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO Open intent to edit event (send bundle of event info as well)
+                // Open intent to edit event (send bundle of event info as well)
                 Intent openEditView = new Intent(OrganizerDetailedEventActivity.this,
                         EditEventActivity.class);
 
                 openEditView.putExtras(extras);
                 startActivity(openEditView);
                 finish();
-
-
-                //EventUtils.updateEvent(event);
             }
         });
 

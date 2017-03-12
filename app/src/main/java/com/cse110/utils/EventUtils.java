@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -174,16 +175,25 @@ public class EventUtils {
     public static final void deleteEvent(String eventId,
                                          String orgId,
                                          OnCompleteListener<Void> onDelete) {
-        eventsDB.child(orgId).child(eventId).removeValue().addOnCompleteListener(onDelete);
+        if (orgId != null && eventId != null) {
+            eventsDB.child(orgId).child(eventId).removeValue().addOnCompleteListener(onDelete);
+        }
     }
 
+    /**
+     * Update all fields of the event
+     * @param event
+     */
     public static final void updateEvent(final Event event,
                                          final OnCompleteListener<String> onCompleteListener) {
-//        deleteEvent(event.getEventid(), event.getOrgid(), new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                createEvent(event, onCompleteListener);
-//            }
-//        });
+        String orgId = event.getOrgid();
+        final String eventId = event.getEventid();
+        OnCompleteListener onEventUpdated = new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                onCompleteListener.onComplete(Tasks.forResult(eventId));
+            }
+        };
+        eventsDB.child(orgId).child(eventId).setValue(event);
     }
 }
