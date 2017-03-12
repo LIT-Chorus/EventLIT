@@ -57,7 +57,7 @@ public class OrganizationSelection_registrationActivity extends AppCompatActivit
         for(int i = 0; i < orgs_to_follow.size(); i++){
             user.addOrgFollowing(orgs_to_follow.get(i));
             UserUtils.updateCurrentUser(user);
-            Log.d("add org", orgs_to_follow.get(i));
+            //Log.d("add org", orgs_to_follow.get(i));
         }
 
         Intent openFeed = new Intent(OrganizationSelection_registrationActivity.this, StudentFeedActivity.class);
