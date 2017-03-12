@@ -62,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:onClick="onStartDateClicked"
                 android:padding="2dp"
-                android:text="Today"
                 android:textSize="15dp" />
 
             <TextView
@@ -71,7 +70,6 @@
                 android:layout_height="wrap_content"
                 android:onClick="onStartTimeClicked"
                 android:padding="2dp"
-                android:text="12:00 pm"
                 android:textSize="15dp" />
 
         </LinearLayout>
@@ -96,7 +94,6 @@
                 android:layout_height="wrap_content"
                 android:onClick="onEndDateClicked"
                 android:padding="2dp"
-                android:text="End Date"
                 android:textSize="15dp" />
 
             <TextView
@@ -105,7 +102,6 @@
                 android:layout_height="wrap_content"
                 android:onClick="onEndTimeClicked"
                 android:padding="2dp"
-                android:text="1:00 pm"
                 android:textSize="15dp" />
 
         </LinearLayout>
