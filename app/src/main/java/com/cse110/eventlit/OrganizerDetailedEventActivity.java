@@ -106,8 +106,8 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 event = new Event(
                         extras.getString("title"),
                         extras.getString("description"),
-                        extras.getString("orgid"),
-                        extras.getString("eventid"),
+                        extras.getString("org_id"),
+                        extras.getString("event_id"),
                         Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                         Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                         extras.getString("location"),
@@ -115,7 +115,14 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                         0
                 );
 
-                EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);
+                EventUtils.deleteEvent(event.getEventid(), event.getOrgid(),
+                        new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // TODO dismiss activity
+                    }
+                });
+
 
                 // TODO Delete event
             }
