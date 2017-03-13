@@ -24,6 +24,7 @@ import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.FileStorageUtils;
+import com.cse110.utils.LitUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,7 +60,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
 
         // TODO: Set database going/interested/not going entry
         final Button editBut = (Button) findViewById(R.id.editButton);
-        Button deleteBut = (Button) findViewById(R.id.deleteButton);
+        final Button deleteBut = (Button) findViewById(R.id.deleteButton);
 
         title = (TextView) findViewById(R.id.title);
 
@@ -123,13 +124,11 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                                 OrganizerFeedActivity.class);
                         extras.putString("whereFrom", "delete");
                         openFeedView.putExtras(extras);
+                        LitUtils.hideSoftKeyboard(OrganizerDetailedEventActivity.this, deleteBut);
                         startActivity(openFeedView);
                         finish();
                     }
                 });
-
-
-                // TODO Delete event
             }
         });
     }

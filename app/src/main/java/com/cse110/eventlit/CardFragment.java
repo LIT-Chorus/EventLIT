@@ -44,7 +44,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     ArrayList<Event> allEvents = new ArrayList<>();
     ArrayList<Event> listEvents = new ArrayList<>();
-    Set<String> eventIdsAdded = new HashSet<>();
 
     RecyclerView MyRecyclerView;
     MyAdapter adapter;
@@ -100,7 +99,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                         allEvents.addAll(eventsFromOrgsTask.getResult());
 
                         // Removes Duplicate events, Sorts by start date
-                        Set<Event> removeDups = new TreeSet<Event>(allEvents);
+                        Set<Event> removeDups = new TreeSet<>(allEvents);
                         listEvents.clear();
                         listEvents.addAll(removeDups);
                         adapter.notifyDataSetChanged();
@@ -117,7 +116,7 @@ public class CardFragment extends android.support.v4.app.Fragment {
                                 allEvents.addAll(allEventsTask.getResult());
 
                                 // Removes Duplicate events, Sorts by start date
-                                Set<Event> removeDups = new TreeSet<Event>(allEvents);
+                                Set<Event> removeDups = new TreeSet<>(allEvents);
                                 listEvents.clear();
                                 listEvents.addAll(removeDups);
                                 adapter.notifyDataSetChanged();

@@ -211,7 +211,7 @@ public class EventUtils {
                 onCompleteListener.onComplete(Tasks.forResult(eventId));
             }
         };
-        eventsDB.child(orgId).child(eventId).setValue(event);
+        eventsDB.child(orgId).child(eventId).setValue(event).addOnCompleteListener(onEventUpdated);
     }
 
     public static void modAttendees(String orgId, String eventId, final int modBy) {
