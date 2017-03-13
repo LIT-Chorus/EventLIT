@@ -115,7 +115,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
                 }
                 else if (whereFrom.equals("edit")) {
                     new AlertDialog.Builder(this, R.style.AlertDialogCustom)
-                            .setTitle("Editted Event Successfully")
+                            .setTitle("Edited Event Successfully")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface arg0, int arg1) {
                                     Log.w("Edit", "Successful");
