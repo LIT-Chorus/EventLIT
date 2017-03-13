@@ -181,6 +181,13 @@ public class Event implements Comparable {
         return new SimpleDateFormat(fmt).format(startTimeAsCalendar().getTime());
     }
 
+    /**
+     * Get time in milliseconds from the Unix epoch, given a date string and a format string
+     * of the date passed in.
+     * @param date
+     * @param fmt
+     * @return
+     */
     public static long getEpochTime(String date, String fmt) {
         try {
             return new SimpleDateFormat(fmt).parse(date).getTime();
