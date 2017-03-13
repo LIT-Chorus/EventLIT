@@ -87,6 +87,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 0
         );
 
+
         editBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -197,13 +197,21 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         mLocation.getEditText().setText(extras.getString("location"));
         mDescription.getEditText().setText(extras.getString("description"));
 
-        /* Fill time field */
+        /* Fill start time field */
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
-        startTimeText.setText(extras.getString("time"));
+        String startTime = extras.getString("time").substring(0, 7);
+        startTimeText.setText(startTime);
+
+        /* FIll end time field */
+        TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
+        String endTime = extras.getString("time").substring(8, extras.getString("time").length() - 1);
+        endTimeText.setText(endTime);
 
         /* Fill date field */
         TextView startDateText = (TextView) findViewById(R.id.startdatetext);
-        startDateText.setText(extras.getString("date"));
+        startDateText.setText(extras.getString("date").replace("\n", " "));
+        TextView endDateText = (TextView) findViewById(R.id.enddatetext);
+        endDateText.setText(extras.getString("date").replace("\n", " "));
 
         /* Fill in default value for spinner (org hosting event) */
         ArrayAdapter myAdap = (ArrayAdapter) orgspinner.getAdapter(); //cast to an ArrayAdapter
