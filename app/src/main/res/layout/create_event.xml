@@ -1,231 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/event"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/event_pic" />
 
-        <ImageView
-            android:id="@+id/event"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:src="@drawable/event_pic" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:theme="@style/InputTextBlack">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="Event Title"
-                android:soundEffectsEnabled="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/mdtp_light_gray"
-                android:textSize="15dp" />
-        </android.support.design.widget.TextInputLayout>
-
-        <Spinner
-            android:id="@+id/orgspinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_left_margin" />
-
-        <!--BUTTONS FOR START TIME/DATE -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:src="@drawable/ic_access_time_black_24dp" />
-
-            <TextView
-                android:id="@+id/startdatetext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onStartDateClicked"
-                android:padding="2dp"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/starttimetext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onStartTimeClicked"
-                android:padding="2dp"
-                android:textSize="15dp" />
-
-        </LinearLayout>
-
-        <!--BUTTONS FOR END DATE/TIME -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0"
-                android:padding="3dp"
-                android:src="@drawable/ic_access_time_black_24dp" />
-
-            <TextView
-                android:id="@+id/enddatetext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onEndDateClicked"
-                android:padding="2dp"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/endtimetext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onEndTimeClicked"
-                android:padding="2dp"
-                android:textSize="15dp" />
-
-        </LinearLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/locationtext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:theme="@style/InputTextBlack">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_location_on_black_24dp"
-                android:drawablePadding="15dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="Location"
-                android:soundEffectsEnabled="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="15dp" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/descriptiontext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:theme="@style/InputTextBlack">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_description_black_24dp"
-                android:drawablePadding="15dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="Description"
-                android:soundEffectsEnabled="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="15dp" />
-        </android.support.design.widget.TextInputLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:src="@drawable/ic_label_black_24dp" />
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:theme="@style/InputTextBlack">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="Event Title"
+                    android:soundEffectsEnabled="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
+            </android.support.design.widget.TextInputLayout>
 
             <Spinner
-                android:id="@+id/tagspinner"
-                android:layout_width="wrap_content"
+                android:id="@+id/orgspinner"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_left_margin" />
 
-        </LinearLayout>
-
-        <!-- CANCEL/CREATE BUTTONS -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="0.6"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:weightSum="3.4">
-
-            <View
-                android:id="@+id/line1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/cancelButton"
-                style="@style/EventButton"
-                android:layout_width="wrap_content"
+            <!--BUTTONS FOR START TIME/DATE -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/notGoingColor"
-                android:text="CANCEL"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <View
-                android:id="@+id/line2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_access_time_black_24dp" />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/createButton"
-                style="@style/EventButton"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/startdatetext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onStartDateClicked"
+                    android:padding="2dp"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/starttimetext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onStartTimeClicked"
+                    android:padding="2dp"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+            <!--BUTTONS FOR END DATE/TIME -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/goingColor"
-                android:text="CREATE"
-                android:textStyle="bold" />
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
 
-            <View
-                android:id="@+id/line3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_access_time_black_24dp" />
 
+                <TextView
+                    android:id="@+id/enddatetext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onEndDateClicked"
+                    android:padding="2dp"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/endtimetext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onEndTimeClicked"
+                    android:padding="2dp"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/locationtext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:theme="@style/InputTextBlack">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                    android:drawablePadding="15dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="Location"
+                    android:soundEffectsEnabled="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="15dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/descriptiontext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:theme="@style/InputTextBlack">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_description_black_24dp"
+                    android:drawablePadding="15dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="Description"
+                    android:soundEffectsEnabled="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="15dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_label_black_24dp" />
+
+                <Spinner
+                    android:id="@+id/tagspinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/activity_left_margin" />
+
+            </LinearLayout>
+
+            <!-- CANCEL/CREATE BUTTONS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/cancelButton"
+                    style="@style/EventButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/notGoingColor"
+                    android:layout_marginEnd="8dp"
+                    android:text="CANCEL"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/createButton"
+                    style="@style/EventButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@color/goingColor"
+                    android:text="CREATE"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
-</ScrollView>
-
-
-
-
-
-
-
+</LinearLayout>

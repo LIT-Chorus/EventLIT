@@ -96,6 +96,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
             public void onClick(View v) {
                 Log.wtf("SettingsFragment", "going to call checkPermission");
                 startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                getActivity().finish();
             }
         });
 

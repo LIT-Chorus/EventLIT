@@ -138,7 +138,7 @@ public class OrganizerRequestActivity extends AppCompatActivity implements AppCo
         sms.sendTextMessage(phoneNumber, null, message, null, null);
 
         Intent openSettings = new Intent(this, SettingsActivity.class);
-        openSettings.putExtra("message", true);
+        openSettings.putExtra("message", 2);
         openSettings.putExtra("orgName", mOrgName.getText().toString());
         LitUtils.hideSoftKeyboard(this, mOrgName);
         startActivity(openSettings);

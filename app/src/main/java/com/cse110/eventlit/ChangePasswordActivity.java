@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.cse110.utils.LitUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -66,9 +68,17 @@ public class ChangePasswordActivity  extends AppCompatActivity {
                     OnCompleteListener<String> passwordResetListener = new OnCompleteListener<String>() {
                         @Override
                         public void onComplete(@NonNull Task<String> task) {
-                            Toast result = Toast.makeText(ChangePasswordActivity.this,
-                                    task.getResult(), Toast.LENGTH_SHORT);
-                            result.show();
+                            String message = task.getResult();
+                            if (message.equalsIgnoreCase("reset success!")) {
+                                Intent openSettings = new Intent(ChangePasswordActivity.this, SettingsActivity.class);
+                                openSettings.putExtra("message", 1);
+                                LitUtils.hideSoftKeyboard(ChangePasswordActivity.this, mSubmitChangePass);
+                                startActivity(openSettings);
+                                finish();
+                            } else {
+                                Toast result = Toast.makeText(ChangePasswordActivity.this,
+                                        message, Toast.LENGTH_LONG);
+                            }
                         }
                     };
 

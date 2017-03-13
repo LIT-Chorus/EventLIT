@@ -96,8 +96,14 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             updateHeader(user.getDisplayName(), user.getEmail());
         }
 
-        boolean requested = getIntent().getBooleanExtra("message", false);
-        if (requested) {
+        int requested = getIntent().getIntExtra("message", 0);
+        if (requested == 1) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                    .setTitle("Password Change Successful")
+                    .setMessage("You have successfully changed your password!")
+                    .setPositiveButton(android.R.string.ok, null);
+            builder.create().show();
+        } else if (requested == 2) {
             String orgName = getIntent().getStringExtra("orgName");
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                     .setTitle("Organizer Request Submitted")
