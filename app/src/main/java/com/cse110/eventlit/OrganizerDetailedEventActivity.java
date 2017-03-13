@@ -58,7 +58,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         extras = i.getExtras();
 
         // TODO: Set database going/interested/not going entry
-        Button editBut = (Button) findViewById(R.id.editButton);
+        final Button editBut = (Button) findViewById(R.id.editButton);
         Button deleteBut = (Button) findViewById(R.id.deleteButton);
 
         title = (TextView) findViewById(R.id.title);
@@ -119,7 +119,12 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                         new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // TODO dismiss activity
+                        Intent openFeedView = new Intent(OrganizerDetailedEventActivity.this,
+                                OrganizerFeedActivity.class);
+                        extras.putString("whereFrom", "delete");
+                        openFeedView.putExtras(extras);
+                        startActivity(openFeedView);
+                        finish();
                     }
                 });
 

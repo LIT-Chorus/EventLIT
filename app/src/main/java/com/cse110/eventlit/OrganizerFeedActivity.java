@@ -98,6 +98,24 @@ public class OrganizerFeedActivity extends AppCompatActivity
         if (user != null){
             updateHeader(user.getDisplayName(), user.getEmail());
         }
+
+
+        // Feedback for Delete Event
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            String delete = bundle.getString("whereFrom");
+            if (delete != null && delete.equals("delete")) {
+                new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                        .setTitle("Event Successfully Delete")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface arg0, int arg1) {
+
+                            }
+                        }).create().show();
+            }
+        }
+
     }
 
     // Updates the name/email/profile pic that is displayed in the hamburger menu
