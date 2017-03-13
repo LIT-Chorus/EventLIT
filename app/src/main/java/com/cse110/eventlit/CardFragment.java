@@ -236,6 +236,35 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 holder.hostingBar.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT, (float)3.4));
+                holder.hostingBar.setVisibility(View.VISIBLE);
+
+            } else {
+                holder.goingButton.setVisibility(View.VISIBLE);
+                holder.interestedButton.setVisibility(View.VISIBLE);
+                holder.notGoingButton.setVisibility(View.VISIBLE);
+
+                // Shows RSVP Buttons
+                holder.goingButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+
+                holder.interestedButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+
+                holder.notGoingButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+
+
+                holder.line1.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,LinearLayout.LayoutParams.MATCH_PARENT,1));
+                holder.line2.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,LinearLayout.LayoutParams.MATCH_PARENT,1));
+
+                // Show Hosting Bar
+                holder.hostingBar.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.hostingBar.setVisibility(View.INVISIBLE);
 
             }
 
