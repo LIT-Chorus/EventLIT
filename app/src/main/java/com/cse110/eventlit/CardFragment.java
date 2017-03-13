@@ -99,16 +99,11 @@ public class CardFragment extends android.support.v4.app.Fragment {
                         allEvents.addAll(eventsFollowingTask.getResult());
                         allEvents.addAll(eventsFromOrgsTask.getResult());
 
-                        // Default add everything
-                        listEvents.addAll(allEvents);
-
-                        Log.w("Event for Orgs Loaded", "Success");
-                        for (Event event: listEvents) {
-                            Log.w("EventLoaded", event.getTitle() + " : " + event.getDescription());
-                        }
-
+                        // Removes Duplicate events, Sorts by start date
+                        Set<Event> removeDups = new TreeSet<Event>(allEvents);
+                        listEvents.clear();
+                        listEvents.addAll(removeDups);
                         adapter.notifyDataSetChanged();
-                        sortBy(Event.eventComparatorDate);
                     }
                 }
             });
@@ -120,10 +115,12 @@ public class CardFragment extends android.support.v4.app.Fragment {
                             if (task.isSuccessful()) {
                                 allEvents.clear();
                                 allEvents.addAll(allEventsTask.getResult());
-                                listEvents.addAll(allEvents);
-                                adapter.notifyDataSetChanged();
-                                sortBy(Event.eventComparatorDate);
 
+                                // Removes Duplicate events, Sorts by start date
+                                Set<Event> removeDups = new TreeSet<Event>(allEvents);
+                                listEvents.clear();
+                                listEvents.addAll(removeDups);
+                                adapter.notifyDataSetChanged();
                             }
                         }
                     }

@@ -1,5 +1,7 @@
 package com.cse110.eventlit.db;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -12,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Event {
+public class Event implements Comparable {
 
     /**
      * Title of the event.
@@ -320,5 +322,19 @@ public class Event {
     @Override
     public boolean equals(Object event) {
         return eventid.equals(((Event)event).getEventid());
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        Event otherEvent = (Event)o;
+        if (otherEvent.startDate > startDate) {
+            return -1;
+        }
+        else if (otherEvent.startDate < startDate) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 }
