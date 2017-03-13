@@ -253,7 +253,7 @@ public class Event {
         map.put("endDate", endDate);
         map.put("location", location);
         map.put("category", category);
-        map.put("maxCapacity", maxCapacity);
+        map.put("maxCapacity", 0);
         map.put("attendees", new ArrayList<>(attendees));
         JSONObject json = new JSONObject(map);
         return json.toString();

@@ -83,7 +83,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                 extras.getString("location"),
                 extras.getString("category"),
-                extras.getInt("max_capacity")
+                0
         );
 
         editBut.setOnClickListener(new View.OnClickListener() {
@@ -108,11 +108,11 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                         extras.getString("description"),
                         extras.getString("orgid"),
                         extras.getString("eventid"),
-                        Event.getEpochTime("LLL/nd", extras.getString("date")),
-                        Event.getEpochTime("LLL/nd", extras.getString("date")),
+                        Event.getEpochTime(extras.getString("date"), "LLL\nd"),
+                        Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                         extras.getString("location"),
                         extras.getString("category"),
-                        Integer.parseInt(extras.getString("maxCapacity"))
+                        0
                 );
 
                 EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);

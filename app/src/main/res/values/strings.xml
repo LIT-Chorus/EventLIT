@@ -93,4 +93,5 @@
     <!-- Help and FAQ Strings -->
     <string name="event_howto">How do I make an event?</string>
     <string name="title_activity_request_organizer_status">Request Organizer Status</string>
+    <string name="hosting">Hosting</string>
 </resources>

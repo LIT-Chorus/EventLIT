@@ -88,6 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="This is a fun event for all students!"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationtext" />
@@ -137,24 +138,31 @@
         android:id="@+id/linearlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:weightSum="5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
+        
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:layout_weight="1"
+            android:id="@+id/line2" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/goingButton"
             android:theme="@style/AppTheme.Button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_weight="1"
             style="@style/AppTheme.Button"
             android:background="@color/goingColor"
             android:text="GOING" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/interestedButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"

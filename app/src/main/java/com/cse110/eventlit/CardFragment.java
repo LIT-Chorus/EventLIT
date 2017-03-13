@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.Event;
@@ -210,7 +211,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
             holder.setDescription(e.getDescription());
             holder.setNumAttendees(e.getAttendees());
-            holder.setMaxCapacity(e.getMaxCapacity());
 
             OrganizationUtils.loadOrgs().addOnCompleteListener(new OnCompleteListener<ArrayList<Organization>>() {
                 @Override
@@ -224,6 +224,19 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 holder.goingButton.setVisibility(View.INVISIBLE);
                 holder.interestedButton.setVisibility(View.INVISIBLE);
                 holder.notGoingButton.setVisibility(View.INVISIBLE);
+
+                // Sets size of buttons to 0
+                holder.goingButton.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.interestedButton.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.notGoingButton.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.line1.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.line2.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+
+                // Show Hosting Bar
+                holder.hostingBar.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT, (float)3.4));
+
             }
 
             holder.goingButton.setOnClickListener(new View.OnClickListener() {
@@ -287,13 +300,16 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatButton goingButton;
         public AppCompatButton interestedButton;
         public AppCompatButton notGoingButton;
+        public AppCompatButton hostingBar;
 
         public AppCompatTextView orgIdTextView;
         public AppCompatTextView eventIdTextView;
 
+        public View line1;
+        public View line2;
+
         private String description;
         private int numAttendees;
-        private int maxCapacity;
 
         public MyViewHolder(View v) {
             super(v);
@@ -307,6 +323,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
             goingButton = (AppCompatButton) v.findViewById(R.id.going);
             interestedButton = (AppCompatButton) v.findViewById(R.id.interested);
             notGoingButton = (AppCompatButton) v.findViewById(R.id.notGoing);
+            hostingBar = (AppCompatButton) v.findViewById(R.id.hostingBar);
+
+            line1 = (View) v.findViewById(R.id.line1);
+            line2 = (View) v.findViewById(R.id.line2);
 
             orgIdTextView = (AppCompatTextView) v.findViewById(R.id.orgId);
             eventIdTextView = (AppCompatTextView) v.findViewById(R.id.eventId);
@@ -349,7 +369,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("date", dateTextView.getText().toString());
                     extras.putString("description", description);
                     extras.putInt("num_attending", numAttendees);
-                    extras.putInt("max_capacity", maxCapacity);
                     extras.putString("org_name", orgNameTextView.getText().toString());
                     extras.putString("org_id", orgId);
                     extras.putString("event_id", eventid);
@@ -367,10 +386,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         public void setDescription(String description) {
             this.description = description;
-        }
-
-        public void setMaxCapacity(int maxCapacity) {
-            this.maxCapacity = maxCapacity;
         }
     }
 }

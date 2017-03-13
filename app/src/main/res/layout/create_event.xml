@@ -152,30 +152,6 @@
                 android:textSize="15dp" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/peopletext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:theme="@style/InputTextBlack">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_person_black_24dp"
-                android:drawablePadding="15dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="Maximum Capacity"
-                android:inputType="number"
-                android:soundEffectsEnabled="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="15dp" />
-        </android.support.design.widget.TextInputLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

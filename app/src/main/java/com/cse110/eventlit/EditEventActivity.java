@@ -48,7 +48,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     private TextInputLayout mTitle;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
-    private TextInputLayout mCapacity;
     private ImageView mEventPic;    // Event Pic
 
     private List<String> orgsManaging;     // Orgs that the Organizer User manages
@@ -133,7 +132,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         mTitle = (TextInputLayout) findViewById(R.id.title);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
-        mCapacity = (TextInputLayout) findViewById(R.id.peopletext);
 
         // Check for validity of input
         mTitle.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -157,15 +155,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     checkDescription();
-                }
-            }
-        });
-
-        mCapacity.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkCapacity();
                 }
             }
         });
@@ -204,7 +193,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         mTitle.getEditText().setText(extras.getString("eventName"));
         mLocation.getEditText().setText(extras.getString("location"));
         mDescription.getEditText().setText(extras.getString("description"));
-        mCapacity.getEditText().setText(extras.getString("max_capacity"));
 
         /* Fill time field */
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
@@ -302,7 +290,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         String title = mTitle.getEditText().getText().toString();
         String location = mLocation.getEditText().getText().toString();
         String description = mDescription.getEditText().getText().toString();
-        String capacity = mCapacity.getEditText().getText().toString();
 
         // Get the organization name
         Spinner orgSpinner = (Spinner)findViewById(R.id.orgspinner);
@@ -311,7 +298,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
 
 
         Event event = new Event(title, description, orgId, eventId, startDatetime,
-                endDatetime ,location, category, Integer.parseInt(capacity));
+                endDatetime ,location, category, 0);
         
         EventUtils.updateEvent(event, new OnCompleteListener<String>() {
             @Override
@@ -375,9 +362,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
             editText.setError("Title can contain at most 100 characters");
         }
 
-        return true;
-    }
-    protected boolean checkCapacity() {
         return true;
     }
 

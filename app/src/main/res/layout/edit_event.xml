@@ -23,6 +23,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:layout_marginBottom="16dp"
             android:theme="@style/InputTextBlack">
 
             <EditText
@@ -39,6 +40,7 @@
         <Spinner
             android:id="@+id/orgspinner"
             android:layout_width="match_parent"
+            android:layout_marginBottom="16dp"
             android:layout_height="wrap_content"/>
 
         <!--BUTTONS FOR START TIME/DATE -->
@@ -79,6 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
             android:paddingLeft="16dp">
 
             <ImageView
@@ -115,6 +118,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:layout_marginBottom="16dp"
             android:theme="@style/InputTextBlack">
 
             <EditText
@@ -137,6 +141,7 @@
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:layout_marginBottom="16dp"
             android:theme="@style/InputTextBlack">
 
             <EditText
@@ -152,33 +157,11 @@
                 android:textColorHint="@color/black" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/peopletext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:theme="@style/InputTextBlack">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_person_black_24dp"
-                android:drawablePadding="15dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="Maximum Capacity"
-                android:inputType="number"
-                android:soundEffectsEnabled="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
-        </android.support.design.widget.TextInputLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
             android:paddingLeft="16dp">
 
             <ImageView
@@ -200,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="0.6"
-            android:weightSum="3.4"
+            android:weightSum="2.2"
             android:orientation="horizontal"
             android:gravity="center_horizontal">
 
@@ -217,7 +200,6 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="#FFFFFF"
                 android:layout_weight="0.2"
                 android:id="@+id/line2">
 

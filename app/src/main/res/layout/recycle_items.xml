@@ -156,7 +156,7 @@
                 android:layout_height="match_parent"
                 android:background="#FFFFFF"
                 android:layout_weight="0.2"
-                android:id="@+id/line2">
+                android:id="@+id/line1">
 
             </View>
 
@@ -175,7 +175,7 @@
                 android:layout_height="match_parent"
                 android:background="#FFFFFF"
                 android:layout_weight="0.2"
-                android:id="@+id/line3">
+                android:id="@+id/line2">
 
             </View>
 
@@ -188,6 +188,15 @@
                 android:background="@color/notGoingColor"
                 android:layout_weight="1"
                 android:text="@string/cannotGo"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/hostingBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                style="@style/EventButton"
+                android:background="@color/circleBackground"
+                android:text="@string/hosting"/>
 
         </LinearLayout>
 
