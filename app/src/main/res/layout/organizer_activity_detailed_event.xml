@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:orientation="vertical">
 
     <ImageView
@@ -16,45 +18,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/event_pic" />
 
-    <ImageView
-        android:id="@+id/orgpic"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="@+id/event"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
     <me.grantland.widget.AutofitTextView
         android:id="@+id/title"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingTop="24dp"
+        android:layout_height="48dp"
         android:text="Event Title"
-        android:maxLines="2"
         android:textColor="@color/white"
         android:textSize="24sp"
-        app:layout_constraintLeft_toRightOf="@+id/orgpic"
-        app:layout_constraintTop_toTopOf="@+id/orgpic" />
+        android:gravity="center"
+        android:maxLines="2"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/event"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/orgname"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:text="Held By:"
-        android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="@+id/orgpic"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/event"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageView
         android:id="@+id/calendaricon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event"
+        app:layout_constraintTop_toBottomOf="@+id/orgname"
         app:srcCompat="@drawable/ic_menu_event" />
 
     <TextView
@@ -144,6 +138,7 @@
         android:id="@+id/linearlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:weightSum="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -153,19 +148,23 @@
             android:theme="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
             style="@style/EventButton"
+            android:layout_weight="1"
             android:background="@color/goingColor"
             android:text="EDIT EVENT" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/line1" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
             style="@style/EventButton"
+            android:layout_weight="1"
             android:background="@color/interestedColor"
             android:text="DELETE EVENT" />
 
