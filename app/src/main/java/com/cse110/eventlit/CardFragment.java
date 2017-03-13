@@ -255,9 +255,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
 
                 holder.line1.setLayoutParams(new LinearLayout.LayoutParams(
-                        0,LinearLayout.LayoutParams.MATCH_PARENT,1));
+                        0,LinearLayout.LayoutParams.MATCH_PARENT, (float)0.2));
                 holder.line2.setLayoutParams(new LinearLayout.LayoutParams(
-                        0,LinearLayout.LayoutParams.MATCH_PARENT,1));
+                        0,LinearLayout.LayoutParams.MATCH_PARENT, (float)0.2));
 
                 // Show Hosting Bar
                 holder.hostingBar.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
