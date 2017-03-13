@@ -21,8 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:layout_marginBottom="16dp"
             android:theme="@style/InputTextBlack">
 
@@ -47,8 +45,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp">
+            android:orientation="horizontal" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -81,8 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
-            android:paddingLeft="16dp">
+            android:layout_marginBottom="16dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -116,8 +112,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:layout_marginBottom="16dp"
             android:theme="@style/InputTextBlack">
 
@@ -139,8 +133,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:layout_marginBottom="16dp"
             android:theme="@style/InputTextBlack">
 
@@ -161,8 +153,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
-            android:paddingLeft="16dp">
+            android:layout_marginBottom="16dp" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -173,8 +164,7 @@
             <Spinner
                 android:id="@+id/tagspinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_left_margin" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
