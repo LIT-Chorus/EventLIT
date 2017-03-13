@@ -106,7 +106,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
             String delete = bundle.getString("whereFrom");
             if (delete != null && delete.equals("delete")) {
                 new AlertDialog.Builder(this, R.style.AlertDialogCustom)
-                        .setTitle("Event Successfully Delete")
+                        .setTitle("Event Successfully Deleted")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface arg0, int arg1) {
