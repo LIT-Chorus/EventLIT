@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -76,8 +78,14 @@ public class ChangePasswordActivity  extends AppCompatActivity {
                                 startActivity(openSettings);
                                 finish();
                             } else {
-                                Toast result = Toast.makeText(ChangePasswordActivity.this,
-                                        message, Toast.LENGTH_LONG);
+                                new AlertDialog.Builder(ChangePasswordActivity.this, R.style.AlertDialogCustom)
+                                        .setTitle("Password Change Failure")
+                                        .setMessage(task.getResult())
+                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface arg0, int arg1) {
+                                                Log.w("Edit", "Successful");
+                                            }
+                                        }).create().show();
                             }
                         }
                     };
