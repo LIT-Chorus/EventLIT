@@ -171,80 +171,59 @@ public class UserUtils {
     }
 
     public static Task<ArrayList<Event>> getEventsFollowing() {
-        final WrappedTask<ArrayList<Event>> wrappedTask = new WrappedTask<>();
-        DatabaseReference userEvents = currentUserDB.child("eventsFollowing");
+        final ArrayList<Task<Event>> eventTasks = new ArrayList<>();
+        final WrappedTask<ArrayList<Event>> finalWrappedTask = new WrappedTask<>();
 
-        userEvents.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, RSVP>> genericTypeIndicator = new GenericTypeIndicator<Map<String, RSVP>>() {};
-                Map<String, RSVP> rsvps = dataSnapshot.getValue(genericTypeIndicator);
-                final ArrayList<Event> events = new ArrayList<Event>();
-                if (rsvps !=  null) {
+        Map<String, RSVP> rsvps = currentUser.getEventsFollowing();
 
-                    final ArrayList<Task<Event>> eventTasks = new ArrayList<>();
-                    for (RSVP rsvp : rsvps.values()) {
-                        final String eventId = rsvp.getEventid();
-                        String orgId = rsvp.getOrgid();
-                        RSVP.Status status = rsvp.rsvpStatus;
+        // Get total event information for each event id
+        for (RSVP rsvp : rsvps.values()) {
+            final String eventId = rsvp.getEventid();
+            String orgId = rsvp.getOrgid();
+            RSVP.Status status = rsvp.rsvpStatus;
 
-                        // If not not going, we put on to the feed
-                        if  (status != RSVP.Status.NOT_GOING) {
-                            if (eventId != null && orgId != null) {
-                                DatabaseReference eventRef = DatabaseUtils.getEventsDB().child(orgId).child(eventId);
-                                final WrappedTask<Event> eventWrappedTask = new WrappedTask<Event>();
-                                eventRef.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        Event event = dataSnapshot.getValue(Event.class);
+            DatabaseReference eventRef = DatabaseUtils.getEventsDB().child(orgId).child(eventId);
 
-                                        //Log.w("Event", dataSnapshot.toString());
+            // If not not going, we put on to the feed
+            if  (status != RSVP.Status.NOT_GOING) {
+                final WrappedTask<Event> eventWrappedTask = new WrappedTask<>();
+                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Event event = dataSnapshot.getValue(Event.class);
 
-                                        if (event != null) {
-                                            events.add(event);
-                                            eventWrappedTask.wrapResult(event);
-                                        }
-
-                                        // Clean up refs to events that don't exist anymore
-                                        else if (event == null){
-                                            UserUtils.removeEventsFollowing(eventId);
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                                // Add event tasks to queue
-                                eventTasks.add(eventWrappedTask.unwrap());
-                            }
+                        if (event == null) {
+                            // Clean up refs to events that don't exist anymore
+                            removeEventsFollowing(eventId);
+                        } else {
+                            eventWrappedTask.wrapResult(event);
                         }
                     }
 
-                    Tasks.whenAll(eventTasks).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            ArrayList<Event> returnEvents = new ArrayList<Event>();
-                            for (Task<Event> et : eventTasks) {
-                                Event e = et.getResult();
-                                returnEvents.add(e);
-                            }
-
-                            wrappedTask.wrapResult(returnEvents);
-                        }
-                    });
-                }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("getEventsFollowing", "Can't get Event from ID");
+                    }
+                });
+                // Add event tasks to queue
+                eventTasks.add(eventWrappedTask.unwrap());
             }
+        }
 
+        Tasks.whenAll(eventTasks).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onComplete(@NonNull Task<Void> task) {
+                ArrayList<Event> returnEvents = new ArrayList<Event>();
+                for (Task<Event> et : eventTasks) {
+                    Event e = et.getResult();
+                    returnEvents.add(e);
+                }
 
+                finalWrappedTask.wrapResult(returnEvents);
             }
         });
 
-        return wrappedTask.unwrap();
+        return finalWrappedTask.unwrap();
     }
 
     public static final Task<ArrayList<Event>> getEventsForOrgs() {
