@@ -177,6 +177,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
             String category = e.getCategory();
             final String eventName = e.getTitle();
 
+            user = UserUtils.getCurrentUser();
+            events = user.getEventsFollowing();
+
             if (events.containsKey(e.getEventid())) {
                 RSVP st = events.get(e.getEventid());
                 RSVP.Status statusOfRSVP = st.getRsvpStatus();
@@ -273,8 +276,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     holder.interestedButton.setBackgroundColor(Color.GRAY);
                     holder.notGoingButton.setBackgroundColor(Color.GRAY);
 
-                    events.put(e.getEventid(), status);
-
                     EventUtils.modAttendees(e.getOrgid(), e.getEventid(), modBy);
                 }
             });
@@ -288,8 +289,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     holder.goingButton.setBackgroundColor(Color.GRAY);
                     holder.notGoingButton.setBackgroundColor(Color.GRAY);
 
-                    events.put(e.getEventid(), status);
-
                     EventUtils.modAttendees(e.getOrgid(), e.getEventid(), modBy);
                 }
             });
@@ -302,8 +301,6 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     holder.notGoingButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
                     holder.goingButton.setBackgroundColor(Color.GRAY);
                     holder.interestedButton.setBackgroundColor(Color.GRAY);
-
-                    events.put(e.getEventid(), status);
 
                     EventUtils.modAttendees(e.getOrgid(), e.getEventid(), modBy);
                 }
