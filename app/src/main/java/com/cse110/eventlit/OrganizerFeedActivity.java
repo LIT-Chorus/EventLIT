@@ -62,7 +62,6 @@ public class OrganizerFeedActivity extends AppCompatActivity
         });
 
 
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -74,7 +73,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
 
         // Follow orgs you manage if you don't already
         User currentUser = UserUtils.getCurrentUser();
-        for (String org: currentUser.getOrgsManaging() ) {
+        for (String org : currentUser.getOrgsManaging()) {
             if (currentUser.isFollowingOrg(org)) {
                 Log.w("Org Created", org);
                 currentUser.addOrgFollowing(org);
@@ -83,7 +82,7 @@ public class OrganizerFeedActivity extends AppCompatActivity
         UserUtils.updateOrgsFollowing((ArrayList<String>) currentUser.getOrgsFollowing());
 
         FragmentManager fm = getSupportFragmentManager();
-        fragment = (CardFragment)fm.findFragmentById(R.id.fragmentContainer);
+        fragment = (CardFragment) fm.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null) {
             fragment = new CardFragment();
@@ -95,10 +94,37 @@ public class OrganizerFeedActivity extends AppCompatActivity
         }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){
+        if (user != null) {
             updateHeader(user.getDisplayName(), user.getEmail());
         }
+
+
+        // Feedback for Edit or Delete Event
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            String whereFrom = bundle.getString("whereFrom");
+            if (whereFrom != null)
+                if (whereFrom.equals("delete")) {
+                    new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                            .setTitle("Event Successfully Deleted")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    Log.w("Delete", "Successful");
+                                }
+                            }).create().show();
+                }
+                else if (whereFrom.equals("edit")) {
+                    new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                            .setTitle("Editted Event Successfully")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    Log.w("Edit", "Successful");
+                                }
+                            }).create().show();
+                }
+        }
     }
+
 
     // Updates the name/email/profile pic that is displayed in the hamburger menu
     public void updateHeader(String name, String email) {

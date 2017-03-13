@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import com.cse110.eventlit.db.Event;
 import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
+import com.cse110.utils.FileStorageUtils;
+import com.cse110.utils.LitUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,8 +59,8 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         extras = i.getExtras();
 
         // TODO: Set database going/interested/not going entry
-        Button editBut = (Button) findViewById(R.id.editButton);
-        Button deleteBut = (Button) findViewById(R.id.deleteButton);
+        final Button editBut = (Button) findViewById(R.id.editButton);
+        final Button deleteBut = (Button) findViewById(R.id.deleteButton);
 
         title = (TextView) findViewById(R.id.title);
 
@@ -81,7 +84,7 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                 extras.getString("location"),
                 extras.getString("category"),
-                extras.getInt("max_capacity")
+                0
         );
 
         editBut.setOnClickListener(new View.OnClickListener() {
@@ -104,18 +107,28 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 event = new Event(
                         extras.getString("title"),
                         extras.getString("description"),
-                        extras.getString("orgid"),
-                        extras.getString("eventid"),
-                        Event.getEpochTime("LLL/nd", extras.getString("date")),
-                        Event.getEpochTime("LLL/nd", extras.getString("date")),
+                        extras.getString("org_id"),
+                        extras.getString("event_id"),
+                        Event.getEpochTime(extras.getString("date"), "LLL\nd"),
+                        Event.getEpochTime(extras.getString("date"), "LLL\nd"),
                         extras.getString("location"),
                         extras.getString("category"),
-                        Integer.parseInt(extras.getString("maxCapacity"))
+                        0
                 );
 
-                EventUtils.deleteEvent(event.getEventid(), event.getOrgid(), null);
-
-                // TODO Delete event
+                EventUtils.deleteEvent(event.getEventid(), event.getOrgid(),
+                        new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent openFeedView = new Intent(OrganizerDetailedEventActivity.this,
+                                OrganizerFeedActivity.class);
+                        extras.putString("whereFrom", "delete");
+                        openFeedView.putExtras(extras);
+                        LitUtils.hideSoftKeyboard(OrganizerDetailedEventActivity.this, deleteBut);
+                        startActivity(openFeedView);
+                        finish();
+                    }
+                });
             }
         });
     }
@@ -154,9 +167,12 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         TextView name = (TextView) findViewById(R.id.orgname);
         name.setText("Hosted By " + bundle.getString("org_name"));
 
+        ImageView eventPic = (ImageView) findViewById(R.id.event);
+
         String orgId = bundle.getString("org_id");
         String eventId = bundle.getString("event_id");
         type = bundle.getString("type");
 
+        FileStorageUtils.getImageView(eventPic, this, eventId);
     }
 }

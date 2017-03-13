@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:orientation="vertical">
 
     <ImageView
@@ -16,17 +18,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/event_pic" />
 
-
     <me.grantland.widget.AutofitTextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:paddingLeft="16dp"
         android:text="Event Title"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:gravity="center"
         android:maxLines="2"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/event"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -34,11 +35,10 @@
         android:id="@+id/orgname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
         android:textSize="16sp"
         android:gravity="center"
-        android:paddingBottom="8dp"
         android:paddingTop="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintTop_toBottomOf="@+id/event"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -88,6 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="This is a fun event for all students!"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationtext" />
@@ -137,6 +138,7 @@
         android:id="@+id/linearlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:weightSum="5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -146,21 +148,32 @@
             android:theme="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_weight="1"
             style="@style/AppTheme.Button"
             android:background="@color/goingColor"
             android:text="GOING" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/line4" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/interestedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
             style="@style/AppTheme.Button"
+            android:layout_weight="1"
             android:background="@color/interestedColor"
             android:text="INTERESTED" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/line5" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/notGoingButton"
@@ -168,6 +181,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             style="@style/AppTheme.Button"
+            android:layout_weight="1"
             android:background="@color/notGoingColor"
             android:text="NOT GOING" />
 

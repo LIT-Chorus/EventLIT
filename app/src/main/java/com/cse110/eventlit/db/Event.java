@@ -1,5 +1,7 @@
 package com.cse110.eventlit.db;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -12,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Event {
+public class Event implements Comparable {
 
     /**
      * Title of the event.
@@ -179,6 +181,13 @@ public class Event {
         return new SimpleDateFormat(fmt).format(startTimeAsCalendar().getTime());
     }
 
+    /**
+     * Get time in milliseconds from the Unix epoch, given a date string and a format string
+     * of the date passed in.
+     * @param date
+     * @param fmt
+     * @return
+     */
     public static long getEpochTime(String date, String fmt) {
         try {
             return new SimpleDateFormat(fmt).parse(date).getTime();
@@ -253,7 +262,7 @@ public class Event {
         map.put("endDate", endDate);
         map.put("location", location);
         map.put("category", category);
-        map.put("maxCapacity", maxCapacity);
+        map.put("maxCapacity", 0);
         map.put("attendees", new ArrayList<>(attendees));
         JSONObject json = new JSONObject(map);
         return json.toString();
@@ -320,5 +329,19 @@ public class Event {
     @Override
     public boolean equals(Object event) {
         return eventid.equals(((Event)event).getEventid());
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        Event otherEvent = (Event)o;
+        if (otherEvent.startDate > startDate) {
+            return -1;
+        }
+        else if (otherEvent.startDate < startDate) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 }

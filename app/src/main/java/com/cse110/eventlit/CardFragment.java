@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.Event;
@@ -25,6 +26,7 @@ import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +34,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by rahulsabnis on 2/22/17.
@@ -41,16 +44,11 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
     ArrayList<Event> allEvents = new ArrayList<>();
     ArrayList<Event> listEvents = new ArrayList<>();
-    Set<String> eventIdsAdded = new HashSet<>();
 
     RecyclerView MyRecyclerView;
     MyAdapter adapter;
 
     private HashMap<String, RSVP> events;
-
-    private String mDescriptionText;
-    private int mNumAttendees;
-    private int mMaxCapacity;
 
     private boolean mOrganizerStatus = false;
 
@@ -86,12 +84,46 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         if (type.equals("feed")) {
             // TODO: Only get subscribed events instead of all events
-            final User user = UserUtils.getCurrentUser();
+            final Task<ArrayList<Event>> eventsFollowingTask;
+            final Task<ArrayList<Event>> eventsFromOrgsTask;
 
-            UserUtils.getEventsFollowing(adapter, allEvents, listEvents, eventIdsAdded);
-            UserUtils.getEventsForOrgs(adapter, allEvents, listEvents, eventIdsAdded, user);
+            Tasks.whenAll(
+                    eventsFollowingTask = UserUtils.getEventsFollowing(),
+                    eventsFromOrgsTask = UserUtils.getEventsForOrgs()
+            ).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        allEvents.clear();
+                        allEvents.addAll(eventsFollowingTask.getResult());
+                        allEvents.addAll(eventsFromOrgsTask.getResult());
+
+                        // Removes Duplicate events, Sorts by start date
+                        Set<Event> removeDups = new TreeSet<>(allEvents);
+                        listEvents.clear();
+                        listEvents.addAll(removeDups);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            });
         } else {
-            EventUtils.getAllEvents(adapter, allEvents, listEvents, eventIdsAdded);
+            final Task<ArrayList<Event>> allEventsTask;
+            Tasks.whenAll(allEventsTask = EventUtils.getAllEvents()).addOnCompleteListener(
+                    new OnCompleteListener<Void>() {
+                        @Override public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                allEvents.clear();
+                                allEvents.addAll(allEventsTask.getResult());
+
+                                // Removes Duplicate events, Sorts by start date
+                                Set<Event> removeDups = new TreeSet<>(allEvents);
+                                listEvents.clear();
+                                listEvents.addAll(removeDups);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+            );
         }
 
         MyRecyclerView.setAdapter(adapter);
@@ -116,17 +148,14 @@ public class CardFragment extends android.support.v4.app.Fragment {
     }
 
     public void sortBy(Comparator<Event> eventComparator) {
-        listEvents.clear();
-        Collections.sort(allEvents, eventComparator);
-        for (Event e: allEvents) {
-            listEvents.add(e);
-        }
+        Collections.sort(listEvents, eventComparator);
         adapter.notifyDataSetChanged();
     }
 
 
     public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         private ArrayList<Event> list;
+        private int numAttendees;
 
         public MyAdapter(ArrayList<Event> Data) {
             list = Data;
@@ -176,6 +205,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
             holder.eventIdTextView.setText(e.getEventid());
             holder.orgIdTextView.setText(e.getOrgid());
 
+            holder.setDescription(e.getDescription());
+            holder.setNumAttendees(e.getAttendees());
+
             OrganizationUtils.loadOrgs().addOnCompleteListener(new OnCompleteListener<ArrayList<Organization>>() {
                 @Override
                 public void onComplete(@NonNull Task<ArrayList<Organization>> task) {
@@ -184,14 +216,52 @@ public class CardFragment extends android.support.v4.app.Fragment {
                 }
             });
 
-            mDescriptionText = e.getDescription();
-            mNumAttendees = e.getAttendees();
-            mMaxCapacity = e.getMaxCapacity();
-
-            if(mOrganizerStatus && user.getOrgsManaging().contains(e.getOrgid())) {
+            if (mOrganizerStatus && user.getOrgsManaging().contains(e.getOrgid())) {
                 holder.goingButton.setVisibility(View.INVISIBLE);
                 holder.interestedButton.setVisibility(View.INVISIBLE);
                 holder.notGoingButton.setVisibility(View.INVISIBLE);
+
+                // Sets size of buttons to 0
+                holder.goingButton.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.interestedButton.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.notGoingButton.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.line1.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.line2.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+
+                // Show Hosting Bar
+                holder.hostingBar.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT, (float)3.4));
+                holder.hostingBar.setVisibility(View.VISIBLE);
+
+            } else {
+                holder.goingButton.setVisibility(View.VISIBLE);
+                holder.interestedButton.setVisibility(View.VISIBLE);
+                holder.notGoingButton.setVisibility(View.VISIBLE);
+
+                // Shows RSVP Buttons
+                holder.goingButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+
+                holder.interestedButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+
+                holder.notGoingButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+
+
+                holder.line1.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,LinearLayout.LayoutParams.MATCH_PARENT, (float)0.2));
+                holder.line2.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,LinearLayout.LayoutParams.MATCH_PARENT, (float)0.2));
+
+                // Show Hosting Bar
+                holder.hostingBar.setLayoutParams(new LinearLayout.LayoutParams(0,0,0));
+                holder.hostingBar.setVisibility(View.INVISIBLE);
+
             }
 
             holder.goingButton.setOnClickListener(new View.OnClickListener() {
@@ -255,9 +325,16 @@ public class CardFragment extends android.support.v4.app.Fragment {
         public AppCompatButton goingButton;
         public AppCompatButton interestedButton;
         public AppCompatButton notGoingButton;
+        public AppCompatButton hostingBar;
 
         public AppCompatTextView orgIdTextView;
         public AppCompatTextView eventIdTextView;
+
+        public View line1;
+        public View line2;
+
+        private String description;
+        private int numAttendees;
 
         public MyViewHolder(View v) {
             super(v);
@@ -271,6 +348,10 @@ public class CardFragment extends android.support.v4.app.Fragment {
             goingButton = (AppCompatButton) v.findViewById(R.id.going);
             interestedButton = (AppCompatButton) v.findViewById(R.id.interested);
             notGoingButton = (AppCompatButton) v.findViewById(R.id.notGoing);
+            hostingBar = (AppCompatButton) v.findViewById(R.id.hostingBar);
+
+            line1 = (View) v.findViewById(R.id.line1);
+            line2 = (View) v.findViewById(R.id.line2);
 
             orgIdTextView = (AppCompatTextView) v.findViewById(R.id.orgId);
             eventIdTextView = (AppCompatTextView) v.findViewById(R.id.eventId);
@@ -311,9 +392,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     extras.putString("category", categoriesTextView.getText().toString());
                     extras.putString("eventName", eventNameTextView.getText().toString());
                     extras.putString("date", dateTextView.getText().toString());
-                    extras.putString("description", mDescriptionText);
-                    extras.putInt("num_attending", mNumAttendees);
-                    extras.putInt("max_capacity", mMaxCapacity);
+                    extras.putString("description", description);
+                    extras.putInt("num_attending", numAttendees);
                     extras.putString("org_name", orgNameTextView.getText().toString());
                     extras.putString("org_id", orgId);
                     extras.putString("event_id", eventid);
@@ -323,6 +403,14 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     getActivity().finish();
                 }
             });
+        }
+
+        public void setNumAttendees(int numAttendees) {
+            this.numAttendees = numAttendees;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
         }
     }
 }

@@ -50,7 +50,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
     private TextInputLayout mTitle;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
-    private TextInputLayout mCapacity;
 
     private TextView mStartTime;
     private TextView mEndTime;
@@ -153,7 +152,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         mTitle = (TextInputLayout) findViewById(R.id.title);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
-        mCapacity = (TextInputLayout) findViewById(R.id.peopletext);
 
         mStartDate = (TextView) findViewById(R.id.startdatetext);
         mEndDate = (TextView) findViewById(R.id.enddatetext);
@@ -187,15 +185,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
                 }
             }
         });
-
-        mCapacity.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkCapacity();
-                }
-            }
-        });
     }
 
     private void setCurrentTime() {
@@ -209,10 +198,27 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String date = month + "/" + day + "/" + year;
 
         int hour = now.get(Calendar.HOUR_OF_DAY);
-        String time = String.format("%s:%s", hour % 12, minute);
 
-        if (hour > 12) {
-            hour %= 12;
+        boolean PM = false;
+
+        //Make the 24 hour time format to 12 hour time format
+        if (hour == 0) {
+            hour = 12;
+        }
+        if (hour >12) {
+            PM = true;
+            hour -= 12;
+        }
+
+        String time = hour + ":";
+
+        if (minute < 10) {
+            time += "0" + minute;
+        } else {
+            time += minute;
+        }
+
+        if (PM) {
             time += "PM";
         } else {
             time += "AM";
@@ -267,6 +273,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in start time textview
         Bundle args = new Bundle();
         args.putInt("timetext", R.id.starttimetext);
+        args.putString("prefix", "Start Time: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
 
@@ -286,6 +293,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in start time textview
         Bundle args = new Bundle();
         args.putInt("datetext", R.id.startdatetext);
+        args.putString("prefix", "Start Date: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"DatePicker");
 
@@ -305,6 +313,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in the end time textview
         Bundle args = new Bundle();
         args.putInt("timetext", R.id.endtimetext);
+        args.putString("prefix", "End Time: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"TimePicker");
 
@@ -324,6 +333,7 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         // Pass in start time textview
         Bundle args = new Bundle();
         args.putInt("datetext", R.id.enddatetext);
+        args.putString("prefix", "End Date: ");
         newFragment.setArguments(args);
         newFragment.show(getSupportFragmentManager(),"DatePicker");
 
@@ -345,7 +355,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         String title = mTitle.getEditText().getText().toString();
         String location = mLocation.getEditText().getText().toString();
         String description = mDescription.getEditText().getText().toString();
-        String capacity = mCapacity.getEditText().getText().toString();
 
         // Get the organization name
         Spinner spinner = (Spinner)findViewById(R.id.orgspinner);
@@ -359,12 +368,8 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
         Log.w("Start", startDatetime.getTimeInMillis() + "");
         Log.w("End", endDatetime.getTimeInMillis() + "");
 
-        if (capacity.equals("")) {
-            capacity = "0";
-        }
-
         Event event = new Event(title, description, orgId, "0", startDatetime,
-                endDatetime ,location, category, Integer.parseInt(capacity));
+                endDatetime ,location, category, 0);
         EventUtils.createEvent(event, new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
@@ -427,9 +432,6 @@ public class CreateEventActivity extends AppCompatActivity implements IPickResul
             editText.setError("Title can contain at most 100 characters");
         }
 
-        return true;
-    }
-    protected boolean checkCapacity() {
         return true;
     }
 

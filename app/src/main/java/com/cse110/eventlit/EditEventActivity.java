@@ -25,6 +25,7 @@ import com.cse110.eventlit.db.Organization;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.FileStorageUtils;
+import com.cse110.utils.LitUtils;
 import com.cse110.utils.OrganizationUtils;
 import com.cse110.utils.UserUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,7 +49,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     private TextInputLayout mTitle;
     private TextInputLayout mLocation;
     private TextInputLayout mDescription;
-    private TextInputLayout mCapacity;
     private ImageView mEventPic;    // Event Pic
 
     private List<String> orgsManaging;     // Orgs that the Organizer User manages
@@ -59,6 +59,8 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     private Calendar endDatetime;
     private String eventId;
     private String category;
+    Bundle extras;
+    Button editBut;
 
 
     @Override
@@ -107,7 +109,7 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
 
         // Cancel and Create button functionality
         Button cancelBut = (Button) findViewById(R.id.cancelButton);
-        Button editBut = (Button) findViewById(R.id.editButton);
+        editBut = (Button) findViewById(R.id.editButton);
 
         cancelBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +135,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         mTitle = (TextInputLayout) findViewById(R.id.title);
         mLocation = (TextInputLayout) findViewById(R.id.locationtext);
         mDescription = (TextInputLayout) findViewById(R.id.descriptiontext);
-        mCapacity = (TextInputLayout) findViewById(R.id.peopletext);
 
         // Check for validity of input
         mTitle.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -161,18 +162,9 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
             }
         });
 
-        mCapacity.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    checkCapacity();
-                }
-            }
-        });
-
 
         Intent i = getIntent();
-        Bundle extras = i.getExtras();
+        extras = i.getExtras();
 
         populateFields(extras);
     }
@@ -204,7 +196,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         mTitle.getEditText().setText(extras.getString("eventName"));
         mLocation.getEditText().setText(extras.getString("location"));
         mDescription.getEditText().setText(extras.getString("description"));
-        mCapacity.getEditText().setText(extras.getString("max_capacity"));
 
         /* Fill time field */
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
@@ -302,7 +293,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
         String title = mTitle.getEditText().getText().toString();
         String location = mLocation.getEditText().getText().toString();
         String description = mDescription.getEditText().getText().toString();
-        String capacity = mCapacity.getEditText().getText().toString();
 
         // Get the organization name
         Spinner orgSpinner = (Spinner)findViewById(R.id.orgspinner);
@@ -311,13 +301,13 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
 
 
         Event event = new Event(title, description, orgId, eventId, startDatetime,
-                endDatetime ,location, category, Integer.parseInt(capacity));
+                endDatetime ,location, category, 0);
         
         EventUtils.updateEvent(event, new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
+                Log.d("Finished Update", "Finished");
                 if (task.isSuccessful()) {
-                    // TODO dismiss activity, Event has been created at this point
                     String eventId = task.getResult();
 
                     try {
@@ -329,6 +319,15 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
+
+                    Log.w("Dismissed Edit", "Dismissed");
+                    Intent openFeedView = new Intent(EditEventActivity.this,
+                            OrganizerFeedActivity.class);
+                    extras.putString("whereFrom", "edit");
+                    openFeedView.putExtras(extras);
+                    LitUtils.hideSoftKeyboard(EditEventActivity.this, editBut);
+                    startActivity(openFeedView);
+                    finish();
                 }
 
             }
@@ -375,9 +374,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
             editText.setError("Title can contain at most 100 characters");
         }
 
-        return true;
-    }
-    protected boolean checkCapacity() {
         return true;
     }
 
