@@ -16,6 +16,7 @@ import com.cse110.eventlit.db.RSVP;
 import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.FileStorageUtils;
+import com.cse110.utils.LitUtils;
 import com.cse110.utils.UserUtils;
 
 import org.w3c.dom.Text;
@@ -144,8 +145,9 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
         AutofitHelper.create(title);
 
         TextView date = (TextView) findViewById(R.id.timetext);
-        date.setText(bundle.getString("date").replaceAll("[\\t\\n\\r]+"," ")
-                + " at " + bundle.getString("time").trim());
+        String startDate = LitUtils.getDateAndTime(bundle.getLong("startDate"));
+        String endDate = LitUtils.getDateAndTime(bundle.getLong("endDate"));
+        date.setText(startDate + " - " + endDate);
 
         TextView location = (TextView) findViewById(R.id.locationtext);
         location.setText(bundle.getString("location"));

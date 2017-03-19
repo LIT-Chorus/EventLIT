@@ -80,8 +80,8 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                 extras.getString("description"),
                 extras.getString("org_id"),
                 extras.getString("event_id"),
-                Event.getEpochTime(extras.getString("date"), "LLL\nd"),
-                Event.getEpochTime(extras.getString("date"), "LLL\nd"),
+                extras.getLong("startDate"),
+                extras.getLong("endDate"),
                 extras.getString("location"),
                 extras.getString("category"),
                 0
@@ -110,8 +110,8 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
                         extras.getString("description"),
                         extras.getString("org_id"),
                         extras.getString("event_id"),
-                        Event.getEpochTime(extras.getString("date"), "LLL\nd"),
-                        Event.getEpochTime(extras.getString("date"), "LLL\nd"),
+                        extras.getLong("startDate"),
+                        extras.getLong("endDate"),
                         extras.getString("location"),
                         extras.getString("category"),
                         0
@@ -152,8 +152,9 @@ public class OrganizerDetailedEventActivity extends AppCompatActivity {
         title.setText(bundle.getString("eventName"));
         AutofitHelper.create(title);
 
-        date.setText(bundle.getString("date").replaceAll("[\\t\\n\\r]+"," ")
-                + " at " + bundle.getString("time").trim());
+        String startDate = LitUtils.getDateAndTime(bundle.getLong("startDate"));
+        String endDate = LitUtils.getDateAndTime(bundle.getLong("endDate"));
+        date.setText(startDate + " - " + endDate);
 
         location.setText(bundle.getString("location"));
 
