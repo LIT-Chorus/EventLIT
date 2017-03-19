@@ -27,27 +27,37 @@ public class LitUtils {
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
     }
 
-    public static String getMonth(long unixSeconds) {
-        Date date = new Date(unixSeconds*1000L); // *1000 is to convert seconds to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-3M-dd HH:mm a"); // the format of the date
+    /* Returns month, ex: Jan, Feb, Mar */
+    public static String getMonthString(long unixSeconds) {
+        Date date = new Date(unixSeconds);
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM"); // the format of the date
         String formattedDate = sdf.format(date);
-        return formattedDate.substring(5, 8);
+        return formattedDate;
     }
 
+    /* Returns day, ex: 01, 12, 31 */
     public static String getDay(long unixSeconds) {
-        Date date = new Date(unixSeconds*1000L); // *1000 is to convert seconds to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-3M-dd HH:mm a"); // the format of the date
+        Date date = new Date(unixSeconds);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd"); // the format of the date
         String formattedDate = sdf.format(date);
-        return formattedDate.substring(10, 12);
+        return formattedDate;
     }
 
+    /* Returns time, ex: 12:35pm, 5:30am */
     public static String getTime(long unixSeconds) {
-        Date date = new Date(unixSeconds*1000L); // *1000 is to convert seconds to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-3M-dd HH:mm a"); // the format of the date
+        Date date = new Date(unixSeconds);
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mma"); // the format of the date
         String formattedDate = sdf.format(date);
-        return formattedDate.substring(12, formattedDate.length() - 1);
+        return formattedDate;
     }
 
+    /* Returns date and time, ex: Jan 31 at 8:30 pm */
+    public static String getDateAndTime(long unixSeconds) {
+        Date date = new Date(unixSeconds);
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd 'at' hh:mma"); // the format of the date
+        String formattedDate = sdf.format(date);
+        return formattedDate;
+    }
 
 
 }
