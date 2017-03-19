@@ -108,8 +108,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                     .setTitle("Organizer Request Submitted")
                     .setMessage("You have successfully submitted a request to be an organizer " +
-                            "for: " + orgName + ". You will receive a response via a text " +
-                            "message regarding your request within 24 hours.")
+                            "for: " + orgName + ". You will receive a response via email " +
+                            "regarding your request within 24 hours.")
                     .setPositiveButton(android.R.string.ok, null);
             builder.create().show();
         }

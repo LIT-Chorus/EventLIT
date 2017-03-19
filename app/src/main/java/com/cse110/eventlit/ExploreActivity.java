@@ -85,10 +85,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         categoriesCurrent.add("Food");
         categoriesCurrent.add("Social");
 
-
-        // TODO Frontend use this ArrayAdapter to populate a ListView or something
-
-        // TODO call updateHeader with user's name/email/pic
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){
             updateHeader(user.getDisplayName(), user.getEmail());
@@ -106,7 +102,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         emailTextView.setText(email);
         CircleImageView profPic = (CircleImageView) profileView.findViewById(R.id.profile_image);
         FileStorageUtils.getImageView(profPic, this, FirebaseAuth.getInstance().getCurrentUser().getUid());
-        // TODO update prof pic
     }
 
     @Override
@@ -117,7 +112,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     }
 
     // Three dots menu
-    // TODO: Handle sorting/filtering here
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
