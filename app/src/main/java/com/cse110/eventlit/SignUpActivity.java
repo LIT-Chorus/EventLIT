@@ -369,6 +369,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     .setPositiveButton(android.R.string.ok, null);
                             builder.create().show();
                             mNextBut.setClickable(true);
+                            mDialog.hide();
                         }
                     }
                 });
