@@ -28,7 +28,7 @@ import org.w3c.dom.Text;
  * Created by Michelle on 2/23/2017.
  */
 
-public class ChangePasswordActivity  extends AppCompatActivity {
+public class ChangePasswordActivity extends AppCompatActivity {
 
     private AppCompatButton mSubmitChangePass;
     private TextInputLayout mOldPass;
@@ -36,78 +36,77 @@ public class ChangePasswordActivity  extends AppCompatActivity {
     private TextInputLayout mPass2;
     private FirebaseUser mUser;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.change_password);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.change_password);
 
-            // Initialize buttons and EditTexts
-            mSubmitChangePass = (AppCompatButton) findViewById(R.id.submitNewPassButton);
-            mOldPass = (TextInputLayout) findViewById(R.id.current_password);
-            mPass1 = (TextInputLayout) findViewById(R.id.new_pass);
-            mPass2 = (TextInputLayout)findViewById(R.id.confirm_pass);
+        // Initialize buttons and EditTexts
+        mSubmitChangePass = (AppCompatButton) findViewById(R.id.submitNewPassButton);
+        mOldPass = (TextInputLayout) findViewById(R.id.current_password);
+        mPass1 = (TextInputLayout) findViewById(R.id.new_pass);
+        mPass2 = (TextInputLayout) findViewById(R.id.confirm_pass);
 
-            // Get the Firebase user instance
-            mUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Get the Firebase user instance
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            mOldPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    checkOldPass();
-                }
-            });
+        mOldPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                checkOldPass();
+            }
+        });
 
-            // Handling Change Password Button Listener
-            mSubmitChangePass.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Get TextValues
-                    String oldPass = mOldPass.getEditText().getText().toString();
-                    String newPass1 = mPass1.getEditText().getText().toString();
-                    String newPass2 = mPass2.getEditText().getText().toString();
+        // Handling Change Password Button Listener
+        mSubmitChangePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get TextValues
+                String oldPass = mOldPass.getEditText().getText().toString();
+                String newPass1 = mPass1.getEditText().getText().toString();
+                String newPass2 = mPass2.getEditText().getText().toString();
 
-                    // Do this when reset is done
-                    OnCompleteListener<String> passwordResetListener = new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            String message = task.getResult();
-                            if (message.equalsIgnoreCase("reset success!")) {
-                                Intent openSettings = new Intent(ChangePasswordActivity.this, SettingsActivity.class);
-                                openSettings.putExtra("message", 1);
-                                LitUtils.hideSoftKeyboard(ChangePasswordActivity.this, mSubmitChangePass);
-                                startActivity(openSettings);
-                                finish();
-                            } else {
-                                new AlertDialog.Builder(ChangePasswordActivity.this, R.style.AlertDialogCustom)
-                                        .setTitle("Password Change Failure")
-                                        .setMessage(task.getResult())
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface arg0, int arg1) {
-                                                Log.w("Edit", "Successful");
-                                            }
-                                        }).create().show();
-                            }
+                // Do this when reset is done
+                OnCompleteListener<String> passwordResetListener = new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        String message = task.getResult();
+                        if (message.equalsIgnoreCase("reset success!")) {
+                            Intent openSettings = new Intent(ChangePasswordActivity.this, SettingsActivity.class);
+                            openSettings.putExtra("message", 1);
+                            LitUtils.hideSoftKeyboard(ChangePasswordActivity.this, mSubmitChangePass);
+                            startActivity(openSettings);
+                            finish();
+                        } else {
+                            new AlertDialog.Builder(ChangePasswordActivity.this, R.style.AlertDialogCustom)
+                                    .setTitle("Password Change Failure")
+                                    .setMessage(task.getResult())
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface arg0, int arg1) {
+                                            Log.w("Edit", "Successful");
+                                        }
+                                    }).create().show();
                         }
-                    };
-
-
-
-                    // Edge Case: new passwords do not match
-
-                    boolean old = checkOldPass();
-                    boolean updated = checkPassMatch();
-
-                    if (old && updated) {
-                        // PS: Backend handles case for incorrect old password
-
-                        // Backend will take care of it from here
-                        UserUtils.resetPassword(mUser, oldPass, newPass1, passwordResetListener);
                     }
+                };
 
+
+                // Edge Case: new passwords do not match
+
+                boolean old = checkOldPass();
+                boolean updated = checkPassMatch();
+
+                if (old && updated) {
+                    // PS: Backend handles case for incorrect old password
+
+                    // Backend will take care of it from here
+                    UserUtils.resetPassword(mUser, oldPass, newPass1, passwordResetListener);
                 }
-            });
 
-        }
+            }
+        });
+
+    }
 
     protected boolean checkOldPass() {
         EditText passEditText = mOldPass.getEditText();
@@ -180,5 +179,10 @@ public class ChangePasswordActivity  extends AppCompatActivity {
         }
 
         return fail;
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ChangePasswordActivity.this, SettingsActivity.class));
     }
 }
