@@ -85,11 +85,11 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
                         // Add it to the list of orgs the user is following
                         int index = getAdapterPosition();
                         if (user != null && mOrganizations.size() != 0) {
-                            //Log.w("Added Org", mOrganizations.get(index).getOrgId());
+                            Log.w("Added Org", mOrganizations.get(index).getOrgId());
                             String temp = mOrganizations.get(index).getOrgId();
                             selectedOrganizationids.add(temp);
-                            //user.addOrgFollowing(mOrganizations.get(index).getOrgId());
-                            //UserUtils.updateCurrentUser(user);
+                            user.addOrgFollowing(mOrganizations.get(index).getOrgId());
+                            UserUtils.updateCurrentUser(user);
                         }
                         mOrgName.setChecked(true);
                     }
