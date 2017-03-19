@@ -51,20 +51,26 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
         final ImageView eventPic = (ImageView) findViewById(R.id.event);
 
         User user = UserUtils.getCurrentUser();
-        HashMap<String, RSVP> events = user.getEventsFollowing();
+        HashMap<String, RSVP> events = null;
+        if (user != null) {
+            events = user.getEventsFollowing();
 
-        if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.GOING) {
-            goingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.goingColor, null));
-            interestedBut.setBackgroundColor(Color.GRAY);
-            notGoingBut.setBackgroundColor(Color.GRAY);
-        } else if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.INTERESTED) {
-            interestedBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.interestedColor, null));
-            goingBut.setBackgroundColor(Color.GRAY);
-            notGoingBut.setBackgroundColor(Color.GRAY);
-        } else if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.NOT_GOING) {
-            notGoingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
-            goingBut.setBackgroundColor(Color.GRAY);
-            interestedBut.setBackgroundColor(Color.GRAY);
+            if (events != null && events.size() != 0) {
+
+                if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.GOING) {
+                    goingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.goingColor, null));
+                    interestedBut.setBackgroundColor(Color.GRAY);
+                    notGoingBut.setBackgroundColor(Color.GRAY);
+                } else if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.INTERESTED) {
+                    interestedBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.interestedColor, null));
+                    goingBut.setBackgroundColor(Color.GRAY);
+                    notGoingBut.setBackgroundColor(Color.GRAY);
+                } else if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.NOT_GOING) {
+                    notGoingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
+                    goingBut.setBackgroundColor(Color.GRAY);
+                    interestedBut.setBackgroundColor(Color.GRAY);
+                }
+            }
         }
 
         FileStorageUtils.getImageView(eventPic, this, eventId);
