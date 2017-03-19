@@ -6,5 +6,5 @@
     android:id="@+id/org_name"
     android:checked="false"
     android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-    android:checkMarkTint="#800000"
+    android:checkMarkTint="@color/backgroundLoginPrimary"
     android:layout_marginBottom="16dp" />
