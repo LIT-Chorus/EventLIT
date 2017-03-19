@@ -199,8 +199,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
             }
 
-            holder.timeTextView.setText(String.format("%s-%s",
-                    e.formattedStartTime("hh:mma"), e.formattedEndTime("hh:mma")));
+            holder.timeTextView.setText(String.format("%s",
+                    e.formattedStartTime("hh:mma")));
             holder.locationTextView.setText(list.get(position).getLocation());
             holder.categoriesTextView.setText(category);
             holder.eventNameTextView.setText(eventName);
@@ -210,6 +210,8 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
             holder.setDescription(e.getDescription());
             holder.setNumAttendees(e.getAttendees());
+            holder.setStartDate(e.getStartDate());
+            holder.setEndDate(e.getEndDate());
 
             OrganizationUtils.loadOrgs().addOnCompleteListener(new OnCompleteListener<ArrayList<Organization>>() {
                 @Override
@@ -339,6 +341,9 @@ public class CardFragment extends android.support.v4.app.Fragment {
         private String description;
         private int numAttendees;
 
+        private long startDate;
+        private long endDate;
+
         public MyViewHolder(View v) {
             super(v);
             timeTextView = (AppCompatTextView) v.findViewById(R.id.time);
@@ -390,11 +395,11 @@ public class CardFragment extends android.support.v4.app.Fragment {
                     }
 
                     extras.putBoolean("organizer", mOrganizerStatus);
-                    extras.putString("time", timeTextView.getText().toString());
+                    extras.putLong("startDate", startDate);
+                    extras.putLong("endDate", endDate);
                     extras.putString("location", locationTextView.getText().toString());
                     extras.putString("category", categoriesTextView.getText().toString());
                     extras.putString("eventName", eventNameTextView.getText().toString());
-                    extras.putString("date", dateTextView.getText().toString());
                     extras.putString("description", description);
                     extras.putInt("num_attending", numAttendees);
                     extras.putString("org_name", orgNameTextView.getText().toString());
@@ -414,6 +419,14 @@ public class CardFragment extends android.support.v4.app.Fragment {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+
+        public void setStartDate(long eventDateStart) {
+            startDate = eventDateStart;
+        }
+
+        public void setEndDate(long eventDateEnd) {
+            endDate = eventDateEnd;
         }
     }
 }
