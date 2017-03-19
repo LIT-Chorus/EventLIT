@@ -199,19 +199,19 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
 
         /* Fill start time field */
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
-        String startTime = extras.getString("time").substring(0, 7);
+        String startTime = LitUtils.getTime(extras.getLong("startDate"));
         startTimeText.setText(startTime);
 
         /* FIll end time field */
         TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
-        String endTime = extras.getString("time").substring(8, extras.getString("time").length() - 1);
+        String endTime = LitUtils.getTime(extras.getLong("endDate"));
         endTimeText.setText(endTime);
 
         /* Fill date field */
         TextView startDateText = (TextView) findViewById(R.id.startdatetext);
-        startDateText.setText(extras.getString("date").replace("\n", " "));
+        startDateText.setText(LitUtils.getMonthAndDate(extras.getLong("startDate")));
         TextView endDateText = (TextView) findViewById(R.id.enddatetext);
-        endDateText.setText(extras.getString("date").replace("\n", " "));
+        endDateText.setText(LitUtils.getMonthAndDate(extras.getLong("endDate")));
 
         /* Fill in default value for spinner (org hosting event) */
         ArrayAdapter myAdap = (ArrayAdapter) orgspinner.getAdapter(); //cast to an ArrayAdapter
@@ -232,7 +232,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     public void onStartTimeClicked(View v){
         TimePickerFragment newFragment = new TimePickerFragment();
         TextView startTimeText = (TextView) findViewById(R.id.starttimetext);
-        startTimeText.setText("Start Time: ");
 
         newFragment.setCalendar(startDatetime);
 
@@ -247,7 +246,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     public void onStartDateClicked(View v){
         DatePickerFragment newFragment = new DatePickerFragment();
         TextView startDateText = (TextView) findViewById(R.id.startdatetext);
-        startDateText.setText("Start Date: ");
 
         newFragment.setCalendar(startDatetime);
 
@@ -262,7 +260,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     public void onEndTimeClicked(View v){
         TimePickerFragment newFragment = new TimePickerFragment();
         TextView endTimeText = (TextView) findViewById(R.id.endtimetext);
-        endTimeText.setText("End Time: ");
 
         newFragment.setCalendar(endDatetime);
 
@@ -277,7 +274,6 @@ public class EditEventActivity extends AppCompatActivity implements IPickResult{
     public void onEndDateClicked(View v){
         DatePickerFragment newFragment = new DatePickerFragment();
         TextView startDateText = (TextView) findViewById(R.id.enddatetext);
-        startDateText.setText("End Date: ");
 
         newFragment.setCalendar(endDatetime);
 
