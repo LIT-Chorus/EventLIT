@@ -67,6 +67,12 @@
                         android:src="@drawable/ic_access_time_black_24dp" />
 
                     <TextView
+                        android:layout_width="96dp"
+                        android:maxLines="1"
+                        android:layout_height="wrap_content"
+                        android:text="Start Time:"/>
+
+                    <TextView
                         android:id="@+id/startdatetext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -99,6 +105,12 @@
                         android:alpha="0"
                         android:padding="3dp"
                         android:src="@drawable/ic_access_time_black_24dp" />
+
+                    <TextView
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="End Time:"/>
 
                     <TextView
                         android:id="@+id/enddatetext"
