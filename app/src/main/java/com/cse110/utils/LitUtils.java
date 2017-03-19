@@ -28,17 +28,9 @@ public class LitUtils {
     }
 
     /* Returns month, ex: Jan, Feb, Mar */
-    public static String getMonthString(long unixSeconds) {
+    public static String getMonthAndDate(long unixSeconds) {
         Date date = new Date(unixSeconds);
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM"); // the format of the date
-        String formattedDate = sdf.format(date);
-        return formattedDate;
-    }
-
-    /* Returns day, ex: 01, 12, 31 */
-    public static String getDay(long unixSeconds) {
-        Date date = new Date(unixSeconds);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd"); // the format of the date
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy"); // the format of the date
         String formattedDate = sdf.format(date);
         return formattedDate;
     }

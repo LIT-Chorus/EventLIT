@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
 /**
@@ -34,11 +35,12 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         //Do something with the date chosen by the user
         TextView tv = (TextView) getActivity().findViewById(getArguments().getInt("datetext"));
 
-        String prefix = getArguments().getString("prefix");
-
         c.set(year, month, day);
-        String stringOfDate = (month + 1) + "/" + day + "/" + year;
-        tv.setText(prefix + stringOfDate);
+        String monthString = new DateFormatSymbols().getMonths()[month];
+        monthString = monthString.substring(0, 3);
+
+        String stringOfDate = monthString + " " + day + " " + year;
+        tv.setText(stringOfDate);
     }
 
     public Calendar getCalendar() {
