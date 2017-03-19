@@ -224,7 +224,7 @@ public class SignUpActivity extends AppCompatActivity {
         if (emailText != null) {
             if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
                 emailEditText.setError("Invalid Email ID");
-            } else if (!emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
+            } else if (!emailText.substring(emailText.length() - 8, emailText.length()).equals("ucsd.edu")) {
                 emailEditText.setError("Please use your UCSD Email!");
             } else {
                 return true;

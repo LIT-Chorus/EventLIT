@@ -240,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
         // Checks email valid and that it ends with @ucsd.edu
         if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
             emailEditText.setError("Invalid Email ID");
-        } else if (emailText.length() < 9 || !emailText.substring(emailText.length() - 9, emailText.length()).equals("@ucsd.edu")) {
+        } else if (emailText.length() < 9 || !emailText.substring(emailText.length() - 8, emailText.length()).equals("ucsd.edu")) {
             emailEditText.setError("Please use your UCSD Email!");
 
         }
