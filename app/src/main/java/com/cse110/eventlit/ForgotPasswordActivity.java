@@ -1,5 +1,6 @@
 package com.cse110.eventlit;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -22,6 +23,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private TextInputLayout mEmailEntry;
     private FirebaseAuth fbAuth;
     private OnCompleteListener onPasswordResetSent;
+
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         }
                     });
 
+                    mDialog.hide();
+
                     LitUtils.hideSoftKeyboard(ForgotPasswordActivity.this, mEmailEntry);
 
                     dialog.show();
@@ -71,6 +76,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         }
                     });
 
+                    mDialog.hide();
+
                     LitUtils.hideSoftKeyboard(ForgotPasswordActivity.this, mEmailEntry);
 
                     dialog.show();
@@ -86,12 +93,19 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 mResetBut.setClickable(false);
                 if (checkEmail()) {
                     String email = mEmailEntry.getEditText().getText().toString();
+                    mDialog.show();
                     fbAuth.sendPasswordResetEmail(email).addOnCompleteListener(onPasswordResetSent);
                 } else {
                     mResetBut.setClickable(true);
                 }
             }
         });
+
+        // Set up Progress Dialog
+        mDialog = new ProgressDialog(this);
+        mDialog.setTitle("Reset Password Request");
+        mDialog.setMessage("Submitting request to reset your password!");
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     }
 
     protected boolean checkEmail() {

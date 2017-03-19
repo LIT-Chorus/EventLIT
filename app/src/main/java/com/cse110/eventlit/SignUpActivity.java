@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.User;
+import com.cse110.utils.LitUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -189,6 +190,7 @@ public class SignUpActivity extends AppCompatActivity {
             String email = mFbAuth.getCurrentUser().getEmail();
 
             if (email != null && email.length() > 0 && mPassword != null && mPassword.length() > 0) {
+                LitUtils.hideSoftKeyboard(SignUpActivity.this, mNextBut);
                 mFbAuth.signOut();
                 mFbAuth.signInWithEmailAndPassword(email, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override

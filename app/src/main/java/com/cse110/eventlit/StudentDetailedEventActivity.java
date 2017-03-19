@@ -13,11 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cse110.eventlit.db.RSVP;
+import com.cse110.eventlit.db.User;
 import com.cse110.utils.EventUtils;
 import com.cse110.utils.FileStorageUtils;
 import com.cse110.utils.UserUtils;
 
 import org.w3c.dom.Text;
+
+import java.util.HashMap;
 
 import me.grantland.widget.AutofitHelper;
 
@@ -47,16 +50,18 @@ public class StudentDetailedEventActivity extends AppCompatActivity {
         final Button notGoingBut = (Button) findViewById(R.id.notGoingButton);
         final ImageView eventPic = (ImageView) findViewById(R.id.event);
 
-        int rsvp = extras.getInt("RSVP");
-        if (rsvp == 1) {
+        User user = UserUtils.getCurrentUser();
+        HashMap<String, RSVP> events = user.getEventsFollowing();
+
+        if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.GOING) {
             goingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.goingColor, null));
             interestedBut.setBackgroundColor(Color.GRAY);
             notGoingBut.setBackgroundColor(Color.GRAY);
-        } else if (rsvp == 2) {
+        } else if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.INTERESTED) {
             interestedBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.interestedColor, null));
             goingBut.setBackgroundColor(Color.GRAY);
             notGoingBut.setBackgroundColor(Color.GRAY);
-        } else if (rsvp == 3) {
+        } else if (events.get(extras.getString("event_id")).rsvpStatus == RSVP.Status.NOT_GOING) {
             notGoingBut.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.notGoingColor, null));
             goingBut.setBackgroundColor(Color.GRAY);
             interestedBut.setBackgroundColor(Color.GRAY);
