@@ -144,7 +144,7 @@ public class Event implements Comparable {
      * No-arg constructor, fills in fields with 'blank' information.
      */
     public Event() {
-        this("Untitled", "No description.", "No org", null, "None");
+        this("Untitled", "No description.", "No org", null, "Academic");
     }
 
     public long getEndDate() {
